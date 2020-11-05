@@ -14,7 +14,8 @@
 			import * as THREE from '../build/three.module.js';
 
 			var camera, scene, renderer; //DÉCLARATIONS OBJETS
-			var mesh; //DÉCLARATION OBJET
+			//var mesh; //DÉCLARATION OBJET
+			var sphere;
 
 			init(); //Pour créer la scène
 			animate(); //Pour animer la scène (boucle qui tourne en permanence)
@@ -38,9 +39,20 @@
 
                                                 
                 //DÉFINITION D'UN OBJET
-				var geometry = new THREE.BoxBufferGeometry( 200, 200, 200 ); //Type/Forme d'objet (ici cube de taille 200)
-				mesh = new THREE.Mesh( geometry, material ); //Création de l'objet avec ses matériaux
-				scene.add( mesh ); //Ajout de l'objet dans la scene
+				//var geometry = new THREE.BoxBufferGeometry( 200, 200, 200 ); //Type/Forme d'objet (ici cube de taille 200)
+				//mesh = new THREE.Mesh( geometry, material ); //Création de l'objet avec ses matériaux
+				//scene.add( mesh ); //Ajout de l'objet dans la scene
+
+				var sphere_toit = new THREE.ConeGeometry( 50, 200, 300);
+            	sphere = new THREE.Mesh( sphere_toit, material );
+				//scene.add(sphere);
+
+				var geometry = new THREE.ParametricBufferGeometry( THREE.ParametricGeometries.klein, 25, 25 );
+				var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+				var klein = new THREE.Mesh( geometry, material );
+				scene.add( klein );
+				
+
 
 				renderer = new THREE.WebGLRenderer( { antialias: true } ); //Moteur graphique (anti-aliasing: pour lisser le graphisme)
 				renderer.setPixelRatio( window.devicePixelRatio ); //Respect du ration des pixels
@@ -65,9 +77,6 @@
 			function animate() {
 
 				requestAnimationFrame( animate ); //Segmente les numéros de frames
-
-				mesh.rotation.x += 0.005;
-				mesh.rotation.y += 0.01;
 
 				renderer.render( scene, camera ); //Lancement du rendu de la scene avec sa caméra
 

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="EN">
+	<head>
+		<title>Project WEBGL - Manveer</title>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<link type="text/css" rel="stylesheet" href="../ressources/css/main.css">
+	</head>
+	<body>
+
+		<script type="module">
+
+            //IMPORT DES DÉPENDANCES
+			import * as THREE from '../build/three.module.js';
+            import {OrbitControls} from "./jsm/controls/OrbitControls.js";
+
+            var camera, scene, renderer, controls; //DÉCLARATIONS OBJETS.
+            var ground, leftWall, rightWall, frontWall, backWall; //DÉCLARATION OBJET
+            var turretBackLeft, turretBackRight, turretFrontLeft, turretFrontRight;
+            var frontGate;
+
+            //CRÉATION DE LA CAMÉRA SUPER DYNAMIQUE
+            camera = new THREE.PerspectiveCamera( 70, window.innerWidth/window.innerHeight, 1, 100000 );
+            camera.position.set( 0, 70000, 0 );
+
+			init(); //Pour créer la scène
+			animate(); //Pour animer la scène (boucle qui tourne en permanence)
+
+			function init() {
+
+                //Création de l'espace 3D (scène) avec ses axes
+                scene = new THREE.Scene();
+
+
+                //Chargement de la texture
+				var texture = new THREE.TextureLoader().load( '../ressources/textures/floors/FloorsCheckerboard_S_Diffuse.jpg' );
+                var turretTexture = new THREE.TextureLoader().load( '../ressources/textures/colors.png' );
+                var wallTexture = new THREE.TextureLoader().load( '../ressources/textures/carbon/Carbon_Normal.png' );
+
+                                                     
+                //Matériaux
+                var material = new THREE.MeshBasicMaterial( { map: texture } );
+                var turretMaterial = new THREE.MeshBasicMaterial( { map: turretTexture } );
+                var wallMaterial = new THREE.MeshBasicMaterial( { map: wallTexture } );
+
+                                                
+                //DÉFINITION DU SOL
+				var groundGeometry = new THREE.BoxBufferGeometry( 30000, 1, 42000 ); //Type/Forme d'objet
+				ground = new THREE.Mesh( groundGeometry, material ); //Création de l'objet avec ses matériaux
+				scene.add( ground ); //Ajout de l'objet dans la scene
+
+				//DÉFINITION DES BOXES
+                var turretGeometry = new THREE.BoxBufferGeometry( 3500, 4000, 3500 );
+
+                turretBackLeft = new THREE.Mesh( turretGeometry, turretMaterial );
+                scene.add( turretBackLeft );
+                turretBackLeft.position.x = -13833.333;
+                turretBackLeft.position.z = -16000;    
+                turretBackLeft.position.y = 2000;
+
+                turretBackRight = new THREE.Mesh( turretGeometry, turretMaterial );
+                scene.add( turretBackRight );
+                turretBackRight.position.x = 13833.333;
+                turretBackRight.position.z = -16000;    
+                turretBackRight.position.y = 2000;
+
+                var turretFrontGeometry = new THREE.BoxBufferGeometry( 5000, 5000, 5000 );
+
+                turretFrontRight = new THREE.Mesh( turretFrontGeometry, turretMaterial );
+                scene.add( turretFrontRight );
+                turretFrontRight.position.x = 13250;
+                turretFrontRight.position.z = 22250;    
+                turretFrontRight.position.y = 2500;
+
+                turretFrontLeft = new THREE.Mesh( turretFrontGeometry, turretMaterial );
+                scene.add( turretFrontLeft );
+                turretFrontLeft.position.x = -13250;
+                turretFrontLeft.position.z = 22250;    
+                turretFrontLeft.position.y = 2500;
+
+                
+                //DÉFINITION DES MURS
+                var leftWallGeometry = new THREE.BoxBufferGeometry( 3000, 2000, 42000 );
+                leftWall = new THREE.Mesh( leftWallGeometry, wallMaterial );
+                scene.add( leftWall );
+                leftWall.position.x = -13500;
+                leftWall.position.y = 1000;
+
+                var rightWallGeometry = new THREE.BoxBufferGeometry( 3000, 2000, 42000 );
+                rightWall = new THREE.Mesh( rightWallGeometry, wallMaterial );
+                scene.add( rightWall );
+                rightWall.position.x = 13500;
+                rightWall.position.y = 1000;
+
+                var frontWallGeometry = new THREE.BoxBufferGeometry( 30000, 3000, 3000 );
+                frontWall = new THREE.Mesh( frontWallGeometry, wallMaterial );
+                scene.add( frontWall );
+                frontWall.position.x = 0;
+                frontWall.position.y = 1500;
+                frontWall.position.z = 22500;   
+
+                var backWallGeometry = new THREE.BoxBufferGeometry( 30000, 2000, 3000 );
+                backWall = new THREE.Mesh( backWallGeometry, wallMaterial );
+                scene.add( backWall );
+                backWall.position.x = 0;
+                backWall.position.y = 1000;
+                backWall.position.z = -20000;
+                
+
+                renderer = new THREE.WebGLRenderer( { antialias: true } ); //Moteur graphique (anti-aliasing: pour lisser le graphisme)
+				renderer.setPixelRatio( window.devicePixelRatio ); //Respect du ration des pixels
+				renderer.setSize( window.innerWidth, window.innerHeight ); //Taille du rendu
+				document.body.appendChild( renderer.domElement ); //Attachement du rendu à l'html
+                
+                controls = new OrbitControls( camera, renderer.domElement );
+                controls.update();
+
+				window.addEventListener( 'resize', onWindowResize, false ); //Adaptation au changement de taille de la fenêtre avec appel de sa fonction ↩️
+
+			}
+
+			function onWindowResize() {
+                //Adaptation au changement de taille de la fenêtre
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+                
+				renderer.setSize( window.innerWidth, window.innerHeight ); //Taille du rendu
+
+			}
+
+			// function animate() {
+
+			// 	requestAnimationFrame( animate ); //Segmente les numéros de frames
+
+			// 	renderer.render( scene, camera ); //Lancement du rendu de la scene avec sa caméra
+
+            // }
+            
+            function animate() {
+
+                requestAnimationFrame( animate );
+
+                // required if controls.enableDamping or controls.autoRotate are set to true
+                controls.update();
+
+                renderer.render( scene, camera );
+
+            }
+
+            
+
+		</script>
+
+	</body>
+</html>
