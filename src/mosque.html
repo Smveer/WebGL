@@ -360,11 +360,7 @@
                     var dome_sphere = new THREE.SphereBufferGeometry( size, 32, 32);
                     var dome_cylindre = new THREE.CylinderGeometry( size, size, size, 32 );
                     var dome_octogone = new THREE.CylinderGeometry( size+100, size+200, 500, 32 );
-
-                    for(let i = 0; i < 2; i++ ){ //tant que dome.position.z > minarais.position.z + 500 &&  dome.position.z < minarais.position.z - 500
                     
-                    
-
                         octogone = new THREE.Mesh( dome_octogone,material);
                         octogone.position.y = build.position.y + (build.geometry.parameters.height/2) + (octogone.geometry.parameters.height/2);
                         octogone.position.x = build.position.x + gapx;
@@ -388,8 +384,30 @@
                         sphere.castShadow = true;
                         sphere.receiveShadow = true;
                         scene.add(sphere);
-                    }
                 }
+
+                function loopDomes(build, size){
+
+                    var gapx = build.geometry.parameters.width/10;
+                    var gapz = build.geometry.parameters.depth/10;
+                    for(let i = 0; i < 2; i++){
+                        addDome(build, size, gapx, gapz);
+                        gapx = gapx*(-1);
+                        gapz = gapz*(-1);
+                    }
+
+                    gapx = build.geometry.parameters.width/5;
+                    gapz = build.geometry.parameters.depth/5;
+
+                    for(let i = 0; i < 2; i++){
+                        addDome(build, size, gapx, gapz);
+                        gapx = gapx*(-1);
+                        gapz = gapz*(-1);
+                    }
+
+                }
+
+                loopDomes(rightWall, 700);
                                 
                 addDome(frontWall, 700, -6500, 0);
                 addDome(frontWall, 700, -9500, 0);
@@ -399,8 +417,8 @@
                 addDome(mainBuildingLittleFront, 700, -9500, 0);
                 addDome(mainBuildingLittleFront, 700, 6500, 0);
                 addDome(mainBuildingLittleFront, 700, 9500, 0);
-                addDome(rightWall, 700, 0, -5000);
-                addDome(rightWall, 700, 0, 5000);
+                //addDome(rightWall, 700, 0, -5000);
+                //addDome(rightWall, 700, 0, 5000);
                 addDome(leftWall, 700, 0, -5000);
                 addDome(leftWall, 700, 0, 5000);
 
