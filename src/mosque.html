@@ -13,6 +13,7 @@
             //IMPORT DES DÉPENDANCES
 			import * as THREE from '../build/three.module.js';
             import {OrbitControls} from "./jsm/controls/OrbitControls.js";
+            import {GUI} from './jsm/libs/dat.gui.module.js'
 
             //DÉCLARATIONS DES OBJETS DE LA SCÈNE
             var camera, scene, renderer, controls, ambient, spotLight, lightHelper, spotLightDome;  
@@ -45,6 +46,9 @@
            
             //DÉCLARATION DES DÔMES
             var sphere, cylindre, octogone;
+
+            //CRÉATION DU GUI
+            const gui = new GUI();
 
             //CRÉATION DE LA CAMÉRA SUPER DYNAMIQUE
             camera = new THREE.PerspectiveCamera( 70, window.innerWidth/window.innerHeight, 1, 1000000 );
