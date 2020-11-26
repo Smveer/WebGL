@@ -15,7 +15,7 @@
             import {OrbitControls} from "./jsm/controls/OrbitControls.js";
 
             //DÉCLARATIONS DES OBJETS DE LA SCÈNE
-            var camera, scene, renderer, controls, ambient, spotLight, lightHelper;  
+            var camera, scene, renderer, controls, ambient, spotLight, lightHelper, spotLightDome;  
 
             //DÉCLARATION DE LA BASE 
             var mesh_floor, ground, leftWall, rightWall, frontWall, backWall;
@@ -68,27 +68,8 @@
                         'dark-s_nz.jpg'
                     ] ); //SKYBOX DU BACKGROUND
 
-                ambient = new THREE.AmbientLight( 0xffffff, 0.1 );
+                ambient = new THREE.AmbientLight( 0xffffff, 0.4 );
 				scene.add( ambient );
-
-                // spotLight = new THREE.SpotLight( 0xffffff, 2 );
-				// spotLight.position.set( 20000, 40000, 40000 );
-				// spotLight.angle = 1.05;
-				// spotLight.penumbra = 0.1;
-				// spotLight.decay = 1;
-                // spotLight.focus = 1;
-				// spotLight.distance = 70000;
-
-				// spotLight.castShadow = true;
-				// spotLight.shadow.mapSize.width = 512;
-				// spotLight.shadow.mapSize.height = 512;
-				// spotLight.shadow.camera.near = 1;
-				// spotLight.shadow.camera.far = 100000;
-				// spotLight.shadow.focus = 1;
-				// scene.add( spotLight );
-
-				// lightHelper = new THREE.SpotLightHelper( spotLight );
-				// scene.add( lightHelper );
 
                 //Chargement des textures
 				var texture = new THREE.TextureLoader().load( '../ressources/textures/grid.png' );
@@ -350,10 +331,27 @@
                     miniTurretBackRight.position.z = frontGateSmall.position.z - (frontGateSmall.geometry.parameters.depth/2);
                     miniTurretBackRight.position.x = frontGateSmall.position.x + (frontGateSmall.geometry.parameters.width/2);
 
-                addMinaret(turretFrontLeft, null, 'on');
-                addMinaret(turretBackLeft, mainBuildingLittleFront, 'on');
-                addMinaret(turretFrontRight, null, 'on');
-                addMinaret(turretBackRight, mainBuildingLittleFront, 'on');
+                //Lumière spotlightDome
+                spotLightDome = new THREE.SpotLight( 0xffffff, 2 );
+                spotLightDome.position.set(mainBuildingMiddle.position.x, mainBuildingMiddle.position.y + mainBuildingMiddle.geometry.parameters.height/2, mainBuildingMiddle.position.z + mainBuildingMiddle.geometry.parameters.depth/2);
+                spotLightDome.angle = 0.4; //Angle de la lumière
+                spotLightDome.penumbra = 0.5;
+                spotLightDome.decay = 1;//
+                spotLightDome.focus = 1;
+                spotLightDome.distance = 40000;
+                spotLightDome.intensity = 1.1;    
+                spotLightDome.target = frontGateBig;                    
+
+                spotLightDome.castShadow = true;
+                spotLightDome.shadow.mapSize.width = 512;
+                spotLightDome.shadow.mapSize.height = 512;
+                spotLightDome.shadow.camera.near = 1;
+                spotLightDome.shadow.camera.far = 100000;
+                spotLightDome.shadow.focus = 1;
+                scene.add( spotLightDome );
+
+                lightHelper = new THREE.SpotLightHelper( spotLightDome );
+                scene.add( lightHelper );
                 
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ DEBUT DOMES @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
@@ -362,6 +360,10 @@
                     var dome_sphere = new THREE.SphereBufferGeometry( size, 32, 32);
                     var dome_cylindre = new THREE.CylinderGeometry( size, size, size, 32 );
                     var dome_octogone = new THREE.CylinderGeometry( size+100, size+200, 500, 32 );
+
+                    for(let i = 0; i < 2; i++ ){ //tant que dome.position.z > minarais.position.z + 500 &&  dome.position.z < minarais.position.z - 500
+                    
+                    
 
                         octogone = new THREE.Mesh( dome_octogone,material);
                         octogone.position.y = build.position.y + (build.geometry.parameters.height/2) + (octogone.geometry.parameters.height/2);
@@ -386,9 +388,9 @@
                         sphere.castShadow = true;
                         sphere.receiveShadow = true;
                         scene.add(sphere);
+                    }
                 }
-
-                //for(var i = 0, i <=) faire boucle sur chaque 
+                                
                 addDome(frontWall, 700, -6500, 0);
                 addDome(frontWall, 700, -9500, 0);
                 addDome(frontWall, 700, 6500, 0);
@@ -411,18 +413,14 @@
 
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ FIN DOMES @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-                renderer = new THREE.WebGLRenderer( { antialias: true } ); //Moteur graphique (anti-aliasing: pour lisser le graphisme)
-				renderer.setPixelRatio( window.devicePixelRatio ); //Respect du ration des pixels
-				renderer.setSize( window.innerWidth, window.innerHeight ); //Taille du rendu
-				document.body.appendChild( renderer.domElement ); //Attachement du rendu à l'html
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ DEBUT MINARET @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-                renderer.shadowMap.enabled = true; //Autoriser les ombres dans le moteur
-                renderer.shadowMap.type = THREE.PCFSoftShadowMap; //Type d'ombre soft
+                addMinaret(turretFrontLeft, null, 'on');
+                addMinaret(turretBackLeft, mainBuildingLittleFront, 'on');
+                addMinaret(turretFrontRight, null, 'on');
+                addMinaret(turretBackRight, mainBuildingLittleFront, 'on');
+
                 
-                controls = new OrbitControls( camera, renderer.domElement );
-                controls.update();
-
-				window.addEventListener( 'resize', onWindowResize, false ); //Adaptation au changement de taille de la fenêtre avec appel de sa fonction ↩️
                 //FONCTION MINARETS
                 function addMinaret(turret, mainBuild, lightStatus){
                     var baseMinaretGeo = new THREE.BoxBufferGeometry( 200*(6000/700), 12000, 200*(6000/700) );
@@ -547,8 +545,8 @@
                         spotLight.shadow.focus = 1;
                         scene.add( spotLight );
 
-                        lightHelper = new THREE.SpotLightHelper( spotLight );
-                        scene.add( lightHelper );
+                        // lightHelper = new THREE.SpotLightHelper( spotLight );
+                        // scene.add( lightHelper );
                     }
 
                     minaret_LowerBalconyTop = new THREE.Mesh( balconyGeoLT, material );
@@ -652,8 +650,22 @@
                     scene.add(minaret_Moon );
 
                 }
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ FIN MINARET @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
+                renderer = new THREE.WebGLRenderer( { antialias: true } ); //Moteur graphique (anti-aliasing: pour lisser le graphisme)
+				renderer.setPixelRatio( window.devicePixelRatio ); //Respect du ration des pixels
+				renderer.setSize( window.innerWidth, window.innerHeight ); //Taille du rendu
+				document.body.appendChild( renderer.domElement ); //Attachement du rendu à l'html
+
+                renderer.shadowMap.enabled = true; //Autoriser les ombres dans le moteur
+                renderer.shadowMap.type = THREE.PCFSoftShadowMap; //Type d'ombre soft
+                
+                controls = new OrbitControls( camera, renderer.domElement );
+                controls.update();
+
+				window.addEventListener( 'resize', onWindowResize, false ); //Adaptation au changement de taille de la fenêtre avec appel de sa fonction ↩️
 			}
+
 
 			function onWindowResize() {
                 //Adaptation au changement de taille de la fenêtre
