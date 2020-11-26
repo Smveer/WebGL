@@ -44,28 +44,7 @@
             var minaret_SpikeBottom, minaret_Spike, minaret_SpikeCircle1, minaret_SpikeCircle2, minaret_SpikeTop, minaret_Moon;
            
             //DÉCLARATION DES PETITS DÔMES FRONT
-            var little_sphere_FLL, little_cylindre_FLL, little_octogone_FLL;
-            var little_sphere_FLR, little_cylindre_FLR, little_octogone_FLR;
-            var little_sphere_FRR, little_cylindre_FRR, little_octogone_FRR;
-            var little_sphere_FRL, little_cylindre_FRL, little_octogone_FRL;
-
-            //DÉCLARATION DES PETITS DÔMES BACK
-            var little_sphere_BLL, little_cylindre_BLL, little_octogone_BLL;
-            var little_sphere_BLR, little_cylindre_BLR, little_octogone_BLR;
-            var little_sphere_BRR, little_cylindre_BRR, little_octogone_BRR;
-            var little_sphere_BRL, little_cylindre_BRL, little_octogone_BRL;
-
-            //DÉCLARATION DES PETITS DÔMES LEFT
-            var little_sphere_L1, little_cylindre_L1, little_octogone_L1;
-            var little_sphere_L2, little_cylindre_L2, little_octogone_L2;
-            var little_sphere_L3, little_cylindre_L3, little_octogone_L3;
-            var little_sphere_L4, little_cylindre_L4, little_octogone_L4;
-
-            //DÉCLARATION DES PETITS DÔMES RIGHT
-            var little_sphere_R1, little_cylindre_R1, little_octogone_R1;
-            var little_sphere_R2, little_cylindre_R2, little_octogone_R2;
-            var little_sphere_R3, little_cylindre_R3, little_octogone_R3;
-            var little_sphere_R4, little_cylindre_R4, little_octogone_R4;
+            var sphere, cylindre, octogone;
 
             //DÉCLARATION DES DÔMES PRINCIPAUX
             var main_sphere, main_cylindre, main_octogone;
@@ -383,432 +362,61 @@
                 addMinaret(turretFrontRight);
                 addMinaret(turretBackRight, mainBuildingLittleFront);
                 
-                //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ DEBUT DOMES @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ DEBUT DOMES @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
                 // DEFINITION PETITS DOMES
-				var little_dome_sphere = new THREE.SphereBufferGeometry( 700, 32, 32);
-				var little_dome_cylindre = new THREE.CylinderGeometry( 700, 700, 700, 32 );
-				var little_dome_octogone = new THREE.CylinderGeometry( 800, 900, 500, 32 );
+                function addDome(build, size, gapx, gapz){
+                    var dome_sphere = new THREE.SphereBufferGeometry( size, 32, 32);
+                    var dome_cylindre = new THREE.CylinderGeometry( size, size, size, 32 );
+                    var dome_octogone = new THREE.CylinderGeometry( size+100, size+200, 500, 32 );
 
-                    //FRONT LEFT
-                    //FLL
-                    little_octogone_FLL = new THREE.Mesh( little_dome_octogone,material);
-                    little_octogone_FLL.position.y = frontWall.position.y + (frontWall.geometry.parameters.height/2) + (little_octogone_FLL.geometry.parameters.height/2);
-                    little_octogone_FLL.position.x = frontWall.position.x - 9500;
-                    little_octogone_FLL.position.z = frontWall.position.z;
-                    scene.add(little_octogone_FLL);
+                        octogone = new THREE.Mesh( dome_octogone,material);
+                        octogone.position.y = build.position.y + (build.geometry.parameters.height/2) + (octogone.geometry.parameters.height/2);
+                        octogone.position.x = build.position.x + gapx;
+                        octogone.position.z = build.position.z + gapz;
+                        octogone.castShadow = true;
+                        octogone.receiveShadow = true;
+                        scene.add(octogone);
 
-                    little_cylindre_FLL = new THREE.Mesh( little_dome_cylindre,material);
-                    little_cylindre_FLL.position.y = little_octogone_FLL.position.y + little_cylindre_FLL.geometry.parameters.height/2;
-                    little_cylindre_FLL.position.x = little_octogone_FLL.position.x;
-                    little_cylindre_FLL.position.z = little_octogone_FLL.position.z;
-                    scene.add(little_cylindre_FLL);
+                        cylindre = new THREE.Mesh( dome_cylindre,material);
+                        cylindre.position.y = octogone.position.y + cylindre.geometry.parameters.height/2;
+                        cylindre.position.x = octogone.position.x;
+                        cylindre.position.z = octogone.position.z;
+                        cylindre.castShadow = true;
+                        cylindre.receiveShadow = true;
+                        scene.add(cylindre);
 
-                    little_sphere_FLL = new THREE.Mesh( little_dome_sphere, sphereMaterial);
-                    little_sphere_FLL.position.y = little_cylindre_FLL.position.y + little_sphere_FLL.geometry.parameters.radius;
-                    little_sphere_FLL.position.x = little_cylindre_FLL.position.x;
-                    little_sphere_FLL.position.z = little_cylindre_FLL.position.z;
-                    scene.add(little_sphere_FLL);
+                        sphere = new THREE.Mesh( dome_sphere, sphereMaterial);
+                        sphere.position.y = cylindre.position.y + sphere.geometry.parameters.radius;
+                        sphere.position.x = cylindre.position.x;
+                        sphere.position.z = cylindre.position.z;
+                        sphere.castShadow = true;
+                        sphere.receiveShadow = true;
+                        scene.add(sphere);
+                }
 
-                    //FLR
-                    little_octogone_FLR = new THREE.Mesh( little_dome_octogone,material);
-                    little_octogone_FLR.position.y = frontWall.position.y + (frontWall.geometry.parameters.height/2) + (little_octogone_FLR.geometry.parameters.height/2);
-                    little_octogone_FLR.position.x = frontWall.position.x - 6500;
-                    little_octogone_FLR.position.z = frontWall.position.z;
-                    scene.add(little_octogone_FLR);
+                //for(var i = 0, i <=) faire boucle sur chaque 
+                addDome(frontWall, 700, -6500, 0);
+                addDome(frontWall, 700, -9500, 0);
+                addDome(frontWall, 700, 6500, 0);
+                addDome(frontWall, 700, 9500, 0);
+                addDome(mainBuildingLittleFront, 700, -6500, 0);
+                addDome(mainBuildingLittleFront, 700, -9500, 0);
+                addDome(mainBuildingLittleFront, 700, 6500, 0);
+                addDome(mainBuildingLittleFront, 700, 9500, 0);
+                addDome(rightWall, 700, 0, -5000);
+                addDome(rightWall, 700, 0, 5000);
+                addDome(leftWall, 700, 0, -5000);
+                addDome(leftWall, 700, 0, 5000);
 
-                    little_cylindre_FLR = new THREE.Mesh( little_dome_cylindre,material);
-                    little_cylindre_FLR.position.y = little_octogone_FLR.position.y + little_cylindre_FLR.geometry.parameters.height/2;
-                    little_cylindre_FLR.position.x = little_octogone_FLR.position.x;
-                    little_cylindre_FLR.position.z = little_octogone_FLR.position.z;
-                    scene.add(little_cylindre_FLR);
-
-                    little_sphere_FLR = new THREE.Mesh( little_dome_sphere, sphereMaterial);
-                    little_sphere_FLR.position.y = little_cylindre_FLR.position.y + little_sphere_FLR.geometry.parameters.radius;
-                    little_sphere_FLR.position.x = little_cylindre_FLR.position.x;
-                    little_sphere_FLR.position.z = little_cylindre_FLR.position.z;
-                    scene.add(little_sphere_FLR);
-
-                    //FRONT RIGHT
-                    //FRR
-                    little_octogone_FRR = new THREE.Mesh( little_dome_octogone,material);
-                    little_octogone_FRR.position.y = frontWall.position.y + (frontWall.geometry.parameters.height/2) + (little_octogone_FRR.geometry.parameters.height/2);
-                    little_octogone_FRR.position.x = frontWall.position.x + 9500;
-                    little_octogone_FRR.position.z = frontWall.position.z;
-                    scene.add(little_octogone_FRR);
-
-                    little_cylindre_FRR = new THREE.Mesh( little_dome_cylindre,material);
-                    little_cylindre_FRR.position.y = little_octogone_FRR.position.y + little_cylindre_FRR.geometry.parameters.height/2;
-                    little_cylindre_FRR.position.x = little_octogone_FRR.position.x;
-                    little_cylindre_FRR.position.z = little_octogone_FRR.position.z;
-                    scene.add(little_cylindre_FRR);
-
-                    little_sphere_FRR = new THREE.Mesh( little_dome_sphere, sphereMaterial);
-                    little_sphere_FRR.position.y = little_cylindre_FRR.position.y + little_sphere_FRR.geometry.parameters.radius;
-                    little_sphere_FRR.position.x = little_cylindre_FRR.position.x;
-                    little_sphere_FRR.position.z = little_cylindre_FRR.position.z;
-                    scene.add(little_sphere_FRR);
-
-                    //FRL
-                    little_octogone_FRL = new THREE.Mesh( little_dome_octogone,material);
-                    little_octogone_FRL.position.y = frontWall.position.y + (frontWall.geometry.parameters.height/2) + (little_octogone_FRL.geometry.parameters.height/2);
-                    little_octogone_FRL.position.x = frontWall.position.x + 6500;
-                    little_octogone_FRL.position.z = frontWall.position.z;
-                    scene.add(little_octogone_FRL);
-
-                    little_cylindre_FRL = new THREE.Mesh( little_dome_cylindre,material);
-                    little_cylindre_FRL.position.y = little_octogone_FRL.position.y + little_cylindre_FRL.geometry.parameters.height/2;
-                    little_cylindre_FRL.position.x = little_octogone_FRL.position.x;
-                    little_cylindre_FRL.position.z = little_octogone_FRL.position.z;
-                    scene.add(little_cylindre_FRL);
-
-                    little_sphere_FRL = new THREE.Mesh( little_dome_sphere, sphereMaterial);
-                    little_sphere_FRL.position.y = little_cylindre_FRL.position.y + little_sphere_FRL.geometry.parameters.radius;
-                    little_sphere_FRL.position.x = little_cylindre_FRL.position.x;
-                    little_sphere_FRL.position.z = little_cylindre_FRL.position.z;
-                    scene.add(little_sphere_FRL);
-
-                    //BACK LEFT
-                    //BLL
-                    little_octogone_BLL = new THREE.Mesh( little_dome_octogone,material);
-                    little_octogone_BLL.position.y = mainBuildingLittleFront.position.y + (mainBuildingLittleFront.geometry.parameters.height/2) + (little_octogone_BLL.geometry.parameters.height/2);
-                    little_octogone_BLL.position.x = mainBuildingLittleFront.position.x - 9500;
-                    little_octogone_BLL.position.z = mainBuildingLittleFront.position.z;
-                    scene.add(little_octogone_BLL);
-
-                    little_cylindre_BLL = new THREE.Mesh( little_dome_cylindre,material);
-                    little_cylindre_BLL.position.y = little_octogone_BLL.position.y + little_cylindre_BLL.geometry.parameters.height/2;
-                    little_cylindre_BLL.position.x = little_octogone_BLL.position.x;
-                    little_cylindre_BLL.position.z = little_octogone_BLL.position.z;
-                    scene.add(little_cylindre_BLL);
-
-                    little_sphere_BLL = new THREE.Mesh( little_dome_sphere, sphereMaterial);
-                    little_sphere_BLL.position.y = little_cylindre_BLL.position.y + little_sphere_BLL.geometry.parameters.radius;
-                    little_sphere_BLL.position.x = little_cylindre_BLL.position.x;
-                    little_sphere_BLL.position.z = little_cylindre_BLL.position.z;
-                    scene.add(little_sphere_BLL);
-
-                    //BLR
-                    little_octogone_BLR = new THREE.Mesh( little_dome_octogone,material);
-                    little_octogone_BLR.position.y = mainBuildingLittleFront.position.y + (mainBuildingLittleFront.geometry.parameters.height/2) + (little_octogone_BLL.geometry.parameters.height/2);
-                    little_octogone_BLR.position.x = mainBuildingLittleFront.position.x - 6500;
-                    little_octogone_BLR.position.z = mainBuildingLittleFront.position.z;
-                    scene.add(little_octogone_BLR);
-
-                    little_cylindre_BLR = new THREE.Mesh( little_dome_cylindre,material);
-                    little_cylindre_BLR.position.y = little_octogone_BLR.position.y + little_cylindre_BLR.geometry.parameters.height/2;
-                    little_cylindre_BLR.position.x = little_octogone_BLR.position.x;
-                    little_cylindre_BLR.position.z = little_octogone_BLR.position.z;
-                    scene.add(little_cylindre_BLR);
-
-                    little_sphere_BLR = new THREE.Mesh( little_dome_sphere, sphereMaterial);
-                    little_sphere_BLR.position.y = little_cylindre_BLR.position.y + little_sphere_BLR.geometry.parameters.radius;
-                    little_sphere_BLR.position.x = little_cylindre_BLR.position.x;
-                    little_sphere_BLR.position.z = little_cylindre_BLR.position.z;
-                    scene.add(little_sphere_BLR);
-
-                    //BACK RIGHT
-                    //BRR
-                    little_octogone_BRR = new THREE.Mesh( little_dome_octogone,material);
-                    little_octogone_BRR.position.y = mainBuildingLittleFront.position.y + (mainBuildingLittleFront.geometry.parameters.height/2) + (little_octogone_BLL.geometry.parameters.height/2);
-                    little_octogone_BRR.position.x = mainBuildingLittleFront.position.x + 9500;
-                    little_octogone_BRR.position.z = mainBuildingLittleFront.position.z;
-                    scene.add(little_octogone_BRR);
-
-                    little_cylindre_BRR = new THREE.Mesh( little_dome_cylindre,material);
-                    little_cylindre_BRR.position.y = little_octogone_BRR.position.y + little_cylindre_BRR.geometry.parameters.height/2;
-                    little_cylindre_BRR.position.x = little_octogone_BRR.position.x;
-                    little_cylindre_BRR.position.z = little_octogone_BRR.position.z;
-                    scene.add(little_cylindre_BRR);
-
-                    little_sphere_BRR = new THREE.Mesh( little_dome_sphere, sphereMaterial);
-                    little_sphere_BRR.position.y = little_cylindre_BRR.position.y + little_sphere_BRR.geometry.parameters.radius;
-                    little_sphere_BRR.position.x = little_cylindre_BRR.position.x;
-                    little_sphere_BRR.position.z = little_cylindre_BRR.position.z;
-                    scene.add(little_sphere_BRR);
-
-                    //BRL
-                    little_octogone_BRL = new THREE.Mesh( little_dome_octogone,material);
-                    little_octogone_BRL.position.y = mainBuildingLittleFront.position.y + (mainBuildingLittleFront.geometry.parameters.height/2) + (little_octogone_BLL.geometry.parameters.height/2);
-                    little_octogone_BRL.position.x = mainBuildingLittleFront.position.x + 6500;
-                    little_octogone_BRL.position.z = mainBuildingLittleFront.position.z;
-                    scene.add(little_octogone_BRL);
-
-                    little_cylindre_BRL = new THREE.Mesh( little_dome_cylindre,material);
-                    little_cylindre_BRL.position.y = little_octogone_BRL.position.y + little_cylindre_BRL.geometry.parameters.height/2;
-                    little_cylindre_BRL.position.x = little_octogone_BRL.position.x;
-                    little_cylindre_BRL.position.z = little_octogone_BRL.position.z;
-                    scene.add(little_cylindre_BRL);
-
-                    little_sphere_BRL = new THREE.Mesh( little_dome_sphere, sphereMaterial);
-                    little_sphere_BRL.position.y = little_cylindre_BRL.position.y + little_sphere_BRL.geometry.parameters.radius;
-                    little_sphere_BRL.position.x = little_cylindre_BRL.position.x;
-                    little_sphere_BRL.position.z = little_cylindre_BRL.position.z;
-                    scene.add(little_sphere_BRL);
-
-                    //LEFT
-                    //L1
-                    little_octogone_L1 = new THREE.Mesh( little_dome_octogone,material);
-                    little_octogone_L1.position.y = leftWall.position.y + (leftWall.geometry.parameters.height/2) + (little_octogone_L1.geometry.parameters.height/2);
-                    little_octogone_L1.position.x = leftWall.position.x;
-                    little_octogone_L1.position.z = mainBuildingLittleFront.position.z;
-                    scene.add(little_octogone_L1);
-
-                    little_cylindre_L1 = new THREE.Mesh( little_dome_cylindre,material);
-                    little_cylindre_L1.position.y = little_octogone_L1.position.y + little_cylindre_L1.geometry.parameters.height/2;
-                    little_cylindre_L1.position.x = little_octogone_L1.position.x;
-                    little_cylindre_L1.position.z = little_octogone_L1.position.z;
-                    scene.add(little_cylindre_L1);
-
-                    little_sphere_L1 = new THREE.Mesh( little_dome_sphere, sphereMaterial);
-                    little_sphere_L1.position.y = little_cylindre_L1.position.y + little_sphere_L1.geometry.parameters.radius;
-                    little_sphere_L1.position.x = little_cylindre_L1.position.x;
-                    little_sphere_L1.position.z = little_cylindre_L1.position.z;
-                    scene.add(little_sphere_L1);
-
-                    //L2
-                    little_octogone_L2 = new THREE.Mesh( little_dome_octogone,material);
-                    little_octogone_L2.position.y = leftWall.position.y + (leftWall.geometry.parameters.height/2) + (little_octogone_L2.geometry.parameters.height/2);
-                    little_octogone_L2.position.x = leftWall.position.x;
-                    little_octogone_L2.position.z = mainBuildingLittleFront.position.z + 6500;
-                    scene.add(little_octogone_L2);
-
-                    little_cylindre_L2 = new THREE.Mesh( little_dome_cylindre,material);
-                    little_cylindre_L2.position.y = little_octogone_L2.position.y + little_cylindre_L2.geometry.parameters.height/2;
-                    little_cylindre_L2.position.x = little_octogone_L2.position.x;
-                    little_cylindre_L2.position.z = little_octogone_L2.position.z;
-                    scene.add(little_cylindre_L2);
-
-                    little_sphere_L2 = new THREE.Mesh( little_dome_sphere, sphereMaterial);
-                    little_sphere_L2.position.y = little_cylindre_L2.position.y + little_sphere_L2.geometry.parameters.radius;
-                    little_sphere_L2.position.x = little_cylindre_L2.position.x;
-                    little_sphere_L2.position.z = little_cylindre_L2.position.z;
-                    scene.add(little_sphere_L2);
-
-                    //L3
-                    little_octogone_L3 = new THREE.Mesh( little_dome_octogone,material);
-                    little_octogone_L3.position.y = leftWall.position.y + (leftWall.geometry.parameters.height/2) + (little_octogone_L3.geometry.parameters.height/2);
-                    little_octogone_L3.position.x = leftWall.position.x;
-                    little_octogone_L3.position.z = mainBuildingLittleFront.position.z + 13000;
-                    scene.add(little_octogone_L3);
-
-                    little_cylindre_L3 = new THREE.Mesh( little_dome_cylindre,material);
-                    little_cylindre_L3.position.y = little_octogone_L3.position.y + little_cylindre_L3.geometry.parameters.height/2;
-                    little_cylindre_L3.position.x = little_octogone_L3.position.x;
-                    little_cylindre_L3.position.z = little_octogone_L3.position.z;
-                    scene.add(little_cylindre_L3);
-
-                    little_sphere_L3 = new THREE.Mesh( little_dome_sphere, sphereMaterial);
-                    little_sphere_L3.position.y = little_cylindre_L3.position.y + little_sphere_L3.geometry.parameters.radius;
-                    little_sphere_L3.position.x = little_cylindre_L3.position.x;
-                    little_sphere_L3.position.z = little_cylindre_L3.position.z;
-                    scene.add(little_sphere_L3);
-
-                    //L4
-                    little_octogone_L4 = new THREE.Mesh( little_dome_octogone,material);
-                    little_octogone_L4.position.y = leftWall.position.y + (leftWall.geometry.parameters.height/2) + (little_octogone_L4.geometry.parameters.height/2);
-                    little_octogone_L4.position.x = leftWall.position.x;
-                    little_octogone_L4.position.z = mainBuildingLittleFront.position.z + 19500;
-                    scene.add(little_octogone_L4);
-
-                    little_cylindre_L4 = new THREE.Mesh( little_dome_cylindre,material);
-                    little_cylindre_L4.position.y = little_octogone_L4.position.y + little_cylindre_L4.geometry.parameters.height/2;
-                    little_cylindre_L4.position.x = little_octogone_L4.position.x;
-                    little_cylindre_L4.position.z = little_octogone_L4.position.z;
-                    scene.add(little_cylindre_L4);
-
-                    little_sphere_L4 = new THREE.Mesh( little_dome_sphere, sphereMaterial);
-                    little_sphere_L4.position.y = little_cylindre_L4.position.y + little_sphere_L4.geometry.parameters.radius;
-                    little_sphere_L4.position.x = little_cylindre_L4.position.x;
-                    little_sphere_L4.position.z = little_cylindre_L4.position.z;
-                    scene.add(little_sphere_L4);
-
-                    //RIGHT
-                    //R1
-                    little_octogone_R1 = new THREE.Mesh( little_dome_octogone,material);
-                    little_octogone_R1.position.y = rightWall.position.y + (rightWall.geometry.parameters.height/2) + (little_octogone_R1.geometry.parameters.height/2);
-                    little_octogone_R1.position.x = rightWall.position.x;
-                    little_octogone_R1.position.z = mainBuildingLittleFront.position.z;
-                    scene.add(little_octogone_R1);
-
-                    little_cylindre_R1 = new THREE.Mesh( little_dome_cylindre,material);
-                    little_cylindre_R1.position.y = little_octogone_R1.position.y + little_cylindre_R1.geometry.parameters.height/2;
-                    little_cylindre_R1.position.x = little_octogone_R1.position.x;
-                    little_cylindre_R1.position.z = little_octogone_R1.position.z;
-                    scene.add(little_cylindre_R1);
-
-                    little_sphere_R1 = new THREE.Mesh( little_dome_sphere, sphereMaterial);
-                    little_sphere_R1.position.y = little_cylindre_R1.position.y + little_sphere_R1.geometry.parameters.radius;
-                    little_sphere_R1.position.x = little_cylindre_R1.position.x;
-                    little_sphere_R1.position.z = little_cylindre_R1.position.z;
-                    scene.add(little_sphere_R1);
-
-                    //R2
-                    little_octogone_R2 = new THREE.Mesh( little_dome_octogone,material);
-                    little_octogone_R2.position.y = rightWall.position.y + (rightWall.geometry.parameters.height/2) + (little_octogone_R1.geometry.parameters.height/2);
-                    little_octogone_R2.position.x = rightWall.position.x;
-                    little_octogone_R2.position.z = mainBuildingLittleFront.position.z + 6500;
-                    scene.add(little_octogone_R2);
-
-                    little_cylindre_R2 = new THREE.Mesh( little_dome_cylindre,material);
-                    little_cylindre_R2.position.y = little_octogone_R2.position.y + little_cylindre_R2.geometry.parameters.height/2;
-                    little_cylindre_R2.position.x = little_octogone_R2.position.x;
-                    little_cylindre_R2.position.z = little_octogone_R2.position.z;
-                    scene.add(little_cylindre_R2);
-
-                    little_sphere_R2 = new THREE.Mesh( little_dome_sphere, sphereMaterial);
-                    little_sphere_R2.position.y = little_cylindre_R2.position.y + little_sphere_R2.geometry.parameters.radius;
-                    little_sphere_R2.position.x = little_cylindre_R2.position.x;
-                    little_sphere_R2.position.z = little_cylindre_R2.position.z;
-                    scene.add(little_sphere_R2);
-
-                    //R3
-                    little_octogone_R3 = new THREE.Mesh( little_dome_octogone,material);
-                    little_octogone_R3.position.y = rightWall.position.y + (rightWall.geometry.parameters.height/2) + (little_octogone_R1.geometry.parameters.height/2);
-                    little_octogone_R3.position.x = rightWall.position.x;
-                    little_octogone_R3.position.z = mainBuildingLittleFront.position.z + 13000;
-                    scene.add(little_octogone_R3);
-
-                    little_cylindre_R3 = new THREE.Mesh( little_dome_cylindre,material);
-                    little_cylindre_R3.position.y = little_octogone_R3.position.y + little_cylindre_R3.geometry.parameters.height/2;
-                    little_cylindre_R3.position.x = little_octogone_R3.position.x;
-                    little_cylindre_R3.position.z = little_octogone_R3.position.z;
-                    scene.add(little_cylindre_R3);
-
-                    little_sphere_R3 = new THREE.Mesh( little_dome_sphere, sphereMaterial);
-                    little_sphere_R3.position.y = little_cylindre_R3.position.y + little_sphere_R3.geometry.parameters.radius;
-                    little_sphere_R3.position.x = little_cylindre_R3.position.x;
-                    little_sphere_R3.position.z = little_cylindre_R3.position.z;
-                    scene.add(little_sphere_R3);
-
-                    //R4
-                    little_octogone_R4 = new THREE.Mesh( little_dome_octogone,material);
-                    little_octogone_R4.position.y = rightWall.position.y + (rightWall.geometry.parameters.height/2) + (little_octogone_R1.geometry.parameters.height/2);
-                    little_octogone_R4.position.x = rightWall.position.x;
-                    little_octogone_R4.position.z = mainBuildingLittleFront.position.z + 19500;
-                    scene.add(little_octogone_R4);
-
-                    little_cylindre_R4 = new THREE.Mesh( little_dome_cylindre,material);
-                    little_cylindre_R4.position.y = little_octogone_R4.position.y + little_cylindre_R4.geometry.parameters.height/2;
-                    little_cylindre_R4.position.x = little_octogone_R4.position.x;
-                    little_cylindre_R4.position.z = little_octogone_R4.position.z;
-                    scene.add(little_cylindre_R4);
-
-                    little_sphere_R4 = new THREE.Mesh( little_dome_sphere, sphereMaterial);
-                    little_sphere_R4.position.y = little_cylindre_R4.position.y + little_sphere_R4.geometry.parameters.radius;
-                    little_sphere_R4.position.x = little_cylindre_R4.position.x;
-                    little_sphere_R4.position.z = little_cylindre_R4.position.z;
-                    scene.add(little_sphere_R4);
-
-
-                // MAIN DOME
-                var main_dome_sphere = new THREE.SphereBufferGeometry( 3250, 32, 32);
-                var main_dome_cylindre = new THREE.CylinderGeometry( 3250, 3250, 3250, 32 );
-                var main_dome_octogone = new THREE.CylinderGeometry( 3350, 3500, 500, 32 );
+                addDome(mainBuilding, 3250, 0, 0);
+                addDome(mainBuilding, 2000, -7000, 0);
+                addDome(mainBuilding, 2000, 7000, 0);
                 
-                    main_octogone = new THREE.Mesh( main_dome_octogone,material);
-                    main_octogone.position.y = mainBuilding.position.y + (mainBuilding.geometry.parameters.height/2) + (main_octogone.geometry.parameters.height/2);
-                    main_octogone.position.x = mainBuilding.position.x;
-                    main_octogone.position.z = mainBuilding.position.z;
-                    scene.add(main_octogone);
+                addDome(mainBuildingMiddle, 1200, 0, 0);
+                addDome(frontGateBig, 1000, 0, 0);
 
-                    main_cylindre = new THREE.Mesh( main_dome_cylindre,material);
-                    main_cylindre.position.y = main_octogone.position.y + main_cylindre.geometry.parameters.height/2;
-                    main_cylindre.position.x = main_octogone.position.x;
-                    main_cylindre.position.z = main_octogone.position.z;
-                    scene.add(main_cylindre);
-
-                    main_sphere = new THREE.Mesh( main_dome_sphere, sphereMaterial);
-                    main_sphere.position.y = main_cylindre.position.y + main_sphere.geometry.parameters.radius;
-                    main_sphere.position.x = main_cylindre.position.x;
-                    main_sphere.position.z = main_cylindre.position.z;
-                    scene.add(main_sphere);
-
-                // BIG DOMES
-                var big_dome_sphere = new THREE.SphereBufferGeometry( 2000, 32, 32);
-                var big_dome_cylindre = new THREE.CylinderGeometry( 2000, 2000, 3250, 32 );
-                var big_dome_octogone = new THREE.CylinderGeometry( 2100, 2300, 500, 32 );
-                    //LEFT
-                    bigLeft_octogone = new THREE.Mesh( big_dome_octogone,material);
-                    bigLeft_octogone.position.y = mainBuilding.position.y + (mainBuilding.geometry.parameters.height/2) + (bigLeft_octogone.geometry.parameters.height/2);
-                    bigLeft_octogone.position.x = mainBuilding.position.x - 7000;
-                    bigLeft_octogone.position.z = mainBuilding.position.z;
-                    scene.add(bigLeft_octogone);
-
-                    bigLeft_cylindre = new THREE.Mesh( big_dome_cylindre,material);
-                    bigLeft_cylindre.position.y = bigLeft_octogone.position.y + bigLeft_cylindre.geometry.parameters.height/2;
-                    bigLeft_cylindre.position.x = bigLeft_octogone.position.x;
-                    bigLeft_cylindre.position.z = bigLeft_octogone.position.z;
-                    scene.add(bigLeft_cylindre);
-
-                    bigLeft_sphere = new THREE.Mesh( big_dome_sphere, sphereMaterial);
-                    bigLeft_sphere.position.y = bigLeft_cylindre.position.y + bigLeft_sphere.geometry.parameters.radius;
-                    bigLeft_sphere.position.x = bigLeft_cylindre.position.x;
-                    bigLeft_sphere.position.z = bigLeft_cylindre.position.z;
-                    scene.add(bigLeft_sphere);
-
-                    //Right
-                    bigRight_octogone = new THREE.Mesh( big_dome_octogone,material);
-                    bigRight_octogone.position.y = mainBuilding.position.y + (mainBuilding.geometry.parameters.height/2) + (bigRight_octogone.geometry.parameters.height/2);
-                    bigRight_octogone.position.x = mainBuilding.position.x + 7000;
-                    bigRight_octogone.position.z = mainBuilding.position.z;
-                    scene.add(bigRight_octogone);
-
-                    bigRight_cylindre = new THREE.Mesh( big_dome_cylindre,material);
-                    bigRight_cylindre.position.y = bigRight_octogone.position.y + bigRight_cylindre.geometry.parameters.height/2;
-                    bigRight_cylindre.position.x = bigRight_octogone.position.x;
-                    bigRight_cylindre.position.z = bigRight_octogone.position.z;
-                    scene.add(bigRight_cylindre);
-
-                    bigRight_sphere = new THREE.Mesh( big_dome_sphere, sphereMaterial);
-                    bigRight_sphere.position.y = bigRight_cylindre.position.y + bigRight_sphere.geometry.parameters.radius;
-                    bigRight_sphere.position.x = bigRight_cylindre.position.x;
-                    bigRight_sphere.position.z = bigRight_cylindre.position.z;
-                    scene.add(bigRight_sphere);
-
-                // MIDDLE DOMES
-                var mid_dome_sphere = new THREE.SphereBufferGeometry( 1200, 32, 32);
-                var mid_dome_cylindre = new THREE.CylinderGeometry( 1200, 1200, 500, 32 );
-                var mid_dome_octogone = new THREE.CylinderGeometry( 1400, 1500, 200, 32 );
-                    //Back
-                    midBack_octogone = new THREE.Mesh( mid_dome_octogone,material);
-                    midBack_octogone.position.y = mainBuildingMiddle.position.y + (mainBuildingMiddle.geometry.parameters.height/2) + (midBack_octogone.geometry.parameters.height/2);
-                    midBack_octogone.position.x = mainBuildingMiddle.position.x;
-                    midBack_octogone.position.z = mainBuildingMiddle.position.z;
-                    scene.add(midBack_octogone);
-
-                    midBack_cylindre = new THREE.Mesh( mid_dome_cylindre,material);
-                    midBack_cylindre.position.y = midBack_octogone.position.y + midBack_cylindre.geometry.parameters.height/2;
-                    midBack_cylindre.position.x = midBack_octogone.position.x;
-                    midBack_cylindre.position.z = midBack_octogone.position.z;
-                    scene.add(midBack_cylindre);
-
-                    midBack_sphere = new THREE.Mesh( mid_dome_sphere, sphereMaterial);
-                    midBack_sphere.position.y = midBack_cylindre.position.y - midBack_cylindre.geometry.parameters.height/2 + midBack_sphere.geometry.parameters.radius;
-                    midBack_sphere.position.x = midBack_cylindre.position.x;
-                    midBack_sphere.position.z = midBack_cylindre.position.z;
-                    scene.add(midBack_sphere);
-                    
-                    //Front
-                    midFront_octogone = new THREE.Mesh( mid_dome_octogone,material);
-                    midFront_octogone.position.y = frontGateBig.position.y + (frontGateBig.geometry.parameters.height/2) + (midFront_octogone.geometry.parameters.height/2);
-                    midFront_octogone.position.x = frontGateBig.position.x;
-                    midFront_octogone.position.z = frontGateBig.position.z;
-                    scene.add(midFront_octogone);
-
-                    midFront_cylindre = new THREE.Mesh( mid_dome_cylindre,material);
-                    midFront_cylindre.position.y = midFront_octogone.position.y + midFront_cylindre.geometry.parameters.height/2;
-                    midFront_cylindre.position.x = midFront_octogone.position.x;
-                    midFront_cylindre.position.z = midFront_octogone.position.z;
-                    scene.add(midFront_cylindre);
-
-                    midFront_sphere = new THREE.Mesh( mid_dome_sphere, sphereMaterial);
-                    midFront_sphere.position.y = midFront_cylindre.position.y - midFront_cylindre.geometry.parameters.height/2 + midFront_sphere.geometry.parameters.radius;
-                    midFront_sphere.position.x = midFront_cylindre.position.x;
-                    midFront_sphere.position.z = midFront_cylindre.position.z;
-                    scene.add(midFront_sphere);
-
-                //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ FIN DOMES @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ FIN DOMES @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
                 renderer = new THREE.WebGLRenderer( { antialias: true } ); //Moteur graphique (anti-aliasing: pour lisser le graphisme)
 				renderer.setPixelRatio( window.devicePixelRatio ); //Respect du ration des pixels
