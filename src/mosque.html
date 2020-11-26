@@ -386,42 +386,63 @@
                         scene.add(sphere);
                 }
 
+                // FONCTION POUR POSITIONNER LES DOMES SUR LA MOSQUÉE
                 function loopDomes(build, size){
 
-                    var gapx = build.geometry.parameters.width/10;
-                    var gapz = build.geometry.parameters.depth/10;
-                    for(let i = 0; i < 2; i++){
-                        addDome(build, size, gapx, gapz);
-                        gapx = gapx*(-1);
-                        gapz = gapz*(-1);
+                    // Condition de vérification si la largeur du bâtiment > profondeur de celui-ci
+                    if(build.geometry.parameters.width > build.geometry.parameters.depth){
+                        // Placement des 'gap' en horizontal entre les domes, soit l'espacement entre ceux-ci
+                        if(build == frontWall || build == mainBuildingLittleFront){
+                            var gapx = build.geometry.parameters.width/4.25;
+                        } else {
+                            var gapx = build.geometry.parameters.width/9;
+                        }
+                           
+                        // Placement des domes à l'aide de boucles   
+                        var gapz = 0;
+                        for(let i = 0; i < 2; i++){
+                            addDome(build, size, gapx, gapz);
+                            gapx = gapx*(-1);
+                        }
+
+                        // Placement des 'gap' en horizontal entre les domes, soit l'espacement entre ceux-ci
+                        if(build == frontWall || build == mainBuildingLittleFront){
+                            gapx = build.geometry.parameters.width/3.250;
+                            console.log(gapx);
+                        } else {
+                            gapx = build.geometry.parameters.width/3;
+                        }
+
+                        // Placement des domes à l'aide de boucles   
+                        for(let i = 0; i < 2; i++){
+                            addDome(build, size, gapx, gapz);
+                            gapx = gapx*(-1);
+                        }
+
+                    } else {
+                        var gapx = 0;
+                        var gapz = build.geometry.parameters.depth/9;
+                        for(let i = 0; i < 2; i++){
+                            addDome(build, size, gapx, gapz);
+                            gapz = gapz*(-1);
+                        }
+
+                        gapz = build.geometry.parameters.depth/3;
+
+                        for(let i = 0; i < 2; i++){
+                            addDome(build, size, gapx, gapz);
+                            gapz = gapz*(-1);
+                        }
                     }
-
-                    gapx = build.geometry.parameters.width/5;
-                    gapz = build.geometry.parameters.depth/5;
-
-                    for(let i = 0; i < 2; i++){
-                        addDome(build, size, gapx, gapz);
-                        gapx = gapx*(-1);
-                        gapz = gapz*(-1);
-                    }
-
+                    
                 }
 
                 loopDomes(rightWall, 700);
+                loopDomes(leftWall, 700);
+                loopDomes(frontWall, 700);
+                loopDomes(mainBuildingLittleFront, 700);
+                loopDomes(backWall, 700);
                                 
-                addDome(frontWall, 700, -6500, 0);
-                addDome(frontWall, 700, -9500, 0);
-                addDome(frontWall, 700, 6500, 0);
-                addDome(frontWall, 700, 9500, 0);
-                addDome(mainBuildingLittleFront, 700, -6500, 0);
-                addDome(mainBuildingLittleFront, 700, -9500, 0);
-                addDome(mainBuildingLittleFront, 700, 6500, 0);
-                addDome(mainBuildingLittleFront, 700, 9500, 0);
-                //addDome(rightWall, 700, 0, -5000);
-                //addDome(rightWall, 700, 0, 5000);
-                addDome(leftWall, 700, 0, -5000);
-                addDome(leftWall, 700, 0, 5000);
-
                 addDome(mainBuilding, 3250, 0, 0);
                 addDome(mainBuilding, 2000, -7000, 0);
                 addDome(mainBuilding, 2000, 7000, 0);
