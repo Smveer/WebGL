@@ -13,7 +13,26 @@
             //IMPORT DES DÉPENDANCES
 			import * as THREE from '../build/three.module.js';
             import {OrbitControls} from "./jsm/controls/OrbitControls.js";
+            import Stats from './jsm/libs/stats.module.js';
             import {GUI} from './jsm/libs/dat.gui.module.js'
+
+
+            (function(fps){
+                var script=document.createElement('script');
+                script.onload=function(){
+                        var stats=new Stats();
+                        document.body.appendChild(stats.dom);
+                        requestAnimationFrame(function loop(){
+                            stats.update();
+                            requestAnimationFrame(loop)
+                        });
+                };
+
+                script.src='//mrdoob.github.io/stats.js/build/stats.min.js';
+                //script.src='./three.js-master/build/three.min.js';
+                document.head.appendChild(script);
+            })();
+
 
             //DÉCLARATIONS DES OBJETS DE LA SCÈNE
             var camera, scene, renderer, controls, ambient, spotLight, lightHelper, spotLightDome;  
@@ -48,7 +67,65 @@
             var sphere, cylindre, octogone;
 
             //CRÉATION DU GUI
-            const gui = new GUI();
+            displaygui();
+            function displaygui() {
+                var gui = new GUI;
+                var parameters = {
+                    //musique d'ambiance
+                    music: "",
+                    volume: 2,
+                    movSpeedX: 1,
+                    movSpeedZ: 1,
+                    rainer: false
+                };
+
+                var sounds = gui.addFolder('Music scene');
+
+                var soundVolume = sounds.add(parameters, 'volume').min(0).max(4).step(0.1).name('Volume');
+                soundVolume.onChange(function(changed){
+                    sound.setVolume(changed);
+
+                });
+
+                var song = sounds.add(parameters, 'music', ['sounds/song.mp3','sounds/AnimalCrossingMusic.ogg','sounds/trickAndTreats.mp3','sounds/moderation.mp3','sounds/resettiSong.mp3', 'sounds/gamecube.mp3']).name("Song")
+                song.onChange(function(changed){
+                    sound.stop();
+                    audioLoader.load( changed, function( buffer ) {
+                    sound.setBuffer( buffer );
+                    sound.setLoop( true );
+                    sound.setVolume( 0.5 );
+                    sound.play();
+                    })
+                });
+
+                var navig = gui.addFolder('Navigation');
+
+                var movingSpeedX = navig.add(parameters, 'movSpeedX').min(-1).max(2).step(0.1).name('Speed X');
+                movingSpeedX.onChange(function(changed){
+                    //movSpeedX = changed;
+
+                });
+                var movingSpeedZ = navig.add(parameters, 'movSpeedZ').min(-1).max(2).step(0.1).name('Speed Z');
+                movingSpeedZ.onChange(function(changed){
+                    //movSpeedZ = changed;
+
+                });
+
+
+                var weather = gui.addFolder('Rain Control');
+
+                var rainControl = weather.add(parameters, 'rainer').name('Raining');
+                rainControl.onChange(function(changed){
+                    //rainBool = changed;
+                    //cloud.visible = changed;
+
+                    // if (changed) {
+                    //     rainSound.play();
+                    // }else{
+                    //     rainSound.stop();
+                    // }
+                });
+            }
 
             //CRÉATION DE LA CAMÉRA SUPER DYNAMIQUE
             camera = new THREE.PerspectiveCamera( 70, window.innerWidth/window.innerHeight, 1, 1000000 );
