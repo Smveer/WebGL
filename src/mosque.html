@@ -39,12 +39,11 @@
             var miniTurretMainBuilding_frontLeft, miniTurretMainBuilding_frontRight;
 
             //DÉCLARATION DES OBJETS DES MINARETS
-            var minaret_Base, minaret_LowerCylinder, minaret_deco2Base, minaret_deco1Base, minaret_BaseLinkOcto, minaret_LowerBalconyBottom, minaret_LowerBalconyTop, minaret_MiddleCylinder, minaret_MiddleBalconyTop, minaret_MiddleBalconyBottom, minaret_HigherBalconyTop, minaret_HigherBalconyBottom, minaret_SpikeBottom, minaret_Spike, minaret_SpikeCircle1, minaret_SpikeCircle2, minaret_SpikeTop, minaret_Moon;
+            var minaretFL_Base, minaretFL_LowerCylinder, minaretFL_deco2Base, minaretFL_deco1Base, minaretFL_BaseLinkOcto, minaretFL_LowerBalconyBottom, minaretFL_LowerBalconyTop, minaretFL_MiddleCylinder, minaretFL_MiddleBalconyTop, minaretFL_MiddleBalconyBottom, minaretFL_HigherBalconyTop, minaretFL_HigherBalconyBottom, minaretFL_SpikeBottom, minaretFL_Spike, minaretFL_SpikeCircle1, minaretFL_SpikeCircle2, minaretFL_SpikeTop, minaretFL_Moon;
             var minaretFR_Base, minaretFR_LowerCylinder, minaretFR_deco2Base, minaretFR_deco1Base, minaretFR_BaseLinkOcto, minaretFR_LowerBalconyBottom, minaretFR_LowerBalconyTop, minaretFR_MiddleCylinder, minaretFR_MiddleBalconyTop, minaretFR_MiddleBalconyBottom, minaretFR_HigherBalconyTop, minaretFR_HigherBalconyBottom, minaretFR_SpikeBottom, minaretFR_Spike, minaretFR_SpikeCircle1, minaretFR_SpikeCircle2, minaretFR_SpikeTop, minaretFR_Moon;
             var minaretBR_Base, minaretBR_LowerCylinder, minaretBR_deco2Base, minaretBR_deco1Base, minaretBR_BaseLinkOcto, minaretBR_LowerBalconyBottom, minaretBR_LowerBalconyTop, minaretBR_MiddleCylinder, minaretBR_MiddleBalconyTop, minaretBR_MiddleBalconyBottom, minaretBR_HigherBalconyTop, minaretBR_HigherBalconyBottom, minaretBR_SpikeBottom, minaretBR_Spike, minaretBR_SpikeCircle1, minaretBR_SpikeCircle2, minaretBR_SpikeTop, minaretBR_Moon;
             var minaretBL_Base, minaretBL_LowerCylinder, minaretBL_deco2Base, minaretBL_deco1Base, minaretBL_BaseLinkOcto, minaretBL_LowerBalconyBottom, minaretBL_LowerBalconyTop, minaretBL_MiddleCylinder, minaretBL_MiddleBalconyTop, minaretBL_MiddleBalconyBottom, minaretBL_HigherBalconyTop, minaretBL_HigherBalconyBottom, minaretBL_SpikeBottom, minaretBL_Spike, minaretBL_SpikeCircle1, minaretBL_SpikeCircle2, minaretBL_SpikeTop, minaretBL_Moon;
-            var minaret_Base, minaret_LowerCylinder, minaret_deco2Base, minaret_deco1Base, minaret_BaseLinkOcto, minaret_LowerBalconyBottom, minaret_LowerBalconyTop, minaret_MiddleCylinder, minaret_MiddleBalconyTop, minaret_MiddleBalconyBottom, minaret_HigherBalconyTop, minaret_HigherBalconyBottom, minaret_SpikeBottom, minaret_Spike, minaret_SpikeCircle1, minaret_SpikeCircle2, minaret_SpikeTop, minaret_Moon;
-           
+
             //DÉCLARATION DES PETITS DÔMES FRONT
             var little_sphere_FLL, little_cylindre_FLL, little_octogone_FLL;
             var little_sphere_FLR, little_cylindre_FLR, little_octogone_FLR;
@@ -82,7 +81,7 @@
 
 			init(); //Pour créer la scène
 			animate(); //Pour animer la scène (boucle qui tourne en permanence)
-            
+
 			function init() {
 
                 //Création de l'espace 3D (scène) avec ses axes
@@ -342,9 +341,517 @@
                     miniTurretMainBuilding_frontRight.position.x = mainBuildingMiddle.position.x + (mainBuildingMiddle.geometry.parameters.width/2);
                     miniTurretMainBuilding_frontRight.position.z = mainBuildingMiddle.position.z + (mainBuildingMiddle.geometry.parameters.depth/2);
 
-                    //DÉFINITION DE L'ENTRÉ
-                    var gateGeometry = new THREE.BoxBufferGeometry( 10000, 4000, 5000 );
-                    var miniGeometry = new THREE.BoxBufferGeometry( 1000, 5000, 1000 );
+                //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ DEBUT MINARETS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+                //DEFINITIONS DES OBJETS DES MINARETS
+                var baseMinaretGeo = new THREE.BoxBufferGeometry( 200*(6000/700), 12000, 200*(6000/700) );
+                var decoMinaretGeo = new THREE.ConeBufferGeometry( 150*(6000/700), 200*(6000/700), 4 );
+                var linkGeo = new THREE.CylinderGeometry( 100*(6000/700), 140*(6000/700), 100*(6000/700), 4, 1 );
+                var geoLC = new THREE.CylinderBufferGeometry( 100*(6000/700), 100*(6000/700), 400*(6000/700), 8 );
+                var balconyGeoLB = new THREE.CylinderGeometry( 180*(6000/700), 100*(6000/700),50*(6000/700), 600, 1 );
+                var balconyGeoLT = new THREE.CylinderBufferGeometry( 180*(6000/700), 180*(6000/700), 30*(6000/700), 1000 );
+                var geoMC = new THREE.CylinderBufferGeometry( 50*(6000/700), 100*(6000/700), 400*(6000/700), 1000 );
+                var balconyGeoMB = new THREE.CylinderGeometry( 120*(6000/700), 80*(6000/700),50*(6000/700), 600, 1 );
+                var balconyGeoMT = new THREE.CylinderBufferGeometry( 120*(6000/700), 120*(6000/700), 30*(6000/700), 1000 );
+                var balconyGeoHB = new THREE.CylinderGeometry( 80*(6000/700), 50*(6000/700), 50*(6000/700), 600, 1 );
+                var balconyGeoHT = new THREE.CylinderBufferGeometry( 80*(6000/700), 80*(6000/700), 30*(6000/700), 1000 );
+                var spikeBottomGeo = new THREE.SphereBufferGeometry( 50*(6000/700), 32, 32 );
+                var spikeGeo = new THREE.CylinderBufferGeometry( 10*(6000/700), 30*(6000/700), 300*(6000/700), 1000 );
+                var spikeCircleGeo = new THREE.CylinderBufferGeometry( 30*(6000/700), 30*(6000/700), 10*(6000/700), 1000 );
+                var spikeTopGeo = new THREE.SphereBufferGeometry( 30*(6000/700), 30*(6000/700), 10 );
+                var moonGeo = new THREE.RingGeometry( 20*(6000/700), 30*(6000/700), 3000 );
+
+                    //################################## MINARET FRONT LEFT ##################################
+                    //BASE MINARET
+                    minaretFL_Base = new THREE.Mesh( baseMinaretGeo, material ) ;//Création de l'objet avec ses matériaux
+                    minaretFL_Base.position.y = minaretFL_Base.geometry.parameters.height/2;
+                    minaretFL_Base.position.z = turretFrontLeft.position.z - (turretFrontLeft.geometry.parameters.depth/2);
+                    minaretFL_Base.position.x = turretFrontLeft.position.x + (turretFrontLeft.geometry.parameters.width/2);
+                    scene.add( minaretFL_Base ); //Ajout de l'objet dans la scene
+
+                    minaretFL_deco1Base = new THREE.Mesh( decoMinaretGeo, material );
+                    minaretFL_deco1Base.position.y = minaretFL_Base.position.y + minaretFL_deco1Base.geometry.parameters.height/2;
+                    minaretFL_deco1Base.position.z = minaretFL_Base.position.z;
+                    minaretFL_deco1Base.position.x = minaretFL_Base.position.x;
+                    scene.add( minaretFL_deco1Base );
+                    
+                    minaretFL_deco2Base = new THREE.Mesh( decoMinaretGeo, material );
+                    minaretFL_deco2Base.position.y = minaretFL_Base.position.y + minaretFL_deco2Base.geometry.parameters.height*2;
+                    minaretFL_deco2Base.position.z = minaretFL_Base.position.z;
+                    minaretFL_deco2Base.position.x = minaretFL_Base.position.x;
+                    scene.add( minaretFL_deco2Base );
+
+                    minaretFL_BaseLinkOcto = new THREE.Mesh(linkGeo, material);
+                    minaretFL_BaseLinkOcto.position.y = minaretFL_Base.position.y + minaretFL_Base.geometry.parameters.height/2 + minaretFL_BaseLinkOcto.geometry.parameters.height/2;;
+                    minaretFL_BaseLinkOcto.rotation.y = Math.PI / 4;
+                    minaretFL_BaseLinkOcto.position.z = minaretFL_Base.position.z;
+                    minaretFL_BaseLinkOcto.position.x = minaretFL_Base.position.x;
+                    scene.add(minaretFL_BaseLinkOcto);
+                
+                    //TRONC DU BAS
+                    minaretFL_LowerCylinder = new THREE.Mesh( geoLC, material );
+                    minaretFL_LowerCylinder.position.y = minaretFL_BaseLinkOcto.position.y + minaretFL_BaseLinkOcto.geometry.parameters.height/2 + minaretFL_LowerCylinder.geometry.parameters.height/2;
+                    minaretFL_LowerCylinder.position.z = minaretFL_Base.position.z;
+                    minaretFL_LowerCylinder.position.x = minaretFL_Base.position.x;                
+                    scene.add( minaretFL_LowerCylinder );
+
+                    minaretFL_LowerBalconyBottom = new THREE.Mesh(balconyGeoLB, material);
+                    minaretFL_LowerBalconyBottom.position.y = minaretFL_LowerCylinder.position.y + minaretFL_LowerCylinder.geometry.parameters.height/2 + minaretFL_LowerBalconyBottom.geometry.parameters.height/2;
+                    minaretFL_LowerBalconyBottom.rotation.y = Math.PI / 4;
+                    minaretFL_LowerBalconyBottom.position.z = minaretFL_Base.position.z;
+                    minaretFL_LowerBalconyBottom.position.x = minaretFL_Base.position.x;
+                    scene.add(minaretFL_LowerBalconyBottom);
+
+                    minaretFL_LowerBalconyTop = new THREE.Mesh( balconyGeoLT, material );
+                    minaretFL_LowerBalconyTop.position.y = minaretFL_LowerBalconyBottom.position.y + minaretFL_LowerBalconyBottom.geometry.parameters.height/2 + minaretFL_LowerBalconyTop.geometry.parameters.height/2;
+                    minaretFL_LowerBalconyTop.position.z = minaretFL_Base.position.z;
+                    minaretFL_LowerBalconyTop.position.x = minaretFL_Base.position.x;
+                    scene.add( minaretFL_LowerBalconyTop );
+
+                    //TRONC DU HAUT
+                    minaretFL_MiddleCylinder = new THREE.Mesh( geoMC, material );
+                    minaretFL_MiddleCylinder.position.y = minaretFL_LowerBalconyTop.position.y + minaretFL_LowerBalconyTop.geometry.parameters.height/2 + minaretFL_MiddleCylinder.geometry.parameters.height/2;
+                    minaretFL_MiddleCylinder.position.z = minaretFL_Base.position.z;
+                    minaretFL_MiddleCylinder.position.x = minaretFL_Base.position.x;
+                    scene.add( minaretFL_MiddleCylinder );
+
+                    minaretFL_MiddleBalconyBottom = new THREE.Mesh(balconyGeoMB, material);
+                    minaretFL_MiddleBalconyBottom.position.y = minaretFL_MiddleCylinder.position.y + minaretFL_MiddleCylinder.geometry.parameters.height/2 + minaretFL_MiddleBalconyBottom.geometry.parameters.height/2;
+                    minaretFL_MiddleBalconyBottom.rotation.y = Math.PI / 4;
+                    minaretFL_MiddleBalconyBottom.position.z = minaretFL_Base.position.z;
+                    minaretFL_MiddleBalconyBottom.position.x = minaretFL_Base.position.x;
+                    scene.add(minaretFL_MiddleBalconyBottom);
+
+                    minaretFL_MiddleBalconyTop = new THREE.Mesh( balconyGeoMT, material );
+                    minaretFL_MiddleBalconyTop.position.y = minaretFL_MiddleBalconyBottom.position.y + minaretFL_MiddleBalconyBottom.geometry.parameters.height/2 + minaretFL_MiddleBalconyTop.geometry.parameters.height/2;
+                    minaretFL_MiddleBalconyTop.position.z = minaretFL_Base.position.z;
+                    minaretFL_MiddleBalconyTop.position.x = minaretFL_Base.position.x;
+                    scene.add( minaretFL_MiddleBalconyTop );
+
+                    minaretFL_HigherBalconyBottom = new THREE.Mesh(balconyGeoHB, material);
+                    minaretFL_HigherBalconyBottom.position.y = minaretFL_MiddleBalconyTop.position.y + minaretFL_MiddleBalconyTop.geometry.parameters.height/2 + minaretFL_HigherBalconyBottom.geometry.parameters.height/2;
+                    minaretFL_HigherBalconyBottom.rotation.y = Math.PI / 4;
+                    minaretFL_HigherBalconyBottom.position.z = minaretFL_Base.position.z;
+                    minaretFL_HigherBalconyBottom.position.x = minaretFL_Base.position.x;
+                    scene.add(minaretFL_HigherBalconyBottom);
+
+                    minaretFL_HigherBalconyTop = new THREE.Mesh( balconyGeoHT, material );
+                    minaretFL_HigherBalconyTop.position.y = minaretFL_HigherBalconyBottom.position.y + minaretFL_HigherBalconyBottom.geometry.parameters.height/2 + minaretFL_HigherBalconyTop.geometry.parameters.height/2;
+                    minaretFL_HigherBalconyTop.position.z = minaretFL_Base.position.z;
+                    minaretFL_HigherBalconyTop.position.x = minaretFL_Base.position.x;
+                    scene.add( minaretFL_HigherBalconyTop );
+
+                    //Pointe du minaret
+                    minaretFL_SpikeBottom = new THREE.Mesh( spikeBottomGeo, material );
+                    minaretFL_SpikeBottom.position.y = minaretFL_HigherBalconyTop.position.y + minaretFL_HigherBalconyTop.geometry.parameters.height/2 + minaretFL_SpikeBottom.geometry.parameters.radius;
+                    minaretFL_SpikeBottom.position.z = minaretFL_Base.position.z;
+                    minaretFL_SpikeBottom.position.x = minaretFL_Base.position.x;
+                    scene.add( minaretFL_SpikeBottom );
+
+                    minaretFL_Spike = new THREE.Mesh( spikeGeo, material );
+                    minaretFL_Spike.position.y = minaretFL_SpikeBottom.position.y + minaretFL_SpikeBottom.geometry.parameters.radius + minaretFL_Spike.geometry.parameters.height/2;
+                    minaretFL_Spike.position.z = minaretFL_Base.position.z;
+                    minaretFL_Spike.position.x = minaretFL_Base.position.x;
+                    scene.add( minaretFL_Spike);
+
+                    minaretFL_SpikeCircle1 = new THREE.Mesh( spikeCircleGeo, material );
+                    minaretFL_SpikeCircle1.position.y = minaretFL_Spike.position.y + minaretFL_Spike.geometry.parameters.height/2 + minaretFL_SpikeCircle1.geometry.parameters.height/2;
+                    minaretFL_SpikeCircle1.position.z = minaretFL_Base.position.z;
+                    minaretFL_SpikeCircle1.position.x = minaretFL_Base.position.x;
+                    scene.add( minaretFL_SpikeCircle1 );
+
+                    minaretFL_SpikeCircle2 = new THREE.Mesh( spikeCircleGeo, material );
+                    minaretFL_SpikeCircle2.position.y = minaretFL_SpikeCircle1.position.y + minaretFL_SpikeCircle1.geometry.parameters.height/2 + minaretFL_SpikeCircle2.geometry.parameters.height/2;
+                    minaretFL_SpikeCircle2.position.z = minaretFL_Base.position.z;
+                    minaretFL_SpikeCircle2.position.x = minaretFL_Base.position.x;
+                    scene.add( minaretFL_SpikeCircle2 );
+
+                    minaretFL_SpikeTop = new THREE.Mesh( spikeTopGeo, material );
+                    minaretFL_SpikeTop.position.y = minaretFL_SpikeCircle2.position.y + minaretFL_SpikeCircle2.geometry.parameters.height/2 + minaretFL_SpikeTop.geometry.parameters.radius;
+                    minaretFL_SpikeTop.position.z = minaretFL_Base.position.z;
+                    minaretFL_SpikeTop.position.x = minaretFL_Base.position.x;
+                    scene.add( minaretFL_SpikeTop );
+
+                    minaretFL_Moon = new THREE.Mesh( moonGeo, material );
+                    minaretFL_Moon.position.y = minaretFL_SpikeTop.position.y + minaretFL_SpikeTop.geometry.parameters.radius;
+                    minaretFL_Moon.position.z = minaretFL_Base.position.z;
+                    minaretFL_Moon.position.x = minaretFL_Base.position.x;
+                    scene.add( minaretFL_Moon );
+
+                    //################################## MINARET FRONT RIGHT ##################################
+                    //BASE MINARET
+                    minaretFR_Base = new THREE.Mesh( baseMinaretGeo, material ) ;
+                    minaretFR_Base.castShadow = true;
+                    minaretFR_Base.position.y = minaretFR_Base.geometry.parameters.height/2;
+                    minaretFR_Base.position.z = turretFrontRight.position.z - (turretFrontRight.geometry.parameters.depth/2);
+                    minaretFR_Base.position.x = turretFrontRight.position.x - (turretFrontRight.geometry.parameters.width/2);
+                    scene.add( minaretFR_Base );
+
+                    minaretFR_deco1Base = new THREE.Mesh( decoMinaretGeo, material );
+                    minaretFR_deco1Base.castShadow = true;
+                    minaretFR_deco1Base.position.y = minaretFR_Base.position.y + minaretFR_deco1Base.geometry.parameters.height/2;
+                    minaretFR_deco1Base.position.z = minaretFR_Base.position.z;
+                    minaretFR_deco1Base.position.x = minaretFR_Base.position.x;
+                    scene.add( minaretFR_deco1Base );
+                    
+                    minaretFR_deco2Base = new THREE.Mesh( decoMinaretGeo, material );
+                    minaretFR_deco2Base.castShadow = true;
+                    minaretFR_deco2Base.position.y = minaretFR_Base.position.y + minaretFR_deco2Base.geometry.parameters.height*2;
+                    minaretFR_deco2Base.position.z = minaretFR_Base.position.z;
+                    minaretFR_deco2Base.position.x = minaretFR_Base.position.x;
+                    scene.add( minaretFR_deco2Base );
+
+                    minaretFR_BaseLinkOcto = new THREE.Mesh(linkGeo, material);
+                    minaretFR_BaseLinkOcto.castShadow = true;
+                    minaretFR_BaseLinkOcto.position.y = minaretFR_Base.position.y + minaretFR_Base.geometry.parameters.height/2 + minaretFR_BaseLinkOcto.geometry.parameters.height/2;;
+                    minaretFR_BaseLinkOcto.rotation.y = Math.PI / 4;
+                    minaretFR_BaseLinkOcto.position.z = minaretFR_Base.position.z;
+                    minaretFR_BaseLinkOcto.position.x = minaretFR_Base.position.x;
+                    scene.add(minaretFR_BaseLinkOcto);
+                
+                    //TRONC DU BAS
+                    minaretFR_LowerCylinder = new THREE.Mesh( geoLC, material );
+                    minaretFR_LowerCylinder.castShadow = true;
+                    minaretFR_LowerCylinder.position.y = minaretFR_BaseLinkOcto.position.y + minaretFR_BaseLinkOcto.geometry.parameters.height/2 + minaretFR_LowerCylinder.geometry.parameters.height/2;
+                    minaretFR_LowerCylinder.position.z = minaretFR_Base.position.z;
+                    minaretFR_LowerCylinder.position.x = minaretFR_Base.position.x;                
+                    scene.add( minaretFR_LowerCylinder );
+
+                    minaretFR_LowerBalconyBottom = new THREE.Mesh(balconyGeoLB, material);
+                    minaretFR_LowerBalconyBottom.castShadow = true;
+                    minaretFR_LowerBalconyBottom.position.y = minaretFR_LowerCylinder.position.y + minaretFR_LowerCylinder.geometry.parameters.height/2 + minaretFR_LowerBalconyBottom.geometry.parameters.height/2;
+                    minaretFR_LowerBalconyBottom.rotation.y = Math.PI / 4;
+                    minaretFR_LowerBalconyBottom.position.z = minaretFR_Base.position.z;
+                    minaretFR_LowerBalconyBottom.position.x = minaretFR_Base.position.x;
+                    scene.add(minaretFR_LowerBalconyBottom);
+
+                    minaretFR_LowerBalconyTop = new THREE.Mesh( balconyGeoLT, material );
+                    minaretFR_LowerBalconyTop.castShadow = true;
+                    minaretFR_LowerBalconyTop.position.y = minaretFR_LowerBalconyBottom.position.y + minaretFR_LowerBalconyBottom.geometry.parameters.height/2 + minaretFR_LowerBalconyTop.geometry.parameters.height/2;
+                    minaretFR_LowerBalconyTop.position.z = minaretFR_Base.position.z;
+                    minaretFR_LowerBalconyTop.position.x = minaretFR_Base.position.x;
+                    scene.add( minaretFR_LowerBalconyTop );
+
+                    //TRONC DU HAUT
+                    minaretFR_MiddleCylinder = new THREE.Mesh( geoMC, material );
+                    minaretFR_MiddleCylinder.castShadow = true;
+                    minaretFR_MiddleCylinder.position.y = minaretFR_LowerBalconyTop.position.y + minaretFR_LowerBalconyTop.geometry.parameters.height/2 + minaretFR_MiddleCylinder.geometry.parameters.height/2;
+                    minaretFR_MiddleCylinder.position.z = minaretFR_Base.position.z;
+                    minaretFR_MiddleCylinder.position.x = minaretFR_Base.position.x;
+                    scene.add( minaretFR_MiddleCylinder );
+
+                    minaretFR_MiddleBalconyBottom = new THREE.Mesh(balconyGeoMB, material);
+                    minaretFR_MiddleBalconyBottom.castShadow = true;
+                    minaretFR_MiddleBalconyBottom.position.y = minaretFR_MiddleCylinder.position.y + minaretFR_MiddleCylinder.geometry.parameters.height/2 + minaretFR_MiddleBalconyBottom.geometry.parameters.height/2;
+                    minaretFR_MiddleBalconyBottom.rotation.y = Math.PI / 4;
+                    minaretFR_MiddleBalconyBottom.position.z = minaretFR_Base.position.z;
+                    minaretFR_MiddleBalconyBottom.position.x = minaretFR_Base.position.x;
+                    scene.add(minaretFR_MiddleBalconyBottom);
+
+                    minaretFR_MiddleBalconyTop = new THREE.Mesh( balconyGeoMT, material );
+                    minaretFR_MiddleBalconyTop.castShadow = true;
+                    minaretFR_MiddleBalconyTop.position.y = minaretFR_MiddleBalconyBottom.position.y + minaretFR_MiddleBalconyBottom.geometry.parameters.height/2 + minaretFR_MiddleBalconyTop.geometry.parameters.height/2;
+                    minaretFR_MiddleBalconyTop.position.z = minaretFR_Base.position.z;
+                    minaretFR_MiddleBalconyTop.position.x = minaretFR_Base.position.x;
+                    scene.add( minaretFR_MiddleBalconyTop );
+
+                    minaretFR_HigherBalconyBottom = new THREE.Mesh(balconyGeoHB, material);
+                    minaretFR_HigherBalconyBottom.castShadow = true;
+                    minaretFR_HigherBalconyBottom.position.y = minaretFR_MiddleBalconyTop.position.y + minaretFR_MiddleBalconyTop.geometry.parameters.height/2 + minaretFR_HigherBalconyBottom.geometry.parameters.height/2;
+                    minaretFR_HigherBalconyBottom.rotation.y = Math.PI / 4;
+                    minaretFR_HigherBalconyBottom.position.z = minaretFR_Base.position.z;
+                    minaretFR_HigherBalconyBottom.position.x = minaretFR_Base.position.x;
+                    scene.add(minaretFR_HigherBalconyBottom);
+
+                    minaretFR_HigherBalconyTop = new THREE.Mesh( balconyGeoHT, material );
+                    minaretFR_HigherBalconyTop.castShadow = true;
+                    minaretFR_HigherBalconyTop.position.y = minaretFR_HigherBalconyBottom.position.y + minaretFR_HigherBalconyBottom.geometry.parameters.height/2 + minaretFR_HigherBalconyTop.geometry.parameters.height/2;
+                    minaretFR_HigherBalconyTop.position.z = minaretFR_Base.position.z;
+                    minaretFR_HigherBalconyTop.position.x = minaretFR_Base.position.x;
+                    scene.add( minaretFR_HigherBalconyTop );
+
+                    //Pointe du minaret
+                    minaretFR_SpikeBottom = new THREE.Mesh( spikeBottomGeo, material );
+                    minaretFR_SpikeBottom.castShadow = true;
+                    minaretFR_SpikeBottom.position.y = minaretFR_HigherBalconyTop.position.y + minaretFR_HigherBalconyTop.geometry.parameters.height/2 + minaretFR_SpikeBottom.geometry.parameters.radius;
+                    minaretFR_SpikeBottom.position.z = minaretFR_Base.position.z;
+                    minaretFR_SpikeBottom.position.x = minaretFR_Base.position.x;
+                    scene.add( minaretFR_SpikeBottom );
+
+                    minaretFR_Spike = new THREE.Mesh( spikeGeo, material );
+                    minaretFR_Spike.castShadow = true;
+                    minaretFR_Spike.position.y = minaretFR_SpikeBottom.position.y + minaretFR_SpikeBottom.geometry.parameters.radius + minaretFR_Spike.geometry.parameters.height/2;
+                    minaretFR_Spike.position.z = minaretFR_Base.position.z;
+                    minaretFR_Spike.position.x = minaretFR_Base.position.x;
+                    scene.add( minaretFR_Spike);
+
+                    minaretFR_SpikeCircle1 = new THREE.Mesh( spikeCircleGeo, material );
+                    minaretFR_SpikeCircle1.castShadow = true;
+                    minaretFR_SpikeCircle1.position.y = minaretFR_Spike.position.y + minaretFR_Spike.geometry.parameters.height/2 + minaretFR_SpikeCircle1.geometry.parameters.height/2;
+                    minaretFR_SpikeCircle1.position.z = minaretFR_Base.position.z;
+                    minaretFR_SpikeCircle1.position.x = minaretFR_Base.position.x;
+                    scene.add( minaretFR_SpikeCircle1 );
+
+                    minaretFR_SpikeCircle2 = new THREE.Mesh( spikeCircleGeo, material );
+                    minaretFR_SpikeCircle2.castShadow = true;
+                    minaretFR_SpikeCircle2.position.y = minaretFR_SpikeCircle1.position.y + minaretFR_SpikeCircle1.geometry.parameters.height/2 + minaretFR_SpikeCircle2.geometry.parameters.height/2;
+                    minaretFR_SpikeCircle2.position.z = minaretFR_Base.position.z;
+                    minaretFR_SpikeCircle2.position.x = minaretFR_Base.position.x;
+                    scene.add( minaretFR_SpikeCircle2 );
+
+                    minaretFR_SpikeTop = new THREE.Mesh( spikeTopGeo, material );
+                    minaretFR_SpikeTop.castShadow = true;
+                    minaretFR_SpikeTop.position.y = minaretFR_SpikeCircle2.position.y + minaretFR_SpikeCircle2.geometry.parameters.height/2 + minaretFR_SpikeTop.geometry.parameters.radius;
+                    minaretFR_SpikeTop.position.z = minaretFR_Base.position.z;
+                    minaretFR_SpikeTop.position.x = minaretFR_Base.position.x;
+                    scene.add( minaretFR_SpikeTop );
+
+                    minaretFR_Moon = new THREE.Mesh( moonGeo, material );
+                    minaretFR_Moon.castShadow = true;
+                    minaretFR_Moon.position.y = minaretFR_SpikeTop.position.y + minaretFR_SpikeTop.geometry.parameters.radius;
+                    minaretFR_Moon.position.z = minaretFR_Base.position.z;
+                    minaretFR_Moon.position.x = minaretFR_Base.position.x;
+                    scene.add( minaretFR_Moon );
+
+                    //################################## MINARET BACK RIGHT ##################################
+                    //BASE MINARET
+                    minaretBR_Base = new THREE.Mesh( baseMinaretGeo, material ) ;
+                    minaretBR_Base.position.y = minaretBR_Base.geometry.parameters.height/2;
+                    minaretBR_Base.position.z = mainBuildingLittleFront.position.z + minaretBR_Base.geometry.parameters.depth;
+                    minaretBR_Base.position.x = turretFrontRight.position.x - (turretFrontRight.geometry.parameters.width/2);
+                    scene.add( minaretBR_Base );
+
+                    minaretBR_deco1Base = new THREE.Mesh( decoMinaretGeo, material );
+                    minaretBR_deco1Base.position.y = minaretBR_Base.position.y + minaretBR_deco1Base.geometry.parameters.height/2;
+                    minaretBR_deco1Base.position.z = minaretBR_Base.position.z;
+                    minaretBR_deco1Base.position.x = minaretBR_Base.position.x;
+                    scene.add( minaretBR_deco1Base );
+                    
+                    minaretBR_deco2Base = new THREE.Mesh( decoMinaretGeo, material );
+                    minaretBR_deco2Base.position.y = minaretBR_Base.position.y + minaretBR_deco2Base.geometry.parameters.height*2;
+                    minaretBR_deco2Base.position.z = minaretBR_Base.position.z;
+                    minaretBR_deco2Base.position.x = minaretBR_Base.position.x;
+                    scene.add( minaretBR_deco2Base );
+
+                    minaretBR_BaseLinkOcto = new THREE.Mesh(linkGeo, material);
+                    minaretBR_BaseLinkOcto.position.y = minaretBR_Base.position.y + minaretBR_Base.geometry.parameters.height/2 + minaretBR_BaseLinkOcto.geometry.parameters.height/2;;
+                    minaretBR_BaseLinkOcto.rotation.y = Math.PI / 4;
+                    minaretBR_BaseLinkOcto.position.z = minaretBR_Base.position.z;
+                    minaretBR_BaseLinkOcto.position.x = minaretBR_Base.position.x;
+                    scene.add(minaretBR_BaseLinkOcto);
+                
+                    //TRONC DU BAS
+                    minaretBR_LowerCylinder = new THREE.Mesh( geoLC, material );
+                    minaretBR_LowerCylinder.position.y = minaretBR_BaseLinkOcto.position.y + minaretBR_BaseLinkOcto.geometry.parameters.height/2 + minaretBR_LowerCylinder.geometry.parameters.height/2;
+                    minaretBR_LowerCylinder.position.z = minaretBR_Base.position.z;
+                    minaretBR_LowerCylinder.position.x = minaretBR_Base.position.x;                
+                    scene.add( minaretBR_LowerCylinder );
+
+                    minaretBR_LowerBalconyBottom = new THREE.Mesh(balconyGeoLB, material);
+                    minaretBR_LowerBalconyBottom.position.y = minaretBR_LowerCylinder.position.y + minaretBR_LowerCylinder.geometry.parameters.height/2 + minaretBR_LowerBalconyBottom.geometry.parameters.height/2;
+                    minaretBR_LowerBalconyBottom.rotation.y = Math.PI / 4;
+                    minaretBR_LowerBalconyBottom.position.z = minaretBR_Base.position.z;
+                    minaretBR_LowerBalconyBottom.position.x = minaretBR_Base.position.x;
+                    scene.add(minaretBR_LowerBalconyBottom);
+
+                    minaretBR_LowerBalconyTop = new THREE.Mesh( balconyGeoLT, material );
+                    minaretBR_LowerBalconyTop.position.y = minaretBR_LowerBalconyBottom.position.y + minaretBR_LowerBalconyBottom.geometry.parameters.height/2 + minaretBR_LowerBalconyTop.geometry.parameters.height/2;
+                    minaretBR_LowerBalconyTop.position.z = minaretBR_Base.position.z;
+                    minaretBR_LowerBalconyTop.position.x = minaretBR_Base.position.x;
+                    scene.add( minaretBR_LowerBalconyTop );
+
+                    //TRONC DU HAUT
+                    minaretBR_MiddleCylinder = new THREE.Mesh( geoMC, material );
+                    minaretBR_MiddleCylinder.position.y = minaretBR_LowerBalconyTop.position.y + minaretBR_LowerBalconyTop.geometry.parameters.height/2 + minaretBR_MiddleCylinder.geometry.parameters.height/2;
+                    minaretBR_MiddleCylinder.position.z = minaretBR_Base.position.z;
+                    minaretBR_MiddleCylinder.position.x = minaretBR_Base.position.x;
+                    scene.add( minaretBR_MiddleCylinder );
+
+                    minaretBR_MiddleBalconyBottom = new THREE.Mesh(balconyGeoMB, material);
+                    minaretBR_MiddleBalconyBottom.position.y = minaretBR_MiddleCylinder.position.y + minaretBR_MiddleCylinder.geometry.parameters.height/2 + minaretBR_MiddleBalconyBottom.geometry.parameters.height/2;
+                    minaretBR_MiddleBalconyBottom.rotation.y = Math.PI / 4;
+                    minaretBR_MiddleBalconyBottom.position.z = minaretBR_Base.position.z;
+                    minaretBR_MiddleBalconyBottom.position.x = minaretBR_Base.position.x;
+                    scene.add(minaretBR_MiddleBalconyBottom);
+
+                    minaretBR_MiddleBalconyTop = new THREE.Mesh( balconyGeoMT, material );
+                    minaretBR_MiddleBalconyTop.position.y = minaretBR_MiddleBalconyBottom.position.y + minaretBR_MiddleBalconyBottom.geometry.parameters.height/2 + minaretBR_MiddleBalconyTop.geometry.parameters.height/2;
+                    minaretBR_MiddleBalconyTop.position.z = minaretBR_Base.position.z;
+                    minaretBR_MiddleBalconyTop.position.x = minaretBR_Base.position.x;
+                    scene.add( minaretBR_MiddleBalconyTop );
+
+                    minaretBR_HigherBalconyBottom = new THREE.Mesh(balconyGeoHB, material);
+                    minaretBR_HigherBalconyBottom.position.y = minaretBR_MiddleBalconyTop.position.y + minaretBR_MiddleBalconyTop.geometry.parameters.height/2 + minaretBR_HigherBalconyBottom.geometry.parameters.height/2;
+                    minaretBR_HigherBalconyBottom.rotation.y = Math.PI / 4;
+                    minaretBR_HigherBalconyBottom.position.z = minaretBR_Base.position.z;
+                    minaretBR_HigherBalconyBottom.position.x = minaretBR_Base.position.x;
+                    scene.add(minaretBR_HigherBalconyBottom);
+
+                    minaretBR_HigherBalconyTop = new THREE.Mesh( balconyGeoHT, material );
+                    minaretBR_HigherBalconyTop.position.y = minaretBR_HigherBalconyBottom.position.y + minaretBR_HigherBalconyBottom.geometry.parameters.height/2 + minaretBR_HigherBalconyTop.geometry.parameters.height/2;
+                    minaretBR_HigherBalconyTop.position.z = minaretBR_Base.position.z;
+                    minaretBR_HigherBalconyTop.position.x = minaretBR_Base.position.x;
+                    scene.add( minaretBR_HigherBalconyTop );
+
+                    //Pointe du minaret
+                    minaretBR_SpikeBottom = new THREE.Mesh( spikeBottomGeo, material );
+                    minaretBR_SpikeBottom.position.y = minaretBR_HigherBalconyTop.position.y + minaretBR_HigherBalconyTop.geometry.parameters.height/2 + minaretBR_SpikeBottom.geometry.parameters.radius;
+                    minaretBR_SpikeBottom.position.z = minaretBR_Base.position.z;
+                    minaretBR_SpikeBottom.position.x = minaretBR_Base.position.x;
+                    scene.add( minaretBR_SpikeBottom );
+
+                    minaretBR_Spike = new THREE.Mesh( spikeGeo, material );
+                    minaretBR_Spike.position.y = minaretBR_SpikeBottom.position.y + minaretBR_SpikeBottom.geometry.parameters.radius + minaretBR_Spike.geometry.parameters.height/2;
+                    minaretBR_Spike.position.z = minaretBR_Base.position.z;
+                    minaretBR_Spike.position.x = minaretBR_Base.position.x;
+                    scene.add( minaretBR_Spike);
+
+                    minaretBR_SpikeCircle1 = new THREE.Mesh( spikeCircleGeo, material );
+                    minaretBR_SpikeCircle1.position.y = minaretBR_Spike.position.y + minaretBR_Spike.geometry.parameters.height/2 + minaretBR_SpikeCircle1.geometry.parameters.height/2;
+                    minaretBR_SpikeCircle1.position.z = minaretBR_Base.position.z;
+                    minaretBR_SpikeCircle1.position.x = minaretBR_Base.position.x;
+                    scene.add( minaretBR_SpikeCircle1 );
+
+                    minaretBR_SpikeCircle2 = new THREE.Mesh( spikeCircleGeo, material );
+                    minaretBR_SpikeCircle2.position.y = minaretBR_SpikeCircle1.position.y + minaretBR_SpikeCircle1.geometry.parameters.height/2 + minaretBR_SpikeCircle2.geometry.parameters.height/2;
+                    minaretBR_SpikeCircle2.position.z = minaretBR_Base.position.z;
+                    minaretBR_SpikeCircle2.position.x = minaretBR_Base.position.x;
+                    scene.add( minaretBR_SpikeCircle2 );
+
+                    minaretBR_SpikeTop = new THREE.Mesh( spikeTopGeo, material );
+                    minaretBR_SpikeTop.position.y = minaretBR_SpikeCircle2.position.y + minaretBR_SpikeCircle2.geometry.parameters.height/2 + minaretBR_SpikeTop.geometry.parameters.radius;
+                    minaretBR_SpikeTop.position.z = minaretBR_Base.position.z;
+                    minaretBR_SpikeTop.position.x = minaretBR_Base.position.x;
+                    scene.add( minaretBR_SpikeTop );
+
+                    minaretBR_Moon = new THREE.Mesh( moonGeo, material );
+                    minaretBR_Moon.position.y = minaretBR_SpikeTop.position.y + minaretBR_SpikeTop.geometry.parameters.radius;
+                    minaretBR_Moon.position.z = minaretBR_Base.position.z;
+                    minaretBR_Moon.position.x = minaretBR_Base.position.x;
+                    scene.add( minaretBR_Moon );
+
+                    //################################## MINARET BACK LEFT ##################################
+                    //BASE MINARET
+                    minaretBL_Base = new THREE.Mesh( baseMinaretGeo, material ) ;//Création de l'objet avec ses matériaux
+                    minaretBL_Base.position.y = minaretBL_Base.geometry.parameters.height/2;
+                    minaretBL_Base.position.z = mainBuildingLittleFront.position.z + minaretBL_Base.geometry.parameters.depth;
+                    minaretBL_Base.position.x = turretFrontLeft.position.x + (turretFrontLeft.geometry.parameters.width/2);
+                    scene.add( minaretBL_Base ); //Ajout de l'objet dans la scene
+
+                    minaretBL_deco1Base = new THREE.Mesh( decoMinaretGeo, material );
+                    minaretBL_deco1Base.position.y = minaretBL_Base.position.y + minaretBL_deco1Base.geometry.parameters.height/2;
+                    minaretBL_deco1Base.position.z = minaretBL_Base.position.z;
+                    minaretBL_deco1Base.position.x = minaretBL_Base.position.x;
+                    scene.add( minaretBL_deco1Base );
+
+                    minaretBL_deco2Base = new THREE.Mesh( decoMinaretGeo, material );
+                    minaretBL_deco2Base.position.y = minaretBL_Base.position.y + minaretBL_deco2Base.geometry.parameters.height*2;
+                    minaretBL_deco2Base.position.z = minaretBL_Base.position.z;
+                    minaretBL_deco2Base.position.x = minaretBL_Base.position.x;
+                    scene.add( minaretBL_deco2Base );
+
+                    minaretBL_BaseLinkOcto = new THREE.Mesh(linkGeo, material);
+                    minaretBL_BaseLinkOcto.position.y = minaretBL_Base.position.y + minaretBL_Base.geometry.parameters.height/2 + minaretBL_BaseLinkOcto.geometry.parameters.height/2;;
+                    minaretBL_BaseLinkOcto.rotation.y = Math.PI / 4;
+                    minaretBL_BaseLinkOcto.position.z = minaretBL_Base.position.z;
+                    minaretBL_BaseLinkOcto.position.x = minaretBL_Base.position.x;
+                    scene.add(minaretBL_BaseLinkOcto);
+
+                    //TRONC DU BAS
+                    minaretBL_LowerCylinder = new THREE.Mesh( geoLC, material );
+                    minaretBL_LowerCylinder.position.y = minaretBL_BaseLinkOcto.position.y + minaretBL_BaseLinkOcto.geometry.parameters.height/2 + minaretBL_LowerCylinder.geometry.parameters.height/2;
+                    minaretBL_LowerCylinder.position.z = minaretBL_Base.position.z;
+                    minaretBL_LowerCylinder.position.x = minaretBL_Base.position.x;                
+                    scene.add( minaretBL_LowerCylinder );
+
+                    minaretBL_LowerBalconyBottom = new THREE.Mesh(balconyGeoLB, material);
+                    minaretBL_LowerBalconyBottom.position.y = minaretBL_LowerCylinder.position.y + minaretBL_LowerCylinder.geometry.parameters.height/2 + minaretBL_LowerBalconyBottom.geometry.parameters.height/2;
+                    minaretBL_LowerBalconyBottom.rotation.y = Math.PI / 4;
+                    minaretBL_LowerBalconyBottom.position.z = minaretBL_Base.position.z;
+                    minaretBL_LowerBalconyBottom.position.x = minaretBL_Base.position.x;
+                    scene.add(minaretBL_LowerBalconyBottom);
+
+                    minaretBL_LowerBalconyTop = new THREE.Mesh( balconyGeoLT, material );
+                    minaretBL_LowerBalconyTop.position.y = minaretBL_LowerBalconyBottom.position.y + minaretBL_LowerBalconyBottom.geometry.parameters.height/2 + minaretBL_LowerBalconyTop.geometry.parameters.height/2;
+                    minaretBL_LowerBalconyTop.position.z = minaretBL_Base.position.z;
+                    minaretBL_LowerBalconyTop.position.x = minaretBL_Base.position.x;
+                    scene.add( minaretBL_LowerBalconyTop );
+
+                    //TRONC DU HAUT
+                    minaretBL_MiddleCylinder = new THREE.Mesh( geoMC, material );
+                    minaretBL_MiddleCylinder.position.y = minaretBL_LowerBalconyTop.position.y + minaretBL_LowerBalconyTop.geometry.parameters.height/2 + minaretBL_MiddleCylinder.geometry.parameters.height/2;
+                    minaretBL_MiddleCylinder.position.z = minaretBL_Base.position.z;
+                    minaretBL_MiddleCylinder.position.x = minaretBL_Base.position.x;
+                    scene.add( minaretBL_MiddleCylinder );
+
+                    minaretBL_MiddleBalconyBottom = new THREE.Mesh(balconyGeoMB, material);
+                    minaretBL_MiddleBalconyBottom.position.y = minaretBL_MiddleCylinder.position.y + minaretBL_MiddleCylinder.geometry.parameters.height/2 + minaretBL_MiddleBalconyBottom.geometry.parameters.height/2;
+                    minaretBL_MiddleBalconyBottom.rotation.y = Math.PI / 4;
+                    minaretBL_MiddleBalconyBottom.position.z = minaretBL_Base.position.z;
+                    minaretBL_MiddleBalconyBottom.position.x = minaretBL_Base.position.x;
+                    scene.add(minaretBL_MiddleBalconyBottom);
+
+                    minaretBL_MiddleBalconyTop = new THREE.Mesh( balconyGeoMT, material );
+                    minaretBL_MiddleBalconyTop.position.y = minaretBL_MiddleBalconyBottom.position.y + minaretBL_MiddleBalconyBottom.geometry.parameters.height/2 + minaretBL_MiddleBalconyTop.geometry.parameters.height/2;
+                    minaretBL_MiddleBalconyTop.position.z = minaretBL_Base.position.z;
+                    minaretBL_MiddleBalconyTop.position.x = minaretBL_Base.position.x;
+                    scene.add( minaretBL_MiddleBalconyTop );
+
+                    minaretBL_HigherBalconyBottom = new THREE.Mesh(balconyGeoHB, material);
+                    minaretBL_HigherBalconyBottom.position.y = minaretBL_MiddleBalconyTop.position.y + minaretBL_MiddleBalconyTop.geometry.parameters.height/2 + minaretBL_HigherBalconyBottom.geometry.parameters.height/2;
+                    minaretBL_HigherBalconyBottom.rotation.y = Math.PI / 4;
+                    minaretBL_HigherBalconyBottom.position.z = minaretBL_Base.position.z;
+                    minaretBL_HigherBalconyBottom.position.x = minaretBL_Base.position.x;
+                    scene.add(minaretBL_HigherBalconyBottom);
+
+                    minaretBL_HigherBalconyTop = new THREE.Mesh( balconyGeoHT, material );
+                    minaretBL_HigherBalconyTop.position.y = minaretBL_HigherBalconyBottom.position.y + minaretBL_HigherBalconyBottom.geometry.parameters.height/2 + minaretBL_HigherBalconyTop.geometry.parameters.height/2;
+                    minaretBL_HigherBalconyTop.position.z = minaretBL_Base.position.z;
+                    minaretBL_HigherBalconyTop.position.x = minaretBL_Base.position.x;
+                    scene.add( minaretBL_HigherBalconyTop );
+
+                    //Pointe du minaret
+                    minaretBL_SpikeBottom = new THREE.Mesh( spikeBottomGeo, material );
+                    minaretBL_SpikeBottom.position.y = minaretBL_HigherBalconyTop.position.y + minaretBL_HigherBalconyTop.geometry.parameters.height/2 + minaretBL_SpikeBottom.geometry.parameters.radius;
+                    minaretBL_SpikeBottom.position.z = minaretBL_Base.position.z;
+                    minaretBL_SpikeBottom.position.x = minaretBL_Base.position.x;
+                    scene.add( minaretBL_SpikeBottom );
+
+                    minaretBL_Spike = new THREE.Mesh( spikeGeo, material );
+                    minaretBL_Spike.position.y = minaretBL_SpikeBottom.position.y + minaretBL_SpikeBottom.geometry.parameters.radius + minaretBL_Spike.geometry.parameters.height/2;
+                    minaretBL_Spike.position.z = minaretBL_Base.position.z;
+                    minaretBL_Spike.position.x = minaretBL_Base.position.x;
+                    scene.add( minaretBL_Spike);
+
+                    minaretBL_SpikeCircle1 = new THREE.Mesh( spikeCircleGeo, material );
+                    minaretBL_SpikeCircle1.position.y = minaretBL_Spike.position.y + minaretBL_Spike.geometry.parameters.height/2 + minaretBL_SpikeCircle1.geometry.parameters.height/2;
+                    minaretBL_SpikeCircle1.position.z = minaretBL_Base.position.z;
+                    minaretBL_SpikeCircle1.position.x = minaretBL_Base.position.x;
+                    scene.add( minaretBL_SpikeCircle1 );
+
+                    minaretBL_SpikeCircle2 = new THREE.Mesh( spikeCircleGeo, material );
+                    minaretBL_SpikeCircle2.position.y = minaretBL_SpikeCircle1.position.y + minaretBL_SpikeCircle1.geometry.parameters.height/2 + minaretBL_SpikeCircle2.geometry.parameters.height/2;
+                    minaretBL_SpikeCircle2.position.z = minaretBL_Base.position.z;
+                    minaretBL_SpikeCircle2.position.x = minaretBL_Base.position.x;
+                    scene.add( minaretBL_SpikeCircle2 );
+
+                    minaretBL_SpikeTop = new THREE.Mesh( spikeTopGeo, material );
+                    minaretBL_SpikeTop.position.y = minaretBL_SpikeCircle2.position.y + minaretBL_SpikeCircle2.geometry.parameters.height/2 + minaretBL_SpikeTop.geometry.parameters.radius;
+                    minaretBL_SpikeTop.position.z = minaretBL_Base.position.z;
+                    minaretBL_SpikeTop.position.x = minaretBL_Base.position.x;
+                    scene.add( minaretBL_SpikeTop );
+
+                    minaretBL_Moon = new THREE.Mesh( moonGeo, material );
+                    minaretBL_Moon.position.y = minaretBL_SpikeTop.position.y + minaretBL_SpikeTop.geometry.parameters.radius;
+                    minaretBL_Moon.position.z = minaretBL_Base.position.z;
+                    minaretBL_Moon.position.x = minaretBL_Base.position.x;
+                    scene.add( minaretBL_Moon );
+
+                //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ FIN MINARETS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+
+                //DÉFINITION DE L'ENTRÉ
+                var gateGeometry = new THREE.BoxBufferGeometry( 10000, 4000, 5000 );
+                var miniGeometry = new THREE.BoxBufferGeometry( 1000, 5000, 1000 );
 
                     frontGateBig = new THREE.Mesh( turretFrontGeometry, turretMaterial );
                     scene.add( frontGateBig );
@@ -380,11 +887,7 @@
                     miniTurretBackRight.position.z = frontGateSmall.position.z - (frontGateSmall.geometry.parameters.depth/2);
                     miniTurretBackRight.position.x = frontGateSmall.position.x + (frontGateSmall.geometry.parameters.width/2);
 
-                addMinaret(turretFrontLeft);
-                addMinaret(turretBackLeft, mainBuildingLittleFront);
-                addMinaret(turretFrontRight);
-                addMinaret(turretBackRight, mainBuildingLittleFront);
-                
+
                 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ DEBUT DOMES @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
                 // DEFINITION PETITS DOMES
@@ -812,6 +1315,7 @@
 
                 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ FIN DOMES @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
+
                 renderer = new THREE.WebGLRenderer( { antialias: true } ); //Moteur graphique (anti-aliasing: pour lisser le graphisme)
 				renderer.setPixelRatio( window.devicePixelRatio ); //Respect du ration des pixels
 				renderer.setSize( window.innerWidth, window.innerHeight ); //Taille du rendu
@@ -824,195 +1328,6 @@
                 controls.update();
 
 				window.addEventListener( 'resize', onWindowResize, false ); //Adaptation au changement de taille de la fenêtre avec appel de sa fonction ↩️
-
-                //FONCTION MINARETS
-                function addMinaret(turret, mainBuild){
-                    var baseMinaretGeo = new THREE.BoxBufferGeometry( 200*(6000/700), 12000, 200*(6000/700) );
-                    var decoMinaretGeo = new THREE.ConeBufferGeometry( 150*(6000/700), 200*(6000/700), 4 );
-                    var linkGeo = new THREE.CylinderGeometry( 100*(6000/700), 140*(6000/700), 100*(6000/700), 4, 1 );
-                    var geoLC = new THREE.CylinderBufferGeometry( 100*(6000/700), 100*(6000/700), 400*(6000/700), 8 );
-                    var balconyGeoLB = new THREE.CylinderGeometry( 180*(6000/700), 100*(6000/700),50*(6000/700), 600, 1 );
-                    var balconyGeoLT = new THREE.CylinderBufferGeometry( 180*(6000/700), 180*(6000/700), 30*(6000/700), 1000 );
-                    var geoMC = new THREE.CylinderBufferGeometry( 50*(6000/700), 100*(6000/700), 400*(6000/700), 1000 );
-                    var balconyGeoMB = new THREE.CylinderGeometry( 120*(6000/700), 80*(6000/700),50*(6000/700), 600, 1 );
-                    var balconyGeoMT = new THREE.CylinderBufferGeometry( 120*(6000/700), 120*(6000/700), 30*(6000/700), 1000 );
-                    var balconyGeoHB = new THREE.CylinderGeometry( 80*(6000/700), 50*(6000/700), 50*(6000/700), 600, 1 );
-                    var balconyGeoHT = new THREE.CylinderBufferGeometry( 80*(6000/700), 80*(6000/700), 30*(6000/700), 1000 );
-                    var spikeBottomGeo = new THREE.SphereBufferGeometry( 50*(6000/700), 32, 32 );
-                    var spikeGeo = new THREE.CylinderBufferGeometry( 10*(6000/700), 30*(6000/700), 300*(6000/700), 1000 );
-                    var spikeCircleGeo = new THREE.CylinderBufferGeometry( 30*(6000/700), 30*(6000/700), 10*(6000/700), 1000 );
-                    var spikeTopGeo = new THREE.SphereBufferGeometry( 30*(6000/700), 30*(6000/700), 10 );
-                    var moonGeo = new THREE.RingGeometry( 20*(6000/700), 30*(6000/700), 3000 );
-
-                    //  BASE
-                    minaret_Base = new THREE.Mesh( baseMinaretGeo, material ) ;//Création de l'objet avec ses matériaux
-                    minaret_Base.position.y = minaret_Base.geometry.parameters.height/2;
-                    
-                    
-                    if (turret.position.x > 0){
-                        minaret_Base.position.x = turret.position.x - (turret.geometry.parameters.width/2);
-                    } else {
-                        minaret_Base.position.x = turret.position.x + (turret.geometry.parameters.width/2);
-                    }
-
-                    if(mainBuild != null){
-                        console.log('wesh');
-                        minaret_Base.position.z = mainBuild.position.z + minaret_Base.geometry.parameters.depth;
-                    } else {
-                        if (turret.position.z > 0){
-                            minaret_Base.position.z = turret.position.z - (turret.geometry.parameters.depth/2);
-                        } else {
-                            minaret_Base.position.z = turret.position.z + (turret.geometry.parameters.depth/2);
-                        }
-                    }
-                    
-                    minaret_Base.castShadow = true;
-                    scene.add(minaret_Base ); //Ajout de l'objet dans la scene
-
-                    minaret_deco1Base = new THREE.Mesh( decoMinaretGeo, material );
-                    minaret_deco1Base.position.y = minaret_Base.position.y + minaret_deco1Base.geometry.parameters.height/2;
-                    minaret_deco1Base.position.z = minaret_Base.position.z;
-                    minaret_deco1Base.position.x = minaret_Base.position.x;
-                    
-                    minaret_deco1Base.castShadow = true;
-                    scene.add(minaret_deco1Base );
-                    
-                    minaret_deco2Base = new THREE.Mesh( decoMinaretGeo, material );
-                    minaret_deco2Base.position.y = minaret_Base.position.y + minaret_deco2Base.geometry.parameters.height*2;
-                    minaret_deco2Base.position.z = minaret_Base.position.z;
-                    minaret_deco2Base.position.x = minaret_Base.position.x;
-                    
-                    minaret_deco2Base.castShadow = true;
-                    scene.add(minaret_deco2Base );
-
-                    minaret_BaseLinkOcto = new THREE.Mesh(linkGeo, material);
-                    minaret_BaseLinkOcto.position.y = minaret_Base.position.y + minaret_Base.geometry.parameters.height/2 + minaret_BaseLinkOcto.geometry.parameters.height/2;;
-                    minaret_BaseLinkOcto.rotation.y = Math.PI / 4;
-                    minaret_BaseLinkOcto.position.z = minaret_Base.position.z;
-                    minaret_BaseLinkOcto.position.x = minaret_Base.position.x;
-                    
-                    minaret_BaseLinkOcto.castShadow = true;
-                    scene.add(minaret_BaseLinkOcto);
-                
-                    //  TRONC DU BAS
-                    minaret_LowerCylinder = new THREE.Mesh( geoLC, material );
-                    minaret_LowerCylinder.position.y = minaret_BaseLinkOcto.position.y + minaret_BaseLinkOcto.geometry.parameters.height/2 + minaret_LowerCylinder.geometry.parameters.height/2;
-                    minaret_LowerCylinder.position.z = minaret_Base.position.z;
-                    minaret_LowerCylinder.position.x = minaret_Base.position.x;                
-                    
-                    minaret_LowerCylinder.castShadow = true;
-                    scene.add(minaret_LowerCylinder );
-
-                    minaret_LowerBalconyBottom = new THREE.Mesh(balconyGeoLB, material);
-                    minaret_LowerBalconyBottom.position.y = minaret_LowerCylinder.position.y + minaret_LowerCylinder.geometry.parameters.height/2 + minaret_LowerBalconyBottom.geometry.parameters.height/2;
-                    minaret_LowerBalconyBottom.rotation.y = Math.PI / 4;
-                    minaret_LowerBalconyBottom.position.z = minaret_Base.position.z;
-                    minaret_LowerBalconyBottom.position.x = minaret_Base.position.x;
-                    
-                    minaret_LowerBalconyBottom.castShadow = true;
-                    scene.add(minaret_LowerBalconyBottom);
-
-                    minaret_LowerBalconyTop = new THREE.Mesh( balconyGeoLT, material );
-                    minaret_LowerBalconyTop.position.y = minaret_LowerBalconyBottom.position.y + minaret_LowerBalconyBottom.geometry.parameters.height/2 + minaret_LowerBalconyTop.geometry.parameters.height/2;
-                    minaret_LowerBalconyTop.position.z = minaret_Base.position.z;
-                    minaret_LowerBalconyTop.position.x = minaret_Base.position.x;
-                    
-                    minaret_LowerBalconyTop.castShadow = true;
-                    scene.add(minaret_LowerBalconyTop );
-                    
-                    //  TRONC DU HAUT
-                    minaret_MiddleCylinder = new THREE.Mesh( geoMC, material );
-                    minaret_MiddleCylinder.position.y = minaret_LowerBalconyTop.position.y + minaret_LowerBalconyTop.geometry.parameters.height/2 + minaret_MiddleCylinder.geometry.parameters.height/2;
-                    minaret_MiddleCylinder.position.z = minaret_Base.position.z;
-                    minaret_MiddleCylinder.position.x = minaret_Base.position.x;
-                    
-                    minaret_MiddleCylinder.castShadow = true;
-                    scene.add(minaret_MiddleCylinder );
-
-                    minaret_MiddleBalconyBottom = new THREE.Mesh(balconyGeoMB, material);
-                    minaret_MiddleBalconyBottom.position.y = minaret_MiddleCylinder.position.y + minaret_MiddleCylinder.geometry.parameters.height/2 + minaret_MiddleBalconyBottom.geometry.parameters.height/2;
-                    minaret_MiddleBalconyBottom.rotation.y = Math.PI / 4;
-                    minaret_MiddleBalconyBottom.position.z = minaret_Base.position.z;
-                    minaret_MiddleBalconyBottom.position.x = minaret_Base.position.x;
-                    
-                    minaret_MiddleBalconyBottom.castShadow = true;
-                    scene.add(minaret_MiddleBalconyBottom);
-
-                    minaret_MiddleBalconyTop = new THREE.Mesh( balconyGeoMT, material );
-                    minaret_MiddleBalconyTop.position.y = minaret_MiddleBalconyBottom.position.y + minaret_MiddleBalconyBottom.geometry.parameters.height/2 + minaret_MiddleBalconyTop.geometry.parameters.height/2;
-                    minaret_MiddleBalconyTop.position.z = minaret_Base.position.z;
-                    minaret_MiddleBalconyTop.position.x = minaret_Base.position.x;
-                    
-                    minaret_MiddleBalconyTop.castShadow = true;
-                    scene.add(minaret_MiddleBalconyTop );
-
-                    minaret_HigherBalconyBottom = new THREE.Mesh(balconyGeoHB, material);
-                    minaret_HigherBalconyBottom.position.y = minaret_MiddleBalconyTop.position.y + minaret_MiddleBalconyTop.geometry.parameters.height/2 + minaret_HigherBalconyBottom.geometry.parameters.height/2;
-                    minaret_HigherBalconyBottom.rotation.y = Math.PI / 4;
-                    minaret_HigherBalconyBottom.position.z = minaret_Base.position.z;
-                    minaret_HigherBalconyBottom.position.x = minaret_Base.position.x;
-                    
-                    minaret_HigherBalconyBottom.castShadow = true;
-                    scene.add(minaret_HigherBalconyBottom);
-
-                    minaret_HigherBalconyTop = new THREE.Mesh( balconyGeoHT, material );
-                    minaret_HigherBalconyTop.position.y = minaret_HigherBalconyBottom.position.y + minaret_HigherBalconyBottom.geometry.parameters.height/2 + minaret_HigherBalconyTop.geometry.parameters.height/2;
-                    minaret_HigherBalconyTop.position.z = minaret_Base.position.z;
-                    minaret_HigherBalconyTop.position.x = minaret_Base.position.x;
-                    
-                    minaret_HigherBalconyTop.castShadow = true;
-                    scene.add(minaret_HigherBalconyTop );
-
-                    //  POINTE DU MINARET
-                    minaret_SpikeBottom = new THREE.Mesh( spikeBottomGeo, material );
-                    minaret_SpikeBottom.position.y = minaret_HigherBalconyTop.position.y + minaret_HigherBalconyTop.geometry.parameters.height/2 + minaret_SpikeBottom.geometry.parameters.radius;
-                    minaret_SpikeBottom.position.z = minaret_Base.position.z;
-                    minaret_SpikeBottom.position.x = minaret_Base.position.x;
-                    
-                    minaret_SpikeBottom.castShadow = true;
-                    scene.add(minaret_SpikeBottom );
-
-                    minaret_Spike = new THREE.Mesh( spikeGeo, material );
-                    minaret_Spike.position.y = minaret_SpikeBottom.position.y + minaret_SpikeBottom.geometry.parameters.radius + minaret_Spike.geometry.parameters.height/2;
-                    minaret_Spike.position.z = minaret_Base.position.z;
-                    minaret_Spike.position.x = minaret_Base.position.x;
-                    
-                    minaret_Spike.castShadow = true;
-                    scene.add(minaret_Spike);
-
-                    minaret_SpikeCircle1 = new THREE.Mesh( spikeCircleGeo, material );
-                    minaret_SpikeCircle1.position.y = minaret_Spike.position.y + minaret_Spike.geometry.parameters.height/2 + minaret_SpikeCircle1.geometry.parameters.height/2;
-                    minaret_SpikeCircle1.position.z = minaret_Base.position.z;
-                    minaret_SpikeCircle1.position.x = minaret_Base.position.x;
-                    
-                    minaret_SpikeCircle1.castShadow = true;
-                    scene.add(minaret_SpikeCircle1 );
-
-                    minaret_SpikeCircle2 = new THREE.Mesh( spikeCircleGeo, material );
-                    minaret_SpikeCircle2.position.y = minaret_SpikeCircle1.position.y + minaret_SpikeCircle1.geometry.parameters.height/2 + minaret_SpikeCircle2.geometry.parameters.height/2;
-                    minaret_SpikeCircle2.position.z = minaret_Base.position.z;
-                    minaret_SpikeCircle2.position.x = minaret_Base.position.x;
-                    
-                    minaret_SpikeCircle2.castShadow = true;
-                    scene.add(minaret_SpikeCircle2 );
-
-                    minaret_SpikeTop = new THREE.Mesh( spikeTopGeo, material );
-                    minaret_SpikeTop.position.y = minaret_SpikeCircle2.position.y + minaret_SpikeCircle2.geometry.parameters.height/2 + minaret_SpikeTop.geometry.parameters.radius;
-                    minaret_SpikeTop.position.z = minaret_Base.position.z;
-                    minaret_SpikeTop.position.x = minaret_Base.position.x;
-                    
-                    minaret_SpikeTop.castShadow = true;
-                    scene.add(minaret_SpikeTop );
-
-                    minaret_Moon = new THREE.Mesh( moonGeo, material );
-                    minaret_Moon.position.y = minaret_SpikeTop.position.y + minaret_SpikeTop.geometry.parameters.radius;
-                    minaret_Moon.position.z = minaret_Base.position.z;
-                    minaret_Moon.position.x = minaret_Base.position.x;
-                    
-                    minaret_Moon.castShadow = true;
-                    scene.add(minaret_Moon );
-
-                }
 
 			}
 
@@ -1032,12 +1347,14 @@
                 // required if controls.enableDamping or controls.autoRotate are set to true
                 controls.update();
                 
-                
+                if(spotLight.position.y < 60000 && spotLight.position.y > -60000){
+                    spotLight.position.y += 100;
+                }
+
+
                 renderer.render( scene, camera );
 
             }
-
-            
 		</script>
 	</body>
 </html>
