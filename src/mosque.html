@@ -71,24 +71,24 @@
                 ambient = new THREE.AmbientLight( 0xffffff, 0.1 );
 				scene.add( ambient );
 
-                spotLight = new THREE.SpotLight( 0xffffff, 2 );
-				spotLight.position.set( 20000, 40000, 40000 );
-				spotLight.angle = 1.05;
-				spotLight.penumbra = 0.1;
-				spotLight.decay = 1;
-                spotLight.focus = 1;
-				spotLight.distance = 70000;
+                // spotLight = new THREE.SpotLight( 0xffffff, 2 );
+				// spotLight.position.set( 20000, 40000, 40000 );
+				// spotLight.angle = 1.05;
+				// spotLight.penumbra = 0.1;
+				// spotLight.decay = 1;
+                // spotLight.focus = 1;
+				// spotLight.distance = 70000;
 
-				spotLight.castShadow = true;
-				spotLight.shadow.mapSize.width = 512;
-				spotLight.shadow.mapSize.height = 512;
-				spotLight.shadow.camera.near = 1;
-				spotLight.shadow.camera.far = 100000;
-				spotLight.shadow.focus = 1;
-				scene.add( spotLight );
+				// spotLight.castShadow = true;
+				// spotLight.shadow.mapSize.width = 512;
+				// spotLight.shadow.mapSize.height = 512;
+				// spotLight.shadow.camera.near = 1;
+				// spotLight.shadow.camera.far = 100000;
+				// spotLight.shadow.focus = 1;
+				// scene.add( spotLight );
 
-				lightHelper = new THREE.SpotLightHelper( spotLight );
-				scene.add( lightHelper );
+				// lightHelper = new THREE.SpotLightHelper( spotLight );
+				// scene.add( lightHelper );
 
                 //Chargement des textures
 				var texture = new THREE.TextureLoader().load( '../ressources/textures/grid.png' );
@@ -350,10 +350,10 @@
                     miniTurretBackRight.position.z = frontGateSmall.position.z - (frontGateSmall.geometry.parameters.depth/2);
                     miniTurretBackRight.position.x = frontGateSmall.position.x + (frontGateSmall.geometry.parameters.width/2);
 
-                addMinaret(turretFrontLeft);
-                addMinaret(turretBackLeft, mainBuildingLittleFront);
-                addMinaret(turretFrontRight);
-                addMinaret(turretBackRight, mainBuildingLittleFront);
+                addMinaret(turretFrontLeft, null, 'on');
+                addMinaret(turretBackLeft, mainBuildingLittleFront, 'on');
+                addMinaret(turretFrontRight, null, 'on');
+                addMinaret(turretBackRight, mainBuildingLittleFront, 'on');
                 
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ DEBUT DOMES @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
@@ -423,9 +423,8 @@
                 controls.update();
 
 				window.addEventListener( 'resize', onWindowResize, false ); //Adaptation au changement de taille de la fenêtre avec appel de sa fonction ↩️
-
                 //FONCTION MINARETS
-                function addMinaret(turret, mainBuild){
+                function addMinaret(turret, mainBuild, lightStatus){
                     var baseMinaretGeo = new THREE.BoxBufferGeometry( 200*(6000/700), 12000, 200*(6000/700) );
                     var decoMinaretGeo = new THREE.ConeBufferGeometry( 150*(6000/700), 200*(6000/700), 4 );
                     var linkGeo = new THREE.CylinderGeometry( 100*(6000/700), 140*(6000/700), 100*(6000/700), 4, 1 );
@@ -446,8 +445,7 @@
                     //  BASE
                     minaret_Base = new THREE.Mesh( baseMinaretGeo, material ) ;//Création de l'objet avec ses matériaux
                     minaret_Base.position.y = minaret_Base.geometry.parameters.height/2;
-                    
-                    
+                   
                     if (turret.position.x > 0){
                         minaret_Base.position.x = turret.position.x - (turret.geometry.parameters.width/2);
                     } else {
@@ -455,7 +453,6 @@
                     }
 
                     if(mainBuild != null){
-                        console.log('wesh');
                         minaret_Base.position.z = mainBuild.position.z + minaret_Base.geometry.parameters.depth;
                     } else {
                         if (turret.position.z > 0){
@@ -510,6 +507,49 @@
                     
                     minaret_LowerBalconyBottom.castShadow = true;
                     scene.add(minaret_LowerBalconyBottom);
+
+                    if (lightStatus == 'on'){
+                        var gap;
+                        spotLight = new THREE.SpotLight( 0xffffff, 2 );
+                        if (turret.position.z < 0){
+                            gap = 1500;
+                        } else {
+                            gap = -1500;
+                        }
+                        spotLight.position.set( minaret_LowerBalconyBottom.position.x, minaret_LowerBalconyBottom.position.y, minaret_LowerBalconyBottom.position.z + gap);
+                        spotLight.angle = 0.4;
+                        spotLight.penumbra = 0.5;
+                        spotLight.decay = 1;
+                        spotLight.focus = 1;
+                        spotLight.distance = 40000;
+                        spotLight.intensity = 1.1;
+
+                        if(mainBuild == null){
+                            if(turret.position.x > 0){
+                                spotLight.target = turretBackLeft;
+                            } else {
+                                spotLight.target = turretBackRight;
+                            }
+                        } else {
+                            if(turret.position.x > 0){
+                                spotLight.target = turretFrontRight;
+                            } else {
+                                spotLight.target = turretFrontLeft;
+                            }
+                        }
+                        
+
+                        spotLight.castShadow = true;
+                        spotLight.shadow.mapSize.width = 512;
+                        spotLight.shadow.mapSize.height = 512;
+                        spotLight.shadow.camera.near = 1;
+                        spotLight.shadow.camera.far = 100000;
+                        spotLight.shadow.focus = 1;
+                        scene.add( spotLight );
+
+                        lightHelper = new THREE.SpotLightHelper( spotLight );
+                        scene.add( lightHelper );
+                    }
 
                     minaret_LowerBalconyTop = new THREE.Mesh( balconyGeoLT, material );
                     minaret_LowerBalconyTop.position.y = minaret_LowerBalconyBottom.position.y + minaret_LowerBalconyBottom.geometry.parameters.height/2 + minaret_LowerBalconyTop.geometry.parameters.height/2;
