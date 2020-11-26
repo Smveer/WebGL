@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="EN">
 	<head>
-		<title>Project WEBGL - Manveer</title>
+		<title>Project WEBGL</title>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 		<link type="text/css" rel="stylesheet" href="../ressources/css/main.css">
@@ -14,14 +14,70 @@
 			import * as THREE from '../build/three.module.js';
             import {OrbitControls} from "./jsm/controls/OrbitControls.js";
 
-            var camera, scene, renderer, controls; //DÉCLARATIONS OBJETS.
-            var ground, leftWall, rightWall, frontWall, backWall; //DÉCLARATION OBJET
+            //DÉCLARATIONS DES OBJETS DE LA SCÈNE
+            var camera, scene, renderer, controls, ambient, spotLight, lightHelper;
+
+            //DÉCLARATION DE LA BASE
+            var mesh_floor, ground, leftWall, rightWall, frontWall, backWall;
+
+            //DÉCLARATION DES TOURELLES DE LA BASE
             var turretBackLeft, turretBackRight, turretFrontLeft, turretFrontRight;
-            var frontGate;
+
+            //DÉCLARATION DE L'ENTRÉE
+            var frontGateBig, frontGateSmall, miniTurretFrontLeft, miniTurretFrontRight, miniTurretBackLeft, miniTurretBackRight;
+
+            //DÉCLARATION DES MINI TOURELLES DE LA TOURELLE GAUCHE
+            var miniTurretFrontLeft_frontLeft, miniTurretFrontRight_frontLeft, miniTurretBackLeft_frontLeft, miniTurretBackRight_frontLeft;
+
+            //DÉCLARATION DES MINI TOURELLES DE LA TOURELLE DROITE
+            var miniTurretFrontLeft_frontRight, miniTurretFrontRight_frontRight, miniTurretBackLeft_frontRight, miniTurretBackRight_frontRight;
+
+            //DÉCLARATION DES BATÎMENTS
+            var mainBuilding, mainBuildingFront, mainBuildingLittleFront, mainBuildingMiddle;
+
+            //DÉCLARATION DES MINI TOURELLES DES BATÎMENTS
+            var miniTurretMainBuilding_frontLeft, miniTurretMainBuilding_frontRight;
+
+            //DÉCLARATION DES OBJETS DES MINARETS
+            var minaretFL_Base, minaretFL_LowerCylinder, minaretFL_deco2Base, minaretFL_deco1Base, minaretFL_BaseLinkOcto, minaretFL_LowerBalconyBottom, minaretFL_LowerBalconyTop, minaretFL_MiddleCylinder, minaretFL_MiddleBalconyTop, minaretFL_MiddleBalconyBottom, minaretFL_HigherBalconyTop, minaretFL_HigherBalconyBottom, minaretFL_SpikeBottom, minaretFL_Spike, minaretFL_SpikeCircle1, minaretFL_SpikeCircle2, minaretFL_SpikeTop, minaretFL_Moon;
+            var minaretFR_Base, minaretFR_LowerCylinder, minaretFR_deco2Base, minaretFR_deco1Base, minaretFR_BaseLinkOcto, minaretFR_LowerBalconyBottom, minaretFR_LowerBalconyTop, minaretFR_MiddleCylinder, minaretFR_MiddleBalconyTop, minaretFR_MiddleBalconyBottom, minaretFR_HigherBalconyTop, minaretFR_HigherBalconyBottom, minaretFR_SpikeBottom, minaretFR_Spike, minaretFR_SpikeCircle1, minaretFR_SpikeCircle2, minaretFR_SpikeTop, minaretFR_Moon;
+            var minaretBR_Base, minaretBR_LowerCylinder, minaretBR_deco2Base, minaretBR_deco1Base, minaretBR_BaseLinkOcto, minaretBR_LowerBalconyBottom, minaretBR_LowerBalconyTop, minaretBR_MiddleCylinder, minaretBR_MiddleBalconyTop, minaretBR_MiddleBalconyBottom, minaretBR_HigherBalconyTop, minaretBR_HigherBalconyBottom, minaretBR_SpikeBottom, minaretBR_Spike, minaretBR_SpikeCircle1, minaretBR_SpikeCircle2, minaretBR_SpikeTop, minaretBR_Moon;
+            var minaretBL_Base, minaretBL_LowerCylinder, minaretBL_deco2Base, minaretBL_deco1Base, minaretBL_BaseLinkOcto, minaretBL_LowerBalconyBottom, minaretBL_LowerBalconyTop, minaretBL_MiddleCylinder, minaretBL_MiddleBalconyTop, minaretBL_MiddleBalconyBottom, minaretBL_HigherBalconyTop, minaretBL_HigherBalconyBottom, minaretBL_SpikeBottom, minaretBL_Spike, minaretBL_SpikeCircle1, minaretBL_SpikeCircle2, minaretBL_SpikeTop, minaretBL_Moon;
+
+            //DÉCLARATION DES PETITS DÔMES FRONT
+            var little_sphere_FLL, little_cylindre_FLL, little_octogone_FLL;
+            var little_sphere_FLR, little_cylindre_FLR, little_octogone_FLR;
+            var little_sphere_FRR, little_cylindre_FRR, little_octogone_FRR;
+            var little_sphere_FRL, little_cylindre_FRL, little_octogone_FRL;
+
+            //DÉCLARATION DES PETITS DÔMES BACK
+            var little_sphere_BLL, little_cylindre_BLL, little_octogone_BLL;
+            var little_sphere_BLR, little_cylindre_BLR, little_octogone_BLR;
+            var little_sphere_BRR, little_cylindre_BRR, little_octogone_BRR;
+            var little_sphere_BRL, little_cylindre_BRL, little_octogone_BRL;
+
+            //DÉCLARATION DES PETITS DÔMES LEFT
+            var little_sphere_L1, little_cylindre_L1, little_octogone_L1;
+            var little_sphere_L2, little_cylindre_L2, little_octogone_L2;
+            var little_sphere_L3, little_cylindre_L3, little_octogone_L3;
+            var little_sphere_L4, little_cylindre_L4, little_octogone_L4;
+
+            //DÉCLARATION DES PETITS DÔMES RIGHT
+            var little_sphere_R1, little_cylindre_R1, little_octogone_R1;
+            var little_sphere_R2, little_cylindre_R2, little_octogone_R2;
+            var little_sphere_R3, little_cylindre_R3, little_octogone_R3;
+            var little_sphere_R4, little_cylindre_R4, little_octogone_R4;
+
+            //DÉCLARATION DES DÔMES PRINCIPAUX
+            var main_sphere, main_cylindre, main_octogone;
+            var bigLeft_sphere, bigLeft_cylindre, bigLeft_octogone;
+            var bigRight_sphere, bigRight_cylindre, bigRight_octogone;
+            var midBack_sphere, midBack_cylindre, midBack_octogone;
+            var midFront_sphere, midFront_cylindre, midFront_octogone;
 
             //CRÉATION DE LA CAMÉRA SUPER DYNAMIQUE
-            camera = new THREE.PerspectiveCamera( 70, window.innerWidth/window.innerHeight, 1, 100000 );
-            camera.position.set( 0, 70000, 0 );
+            camera = new THREE.PerspectiveCamera( 70, window.innerWidth/window.innerHeight, 1, 1000000 );
+            camera.position.set( 70000, 70000, 70000 );
 
 			init(); //Pour créer la scène
 			animate(); //Pour animer la scène (boucle qui tourne en permanence)
@@ -30,87 +86,1243 @@
 
                 //Création de l'espace 3D (scène) avec ses axes
                 scene = new THREE.Scene();
+                scene.background = new THREE.CubeTextureLoader()
+                    .setPath( 'textures/cube/MilkyWay/' )
+                    .load( [
+                        'dark-s_px.jpg',
+                        'dark-s_nx.jpg',
+                        'dark-s_py.jpg',
+                        'dark-s_ny.jpg',
+                        'dark-s_pz.jpg',
+                        'dark-s_nz.jpg'
+                    ] ); //SKYBOX DU BACKGROUND
 
+                ambient = new THREE.AmbientLight( 0xffffff, 0.1 );
+				scene.add( ambient );
 
-                //Chargement de la texture
-				var texture = new THREE.TextureLoader().load( '../ressources/textures/floors/FloorsCheckerboard_S_Diffuse.jpg' );
-                var turretTexture = new THREE.TextureLoader().load( '../ressources/textures/colors.png' );
-                var wallTexture = new THREE.TextureLoader().load( '../ressources/textures/carbon/Carbon_Normal.png' );
+                spotLight = new THREE.SpotLight( 0xffffff, 2 );
+				spotLight.position.set( 20000, 40000, 40000 );
+				spotLight.angle = 1.05;
+				spotLight.penumbra = 0.1;
+				spotLight.decay = 1;
+                spotLight.focus = 1;
+				spotLight.distance = 70000;
 
+				spotLight.castShadow = true;
+				spotLight.shadow.mapSize.width = 512;
+				spotLight.shadow.mapSize.height = 512;
+				spotLight.shadow.camera.near = 1;
+				spotLight.shadow.camera.far = 100000;
+				spotLight.shadow.focus = 1;
+				scene.add( spotLight );
+
+				lightHelper = new THREE.SpotLightHelper( spotLight );
+				scene.add( lightHelper );
+
+                //Chargement des textures
+				var texture = new THREE.TextureLoader().load( '../ressources/textures/grid.png' );
+
+                var turretTexture = new THREE.TextureLoader().load( '../ressources/textures/square-outline.png' );
+                
+                var wallTexture = new THREE.TextureLoader().load( '../ressources/textures/square-outline.png' );
+
+                var groundTexture = new THREE.TextureLoader().load( '../ressources/textures/brick_bump.jpg' );
+                    groundTexture.wrapS = THREE.RepeatWrapping;
+                    groundTexture.wrapT = THREE.RepeatWrapping;
+                    groundTexture.repeat.set( 20, 20 );
+
+                var sphereTexture = new THREE.TextureLoader().load( '../ressources/textures/square-outline.png' );
+                    sphereTexture.wrapS = THREE.RepeatWrapping;
+                    sphereTexture.wrapT = THREE.RepeatWrapping;
+                    sphereTexture.repeat.set( 30, 30 );
+
+                //var grassTexture = new THREE.TextureLoader().load( '../ressources/textures/terrain/grasslight-big.jpg');
                                                      
-                //Matériaux
-                var material = new THREE.MeshBasicMaterial( { map: texture } );
-                var turretMaterial = new THREE.MeshBasicMaterial( { map: turretTexture } );
-                var wallMaterial = new THREE.MeshBasicMaterial( { map: wallTexture } );
+                //Création des matériaux
+                var material = new THREE.MeshPhongMaterial( { map: texture, side: THREE.DoubleSide } );
+                var turretMaterial = new THREE.MeshPhongMaterial( { map: turretTexture, side: THREE.DoubleSide } );
+                var wallMaterial = new THREE.MeshPhongMaterial( { map: wallTexture, side: THREE.DoubleSide } );
+                var groundMaterial = new THREE.MeshPhongMaterial( { map: groundTexture, side: THREE.DoubleSide } );
+                var sphereMaterial = new THREE.MeshPhongMaterial( { map: sphereTexture, side: THREE.DoubleSide } );
+                //var grass = new THREE.MeshBasicMaterial( { map:  grassTexture, side: THREE.DoubleSide} );
 
+                //PLATEAU
+                //var floor = new THREE.BoxBufferGeometry(90000, 2000, 90000);
+                //mesh_floor = new THREE.Mesh( floor,  grass);
+                //mesh_floor.receiveShadow = true;
+                //mesh_floor.position.y = -mesh_floor.geometry.parameters.height/2 - 1000;
+                //scene.add(mesh_floor);
                                                 
                 //DÉFINITION DU SOL
-				var groundGeometry = new THREE.BoxBufferGeometry( 30000, 1, 42000 ); //Type/Forme d'objet
-				ground = new THREE.Mesh( groundGeometry, material ); //Création de l'objet avec ses matériaux
+				var groundGeometry = new THREE.BoxBufferGeometry( 30000, 1000, 42000 ); //Type/Forme d'objet
+				ground = new THREE.Mesh( groundGeometry, groundMaterial ); //Création de l'objet avec ses matériaux
+                ground.position.y = -ground.geometry.parameters.height/2;
+                ground.receiveShadow = true;
 				scene.add( ground ); //Ajout de l'objet dans la scene
 
-				//DÉFINITION DES BOXES
-                var turretGeometry = new THREE.BoxBufferGeometry( 3500, 4000, 3500 );
 
-                turretBackLeft = new THREE.Mesh( turretGeometry, turretMaterial );
-                scene.add( turretBackLeft );
-                turretBackLeft.position.x = -13833.333;
-                turretBackLeft.position.z = -16000;    
-                turretBackLeft.position.y = 2000;
-
-                turretBackRight = new THREE.Mesh( turretGeometry, turretMaterial );
-                scene.add( turretBackRight );
-                turretBackRight.position.x = 13833.333;
-                turretBackRight.position.z = -16000;    
-                turretBackRight.position.y = 2000;
-
-                var turretFrontGeometry = new THREE.BoxBufferGeometry( 5000, 5000, 5000 );
-
-                turretFrontRight = new THREE.Mesh( turretFrontGeometry, turretMaterial );
-                scene.add( turretFrontRight );
-                turretFrontRight.position.x = 13250;
-                turretFrontRight.position.z = 22250;    
-                turretFrontRight.position.y = 2500;
-
-                turretFrontLeft = new THREE.Mesh( turretFrontGeometry, turretMaterial );
-                scene.add( turretFrontLeft );
-                turretFrontLeft.position.x = -13250;
-                turretFrontLeft.position.z = 22250;    
-                turretFrontLeft.position.y = 2500;
-
-                
                 //DÉFINITION DES MURS
-                var leftWallGeometry = new THREE.BoxBufferGeometry( 3000, 2000, 42000 );
-                leftWall = new THREE.Mesh( leftWallGeometry, wallMaterial );
-                scene.add( leftWall );
-                leftWall.position.x = -13500;
-                leftWall.position.y = 1000;
+                var longWallGeometry = new THREE.BoxBufferGeometry( 3000, 3000, 42000 );
+                var largeWallGeometry = new THREE.BoxBufferGeometry( 30000, 3000, 3000 );
 
-                var rightWallGeometry = new THREE.BoxBufferGeometry( 3000, 2000, 42000 );
-                rightWall = new THREE.Mesh( rightWallGeometry, wallMaterial );
-                scene.add( rightWall );
-                rightWall.position.x = 13500;
-                rightWall.position.y = 1000;
+                    leftWall = new THREE.Mesh( longWallGeometry, wallMaterial );
+                    leftWall.receiveShadow = true;
+                    leftWall.castShadow = true;
+                    scene.add( leftWall );
+                    leftWall.position.x = -13500;
+                    leftWall.position.y = leftWall.geometry.parameters.height/2;;
 
-                var frontWallGeometry = new THREE.BoxBufferGeometry( 30000, 3000, 3000 );
-                frontWall = new THREE.Mesh( frontWallGeometry, wallMaterial );
-                scene.add( frontWall );
-                frontWall.position.x = 0;
-                frontWall.position.y = 1500;
-                frontWall.position.z = 22500;   
+                    rightWall = new THREE.Mesh( longWallGeometry, wallMaterial );
+                    rightWall.receiveShadow = true;
+                    rightWall.castShadow = true;
+                    scene.add( rightWall );
+                    rightWall.position.x = 13500;
+                    rightWall.position.y = rightWall.geometry.parameters.height/2;
 
-                var backWallGeometry = new THREE.BoxBufferGeometry( 30000, 2000, 3000 );
-                backWall = new THREE.Mesh( backWallGeometry, wallMaterial );
-                scene.add( backWall );
-                backWall.position.x = 0;
-                backWall.position.y = 1000;
-                backWall.position.z = -20000;
+                    frontWall = new THREE.Mesh( largeWallGeometry, wallMaterial );
+                    frontWall.receiveShadow = true;
+                    frontWall.castShadow = true;
+                    scene.add( frontWall );
+                    frontWall.position.x = 0;
+                    frontWall.position.y = frontWall.geometry.parameters.height/2;
+                    frontWall.position.z = ground.geometry.parameters.depth/2 - 1250;   
+
+                    backWall = new THREE.Mesh( largeWallGeometry, wallMaterial );
+                    backWall.receiveShadow = true;
+                    backWall.castShadow = true;
+                    scene.add( backWall );
+                    backWall.position.x = 0;
+                    backWall.position.y = backWall.geometry.parameters.height/2;
+                    backWall.position.z = -ground.geometry.parameters.depth/2 + 1250;  
+
+
+				//DÉFINITION DES TOURELLES DE LA BASE ARRIÈRE
+                var turretGeometry = new THREE.BoxBufferGeometry( 3500, 4000, 3500 );
+                    // TOURELLE GAUCHE
+                    turretBackLeft = new THREE.Mesh( turretGeometry, turretMaterial );
+                    turretBackLeft.receiveShadow = true;
+                    turretBackLeft.castShadow = true;
+                    scene.add( turretBackLeft );
+                    turretBackLeft.position.x = -ground.geometry.parameters.width/2 + 1166.667;
+                    turretBackLeft.position.z = -ground.geometry.parameters.depth/2 + 5000;    
+                    turretBackLeft.position.y = turretBackLeft.geometry.parameters.height/2;
+
+                    // TOURELLE DROITE
+                    turretBackRight = new THREE.Mesh( turretGeometry, turretMaterial );
+                    turretBackRight.receiveShadow = true;
+                    turretBackRight.castShadow = true;
+                    scene.add( turretBackRight );
+                    turretBackRight.position.x = ground.geometry.parameters.width/2 - 1166.667;
+                    turretBackRight.position.z = -ground.geometry.parameters.depth/2 + 5000;    
+                    turretBackRight.position.y = turretBackRight.geometry.parameters.height/2;
+
+
+                //DÉFINITION DES TOURELLES DE LA BASE AVANT
+                var turretFrontGeometry = new THREE.BoxBufferGeometry( 5000, 5000, 5000 );
+                var miniGeometryTurret = new THREE.BoxBufferGeometry( 1000, 6000, 1000 );
+                    // TOURELLE DROITE
+                    turretFrontRight = new THREE.Mesh( turretFrontGeometry, turretMaterial );
+                    turretFrontRight.receiveShadow = true;
+                    turretFrontRight.castShadow = true;
+                    scene.add( turretFrontRight );
+                    turretFrontRight.position.x = rightWall.position.x - 250;
+                    turretFrontRight.position.z = frontWall.position.z;    
+                    turretFrontRight.position.y = turretFrontRight.geometry.parameters.height/2;
+
+                    miniTurretFrontLeft_frontRight = new THREE.Mesh( miniGeometryTurret, turretMaterial );
+                    miniTurretFrontLeft_frontRight.receiveShadow = true;
+                    miniTurretFrontLeft_frontRight.castShadow = true;
+                    scene.add ( miniTurretFrontLeft_frontRight );
+                    miniTurretFrontLeft_frontRight.position.y = miniTurretFrontLeft_frontRight.geometry.parameters.height/2;
+                    miniTurretFrontLeft_frontRight.position.x = turretFrontRight.position.x - (turretFrontRight.geometry.parameters.width/2);
+                    miniTurretFrontLeft_frontRight.position.z = turretFrontRight.position.z + (turretFrontRight.geometry.parameters.depth/2);
+
+                    miniTurretFrontRight_frontRight = new THREE.Mesh( miniGeometryTurret, turretMaterial );
+                    miniTurretFrontRight_frontRight.receiveShadow = true;
+                    miniTurretFrontRight_frontRight.castShadow = true;
+                    scene.add ( miniTurretFrontRight_frontRight );
+                    miniTurretFrontRight_frontRight.position.y = miniTurretFrontRight_frontRight.geometry.parameters.height/2;
+                    miniTurretFrontRight_frontRight.position.x = turretFrontRight.position.x + (turretFrontRight.geometry.parameters.width/2);
+                    miniTurretFrontRight_frontRight.position.z = turretFrontRight.position.z + (turretFrontRight.geometry.parameters.depth/2); 
+
+                    miniTurretBackRight_frontRight = new THREE.Mesh( miniGeometryTurret, turretMaterial );
+                    miniTurretBackRight_frontRight.receiveShadow = true;
+                    miniTurretBackRight_frontRight.castShadow = true;
+                    scene.add ( miniTurretBackRight_frontRight );
+                    miniTurretBackRight_frontRight.position.y = miniTurretBackRight_frontRight.geometry.parameters.height/2;
+                    miniTurretBackRight_frontRight.position.x = turretFrontRight.position.x + (turretFrontRight.geometry.parameters.width/2);
+                    miniTurretBackRight_frontRight.position.z = turretFrontRight.position.z - (turretFrontRight.geometry.parameters.depth/2);
+
+                    // TOURELLE GAUCHE
+                    turretFrontLeft = new THREE.Mesh( turretFrontGeometry, turretMaterial );
+                    turretFrontLeft.receiveShadow = true;
+                    turretFrontLeft.castShadow = true;
+                    scene.add( turretFrontLeft );
+                    turretFrontLeft.position.x = leftWall.position.x - 250;
+                    turretFrontLeft.position.z = frontWall.position.z;    
+                    turretFrontLeft.position.y = turretFrontLeft.geometry.parameters.height/2;
+
+                    miniTurretFrontLeft_frontLeft = new THREE.Mesh( miniGeometryTurret, turretMaterial );
+                    miniTurretFrontLeft_frontLeft.receiveShadow = true;
+                    miniTurretFrontLeft_frontLeft.castShadow = true;
+                    scene.add ( miniTurretFrontLeft_frontLeft );
+                    miniTurretFrontLeft_frontLeft.position.y = miniTurretFrontLeft_frontLeft.geometry.parameters.height/2;
+                    miniTurretFrontLeft_frontLeft.position.x = turretFrontLeft.position.x - (turretFrontLeft.geometry.parameters.width/2);
+                    miniTurretFrontLeft_frontLeft.position.z = turretFrontLeft.position.z + (turretFrontLeft.geometry.parameters.depth/2);
+
+                    miniTurretFrontRight_frontLeft = new THREE.Mesh( miniGeometryTurret, turretMaterial );
+                    miniTurretFrontRight_frontLeft.receiveShadow = true;
+                    miniTurretFrontRight_frontLeft.castShadow = true;
+                    scene.add ( miniTurretFrontRight_frontLeft );
+                    miniTurretFrontRight_frontLeft.position.y = miniTurretFrontRight_frontLeft.geometry.parameters.height/2;
+                    miniTurretFrontRight_frontLeft.position.x = turretFrontLeft.position.x + (turretFrontLeft.geometry.parameters.width/2);
+                    miniTurretFrontRight_frontLeft.position.z = turretFrontLeft.position.z + (turretFrontLeft.geometry.parameters.depth/2); 
+
+                    miniTurretBackLeft_frontLeft = new THREE.Mesh( miniGeometryTurret, turretMaterial );
+                    miniTurretBackLeft_frontLeft.receiveShadow = true;
+                    miniTurretBackLeft_frontLeft.castShadow = true;
+                    scene.add ( miniTurretBackLeft_frontLeft );
+                    miniTurretBackLeft_frontLeft.position.y = miniTurretBackLeft_frontLeft.geometry.parameters.height/2;
+                    miniTurretBackLeft_frontLeft.position.x = turretFrontLeft.position.x - (turretFrontLeft.geometry.parameters.width/2);
+                    miniTurretBackLeft_frontLeft.position.z = turretFrontLeft.position.z - (turretFrontLeft.geometry.parameters.depth/2);
+                     
                 
+                //DÉFINITION DES BÂTIMENTS
+                var mainBuildGeometry = new THREE.BoxBufferGeometry( 27000, 6000, 7000 );       
+                var mainBuildFrGeo = new THREE.BoxBufferGeometry( 27000, 3500, 3500 );
+                var mainBuildLitFrGeo = new THREE.BoxBufferGeometry( 27000, 2000, 1750 );        
+                var mainBuildMidGeo = new THREE.BoxBufferGeometry( 10000, 4500, 6250);
+
+
+                    mainBuilding = new THREE.Mesh( mainBuildGeometry, turretMaterial );
+                    mainBuilding.receiveShadow = true;
+                    mainBuilding.castShadow = true;
+                    scene.add( mainBuilding );
+                    
+                    mainBuilding.position.y = mainBuilding.geometry.parameters.height/2;
+                    mainBuilding.receiveShadow = true;
+                    mainBuilding.castShadow = true;
+                    mainBuilding.position.z = -16000;
+
+                    mainBuildingFront = new THREE.Mesh( mainBuildFrGeo, turretMaterial );
+                    mainBuildingFront.receiveShadow = true;
+                    mainBuildingFront.castShadow = true;
+                    scene.add( mainBuildingFront );
+                    mainBuildingFront.position.y = mainBuildingFront.geometry.parameters.height/2;
+                    mainBuildingFront.position.z = mainBuilding.position.z + (mainBuilding.geometry.parameters.depth/2) + (mainBuildingFront.geometry.parameters.depth/2);
+
+                    mainBuildingLittleFront = new THREE.Mesh( mainBuildLitFrGeo, wallMaterial );
+                    mainBuildingLittleFront.receiveShadow = true;
+                    mainBuildingLittleFront.castShadow = true;
+                    scene.add( mainBuildingLittleFront );
+                    mainBuildingLittleFront.position.y = mainBuildingLittleFront.geometry.parameters.height/2;
+                    mainBuildingLittleFront.position.z = mainBuildingFront.position.z + (mainBuildingFront.geometry.parameters.depth/2) + (mainBuildingLittleFront.geometry.parameters.depth/2);
+                    
+                    mainBuildingMiddle = new THREE.Mesh( mainBuildMidGeo, turretMaterial );
+                    mainBuildingMiddle.receiveShadow = true;
+                    mainBuildingMiddle.castShadow = true;
+                    scene.add( mainBuildingMiddle );
+                    mainBuildingMiddle.position.y = mainBuildingMiddle.geometry.parameters.height/2;
+                    mainBuildingMiddle.position.z = mainBuildingFront.position.z + (mainBuildingLittleFront.geometry.parameters.depth/2) + 500;
+
+                    miniTurretMainBuilding_frontLeft = new THREE.Mesh( miniGeometryTurret, turretMaterial );
+                    miniTurretMainBuilding_frontLeft.receiveShadow = true;
+                    miniTurretMainBuilding_frontLeft.castShadow = true;
+                    scene.add( miniTurretMainBuilding_frontLeft );
+                    miniTurretMainBuilding_frontLeft.position.y = (miniTurretMainBuilding_frontLeft.geometry.parameters.height/2);
+                    miniTurretMainBuilding_frontLeft.position.x = mainBuildingMiddle.position.x - (mainBuildingMiddle.geometry.parameters.width/2);
+                    miniTurretMainBuilding_frontLeft.position.z = mainBuildingMiddle.position.z + (mainBuildingMiddle.geometry.parameters.depth/2);
+
+                    miniTurretMainBuilding_frontRight = new THREE.Mesh( miniGeometryTurret, turretMaterial );
+                    miniTurretMainBuilding_frontRight.receiveShadow = true;
+                    miniTurretMainBuilding_frontRight.castShadow = true;
+                    scene.add( miniTurretMainBuilding_frontRight );
+                    miniTurretMainBuilding_frontRight.position.y = (miniTurretMainBuilding_frontRight.geometry.parameters.height/2);
+                    miniTurretMainBuilding_frontRight.position.x = mainBuildingMiddle.position.x + (mainBuildingMiddle.geometry.parameters.width/2);
+                    miniTurretMainBuilding_frontRight.position.z = mainBuildingMiddle.position.z + (mainBuildingMiddle.geometry.parameters.depth/2);
+
+                //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ DEBUT MINARETS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+                //DEFINITIONS DES OBJETS DES MINARETS
+                var baseMinaretGeo = new THREE.BoxBufferGeometry( 200*(6000/700), 12000, 200*(6000/700) );
+                var decoMinaretGeo = new THREE.ConeBufferGeometry( 150*(6000/700), 200*(6000/700), 4 );
+                var linkGeo = new THREE.CylinderGeometry( 100*(6000/700), 140*(6000/700), 100*(6000/700), 4, 1 );
+                var geoLC = new THREE.CylinderBufferGeometry( 100*(6000/700), 100*(6000/700), 400*(6000/700), 8 );
+                var balconyGeoLB = new THREE.CylinderGeometry( 180*(6000/700), 100*(6000/700),50*(6000/700), 600, 1 );
+                var balconyGeoLT = new THREE.CylinderBufferGeometry( 180*(6000/700), 180*(6000/700), 30*(6000/700), 1000 );
+                var geoMC = new THREE.CylinderBufferGeometry( 50*(6000/700), 100*(6000/700), 400*(6000/700), 1000 );
+                var balconyGeoMB = new THREE.CylinderGeometry( 120*(6000/700), 80*(6000/700),50*(6000/700), 600, 1 );
+                var balconyGeoMT = new THREE.CylinderBufferGeometry( 120*(6000/700), 120*(6000/700), 30*(6000/700), 1000 );
+                var balconyGeoHB = new THREE.CylinderGeometry( 80*(6000/700), 50*(6000/700), 50*(6000/700), 600, 1 );
+                var balconyGeoHT = new THREE.CylinderBufferGeometry( 80*(6000/700), 80*(6000/700), 30*(6000/700), 1000 );
+                var spikeBottomGeo = new THREE.SphereBufferGeometry( 50*(6000/700), 32, 32 );
+                var spikeGeo = new THREE.CylinderBufferGeometry( 10*(6000/700), 30*(6000/700), 300*(6000/700), 1000 );
+                var spikeCircleGeo = new THREE.CylinderBufferGeometry( 30*(6000/700), 30*(6000/700), 10*(6000/700), 1000 );
+                var spikeTopGeo = new THREE.SphereBufferGeometry( 30*(6000/700), 30*(6000/700), 10 );
+                var moonGeo = new THREE.RingGeometry( 20*(6000/700), 30*(6000/700), 3000 );
+
+                    //################################## MINARET FRONT LEFT ##################################
+                    //BASE MINARET
+                    minaretFL_Base = new THREE.Mesh( baseMinaretGeo, material ) ;//Création de l'objet avec ses matériaux
+                    minaretFL_Base.position.y = minaretFL_Base.geometry.parameters.height/2;
+                    minaretFL_Base.position.z = turretFrontLeft.position.z - (turretFrontLeft.geometry.parameters.depth/2);
+                    minaretFL_Base.position.x = turretFrontLeft.position.x + (turretFrontLeft.geometry.parameters.width/2);
+                    scene.add( minaretFL_Base ); //Ajout de l'objet dans la scene
+
+                    minaretFL_deco1Base = new THREE.Mesh( decoMinaretGeo, material );
+                    minaretFL_deco1Base.position.y = minaretFL_Base.position.y + minaretFL_deco1Base.geometry.parameters.height/2;
+                    minaretFL_deco1Base.position.z = minaretFL_Base.position.z;
+                    minaretFL_deco1Base.position.x = minaretFL_Base.position.x;
+                    scene.add( minaretFL_deco1Base );
+                    
+                    minaretFL_deco2Base = new THREE.Mesh( decoMinaretGeo, material );
+                    minaretFL_deco2Base.position.y = minaretFL_Base.position.y + minaretFL_deco2Base.geometry.parameters.height*2;
+                    minaretFL_deco2Base.position.z = minaretFL_Base.position.z;
+                    minaretFL_deco2Base.position.x = minaretFL_Base.position.x;
+                    scene.add( minaretFL_deco2Base );
+
+                    minaretFL_BaseLinkOcto = new THREE.Mesh(linkGeo, material);
+                    minaretFL_BaseLinkOcto.position.y = minaretFL_Base.position.y + minaretFL_Base.geometry.parameters.height/2 + minaretFL_BaseLinkOcto.geometry.parameters.height/2;;
+                    minaretFL_BaseLinkOcto.rotation.y = Math.PI / 4;
+                    minaretFL_BaseLinkOcto.position.z = minaretFL_Base.position.z;
+                    minaretFL_BaseLinkOcto.position.x = minaretFL_Base.position.x;
+                    scene.add(minaretFL_BaseLinkOcto);
+                
+                    //TRONC DU BAS
+                    minaretFL_LowerCylinder = new THREE.Mesh( geoLC, material );
+                    minaretFL_LowerCylinder.position.y = minaretFL_BaseLinkOcto.position.y + minaretFL_BaseLinkOcto.geometry.parameters.height/2 + minaretFL_LowerCylinder.geometry.parameters.height/2;
+                    minaretFL_LowerCylinder.position.z = minaretFL_Base.position.z;
+                    minaretFL_LowerCylinder.position.x = minaretFL_Base.position.x;                
+                    scene.add( minaretFL_LowerCylinder );
+
+                    minaretFL_LowerBalconyBottom = new THREE.Mesh(balconyGeoLB, material);
+                    minaretFL_LowerBalconyBottom.position.y = minaretFL_LowerCylinder.position.y + minaretFL_LowerCylinder.geometry.parameters.height/2 + minaretFL_LowerBalconyBottom.geometry.parameters.height/2;
+                    minaretFL_LowerBalconyBottom.rotation.y = Math.PI / 4;
+                    minaretFL_LowerBalconyBottom.position.z = minaretFL_Base.position.z;
+                    minaretFL_LowerBalconyBottom.position.x = minaretFL_Base.position.x;
+                    scene.add(minaretFL_LowerBalconyBottom);
+
+                    minaretFL_LowerBalconyTop = new THREE.Mesh( balconyGeoLT, material );
+                    minaretFL_LowerBalconyTop.position.y = minaretFL_LowerBalconyBottom.position.y + minaretFL_LowerBalconyBottom.geometry.parameters.height/2 + minaretFL_LowerBalconyTop.geometry.parameters.height/2;
+                    minaretFL_LowerBalconyTop.position.z = minaretFL_Base.position.z;
+                    minaretFL_LowerBalconyTop.position.x = minaretFL_Base.position.x;
+                    scene.add( minaretFL_LowerBalconyTop );
+
+                    //TRONC DU HAUT
+                    minaretFL_MiddleCylinder = new THREE.Mesh( geoMC, material );
+                    minaretFL_MiddleCylinder.position.y = minaretFL_LowerBalconyTop.position.y + minaretFL_LowerBalconyTop.geometry.parameters.height/2 + minaretFL_MiddleCylinder.geometry.parameters.height/2;
+                    minaretFL_MiddleCylinder.position.z = minaretFL_Base.position.z;
+                    minaretFL_MiddleCylinder.position.x = minaretFL_Base.position.x;
+                    scene.add( minaretFL_MiddleCylinder );
+
+                    minaretFL_MiddleBalconyBottom = new THREE.Mesh(balconyGeoMB, material);
+                    minaretFL_MiddleBalconyBottom.position.y = minaretFL_MiddleCylinder.position.y + minaretFL_MiddleCylinder.geometry.parameters.height/2 + minaretFL_MiddleBalconyBottom.geometry.parameters.height/2;
+                    minaretFL_MiddleBalconyBottom.rotation.y = Math.PI / 4;
+                    minaretFL_MiddleBalconyBottom.position.z = minaretFL_Base.position.z;
+                    minaretFL_MiddleBalconyBottom.position.x = minaretFL_Base.position.x;
+                    scene.add(minaretFL_MiddleBalconyBottom);
+
+                    minaretFL_MiddleBalconyTop = new THREE.Mesh( balconyGeoMT, material );
+                    minaretFL_MiddleBalconyTop.position.y = minaretFL_MiddleBalconyBottom.position.y + minaretFL_MiddleBalconyBottom.geometry.parameters.height/2 + minaretFL_MiddleBalconyTop.geometry.parameters.height/2;
+                    minaretFL_MiddleBalconyTop.position.z = minaretFL_Base.position.z;
+                    minaretFL_MiddleBalconyTop.position.x = minaretFL_Base.position.x;
+                    scene.add( minaretFL_MiddleBalconyTop );
+
+                    minaretFL_HigherBalconyBottom = new THREE.Mesh(balconyGeoHB, material);
+                    minaretFL_HigherBalconyBottom.position.y = minaretFL_MiddleBalconyTop.position.y + minaretFL_MiddleBalconyTop.geometry.parameters.height/2 + minaretFL_HigherBalconyBottom.geometry.parameters.height/2;
+                    minaretFL_HigherBalconyBottom.rotation.y = Math.PI / 4;
+                    minaretFL_HigherBalconyBottom.position.z = minaretFL_Base.position.z;
+                    minaretFL_HigherBalconyBottom.position.x = minaretFL_Base.position.x;
+                    scene.add(minaretFL_HigherBalconyBottom);
+
+                    minaretFL_HigherBalconyTop = new THREE.Mesh( balconyGeoHT, material );
+                    minaretFL_HigherBalconyTop.position.y = minaretFL_HigherBalconyBottom.position.y + minaretFL_HigherBalconyBottom.geometry.parameters.height/2 + minaretFL_HigherBalconyTop.geometry.parameters.height/2;
+                    minaretFL_HigherBalconyTop.position.z = minaretFL_Base.position.z;
+                    minaretFL_HigherBalconyTop.position.x = minaretFL_Base.position.x;
+                    scene.add( minaretFL_HigherBalconyTop );
+
+                    //Pointe du minaret
+                    minaretFL_SpikeBottom = new THREE.Mesh( spikeBottomGeo, material );
+                    minaretFL_SpikeBottom.position.y = minaretFL_HigherBalconyTop.position.y + minaretFL_HigherBalconyTop.geometry.parameters.height/2 + minaretFL_SpikeBottom.geometry.parameters.radius;
+                    minaretFL_SpikeBottom.position.z = minaretFL_Base.position.z;
+                    minaretFL_SpikeBottom.position.x = minaretFL_Base.position.x;
+                    scene.add( minaretFL_SpikeBottom );
+
+                    minaretFL_Spike = new THREE.Mesh( spikeGeo, material );
+                    minaretFL_Spike.position.y = minaretFL_SpikeBottom.position.y + minaretFL_SpikeBottom.geometry.parameters.radius + minaretFL_Spike.geometry.parameters.height/2;
+                    minaretFL_Spike.position.z = minaretFL_Base.position.z;
+                    minaretFL_Spike.position.x = minaretFL_Base.position.x;
+                    scene.add( minaretFL_Spike);
+
+                    minaretFL_SpikeCircle1 = new THREE.Mesh( spikeCircleGeo, material );
+                    minaretFL_SpikeCircle1.position.y = minaretFL_Spike.position.y + minaretFL_Spike.geometry.parameters.height/2 + minaretFL_SpikeCircle1.geometry.parameters.height/2;
+                    minaretFL_SpikeCircle1.position.z = minaretFL_Base.position.z;
+                    minaretFL_SpikeCircle1.position.x = minaretFL_Base.position.x;
+                    scene.add( minaretFL_SpikeCircle1 );
+
+                    minaretFL_SpikeCircle2 = new THREE.Mesh( spikeCircleGeo, material );
+                    minaretFL_SpikeCircle2.position.y = minaretFL_SpikeCircle1.position.y + minaretFL_SpikeCircle1.geometry.parameters.height/2 + minaretFL_SpikeCircle2.geometry.parameters.height/2;
+                    minaretFL_SpikeCircle2.position.z = minaretFL_Base.position.z;
+                    minaretFL_SpikeCircle2.position.x = minaretFL_Base.position.x;
+                    scene.add( minaretFL_SpikeCircle2 );
+
+                    minaretFL_SpikeTop = new THREE.Mesh( spikeTopGeo, material );
+                    minaretFL_SpikeTop.position.y = minaretFL_SpikeCircle2.position.y + minaretFL_SpikeCircle2.geometry.parameters.height/2 + minaretFL_SpikeTop.geometry.parameters.radius;
+                    minaretFL_SpikeTop.position.z = minaretFL_Base.position.z;
+                    minaretFL_SpikeTop.position.x = minaretFL_Base.position.x;
+                    scene.add( minaretFL_SpikeTop );
+
+                    minaretFL_Moon = new THREE.Mesh( moonGeo, material );
+                    minaretFL_Moon.position.y = minaretFL_SpikeTop.position.y + minaretFL_SpikeTop.geometry.parameters.radius;
+                    minaretFL_Moon.position.z = minaretFL_Base.position.z;
+                    minaretFL_Moon.position.x = minaretFL_Base.position.x;
+                    scene.add( minaretFL_Moon );
+
+                    //################################## MINARET FRONT RIGHT ##################################
+                    //BASE MINARET
+                    minaretFR_Base = new THREE.Mesh( baseMinaretGeo, material ) ;
+                    minaretFR_Base.castShadow = true;
+                    minaretFR_Base.position.y = minaretFR_Base.geometry.parameters.height/2;
+                    minaretFR_Base.position.z = turretFrontRight.position.z - (turretFrontRight.geometry.parameters.depth/2);
+                    minaretFR_Base.position.x = turretFrontRight.position.x - (turretFrontRight.geometry.parameters.width/2);
+                    scene.add( minaretFR_Base );
+
+                    minaretFR_deco1Base = new THREE.Mesh( decoMinaretGeo, material );
+                    minaretFR_deco1Base.castShadow = true;
+                    minaretFR_deco1Base.position.y = minaretFR_Base.position.y + minaretFR_deco1Base.geometry.parameters.height/2;
+                    minaretFR_deco1Base.position.z = minaretFR_Base.position.z;
+                    minaretFR_deco1Base.position.x = minaretFR_Base.position.x;
+                    scene.add( minaretFR_deco1Base );
+                    
+                    minaretFR_deco2Base = new THREE.Mesh( decoMinaretGeo, material );
+                    minaretFR_deco2Base.castShadow = true;
+                    minaretFR_deco2Base.position.y = minaretFR_Base.position.y + minaretFR_deco2Base.geometry.parameters.height*2;
+                    minaretFR_deco2Base.position.z = minaretFR_Base.position.z;
+                    minaretFR_deco2Base.position.x = minaretFR_Base.position.x;
+                    scene.add( minaretFR_deco2Base );
+
+                    minaretFR_BaseLinkOcto = new THREE.Mesh(linkGeo, material);
+                    minaretFR_BaseLinkOcto.castShadow = true;
+                    minaretFR_BaseLinkOcto.position.y = minaretFR_Base.position.y + minaretFR_Base.geometry.parameters.height/2 + minaretFR_BaseLinkOcto.geometry.parameters.height/2;;
+                    minaretFR_BaseLinkOcto.rotation.y = Math.PI / 4;
+                    minaretFR_BaseLinkOcto.position.z = minaretFR_Base.position.z;
+                    minaretFR_BaseLinkOcto.position.x = minaretFR_Base.position.x;
+                    scene.add(minaretFR_BaseLinkOcto);
+                
+                    //TRONC DU BAS
+                    minaretFR_LowerCylinder = new THREE.Mesh( geoLC, material );
+                    minaretFR_LowerCylinder.castShadow = true;
+                    minaretFR_LowerCylinder.position.y = minaretFR_BaseLinkOcto.position.y + minaretFR_BaseLinkOcto.geometry.parameters.height/2 + minaretFR_LowerCylinder.geometry.parameters.height/2;
+                    minaretFR_LowerCylinder.position.z = minaretFR_Base.position.z;
+                    minaretFR_LowerCylinder.position.x = minaretFR_Base.position.x;                
+                    scene.add( minaretFR_LowerCylinder );
+
+                    minaretFR_LowerBalconyBottom = new THREE.Mesh(balconyGeoLB, material);
+                    minaretFR_LowerBalconyBottom.castShadow = true;
+                    minaretFR_LowerBalconyBottom.position.y = minaretFR_LowerCylinder.position.y + minaretFR_LowerCylinder.geometry.parameters.height/2 + minaretFR_LowerBalconyBottom.geometry.parameters.height/2;
+                    minaretFR_LowerBalconyBottom.rotation.y = Math.PI / 4;
+                    minaretFR_LowerBalconyBottom.position.z = minaretFR_Base.position.z;
+                    minaretFR_LowerBalconyBottom.position.x = minaretFR_Base.position.x;
+                    scene.add(minaretFR_LowerBalconyBottom);
+
+                    minaretFR_LowerBalconyTop = new THREE.Mesh( balconyGeoLT, material );
+                    minaretFR_LowerBalconyTop.castShadow = true;
+                    minaretFR_LowerBalconyTop.position.y = minaretFR_LowerBalconyBottom.position.y + minaretFR_LowerBalconyBottom.geometry.parameters.height/2 + minaretFR_LowerBalconyTop.geometry.parameters.height/2;
+                    minaretFR_LowerBalconyTop.position.z = minaretFR_Base.position.z;
+                    minaretFR_LowerBalconyTop.position.x = minaretFR_Base.position.x;
+                    scene.add( minaretFR_LowerBalconyTop );
+
+                    //TRONC DU HAUT
+                    minaretFR_MiddleCylinder = new THREE.Mesh( geoMC, material );
+                    minaretFR_MiddleCylinder.castShadow = true;
+                    minaretFR_MiddleCylinder.position.y = minaretFR_LowerBalconyTop.position.y + minaretFR_LowerBalconyTop.geometry.parameters.height/2 + minaretFR_MiddleCylinder.geometry.parameters.height/2;
+                    minaretFR_MiddleCylinder.position.z = minaretFR_Base.position.z;
+                    minaretFR_MiddleCylinder.position.x = minaretFR_Base.position.x;
+                    scene.add( minaretFR_MiddleCylinder );
+
+                    minaretFR_MiddleBalconyBottom = new THREE.Mesh(balconyGeoMB, material);
+                    minaretFR_MiddleBalconyBottom.castShadow = true;
+                    minaretFR_MiddleBalconyBottom.position.y = minaretFR_MiddleCylinder.position.y + minaretFR_MiddleCylinder.geometry.parameters.height/2 + minaretFR_MiddleBalconyBottom.geometry.parameters.height/2;
+                    minaretFR_MiddleBalconyBottom.rotation.y = Math.PI / 4;
+                    minaretFR_MiddleBalconyBottom.position.z = minaretFR_Base.position.z;
+                    minaretFR_MiddleBalconyBottom.position.x = minaretFR_Base.position.x;
+                    scene.add(minaretFR_MiddleBalconyBottom);
+
+                    minaretFR_MiddleBalconyTop = new THREE.Mesh( balconyGeoMT, material );
+                    minaretFR_MiddleBalconyTop.castShadow = true;
+                    minaretFR_MiddleBalconyTop.position.y = minaretFR_MiddleBalconyBottom.position.y + minaretFR_MiddleBalconyBottom.geometry.parameters.height/2 + minaretFR_MiddleBalconyTop.geometry.parameters.height/2;
+                    minaretFR_MiddleBalconyTop.position.z = minaretFR_Base.position.z;
+                    minaretFR_MiddleBalconyTop.position.x = minaretFR_Base.position.x;
+                    scene.add( minaretFR_MiddleBalconyTop );
+
+                    minaretFR_HigherBalconyBottom = new THREE.Mesh(balconyGeoHB, material);
+                    minaretFR_HigherBalconyBottom.castShadow = true;
+                    minaretFR_HigherBalconyBottom.position.y = minaretFR_MiddleBalconyTop.position.y + minaretFR_MiddleBalconyTop.geometry.parameters.height/2 + minaretFR_HigherBalconyBottom.geometry.parameters.height/2;
+                    minaretFR_HigherBalconyBottom.rotation.y = Math.PI / 4;
+                    minaretFR_HigherBalconyBottom.position.z = minaretFR_Base.position.z;
+                    minaretFR_HigherBalconyBottom.position.x = minaretFR_Base.position.x;
+                    scene.add(minaretFR_HigherBalconyBottom);
+
+                    minaretFR_HigherBalconyTop = new THREE.Mesh( balconyGeoHT, material );
+                    minaretFR_HigherBalconyTop.castShadow = true;
+                    minaretFR_HigherBalconyTop.position.y = minaretFR_HigherBalconyBottom.position.y + minaretFR_HigherBalconyBottom.geometry.parameters.height/2 + minaretFR_HigherBalconyTop.geometry.parameters.height/2;
+                    minaretFR_HigherBalconyTop.position.z = minaretFR_Base.position.z;
+                    minaretFR_HigherBalconyTop.position.x = minaretFR_Base.position.x;
+                    scene.add( minaretFR_HigherBalconyTop );
+
+                    //Pointe du minaret
+                    minaretFR_SpikeBottom = new THREE.Mesh( spikeBottomGeo, material );
+                    minaretFR_SpikeBottom.castShadow = true;
+                    minaretFR_SpikeBottom.position.y = minaretFR_HigherBalconyTop.position.y + minaretFR_HigherBalconyTop.geometry.parameters.height/2 + minaretFR_SpikeBottom.geometry.parameters.radius;
+                    minaretFR_SpikeBottom.position.z = minaretFR_Base.position.z;
+                    minaretFR_SpikeBottom.position.x = minaretFR_Base.position.x;
+                    scene.add( minaretFR_SpikeBottom );
+
+                    minaretFR_Spike = new THREE.Mesh( spikeGeo, material );
+                    minaretFR_Spike.castShadow = true;
+                    minaretFR_Spike.position.y = minaretFR_SpikeBottom.position.y + minaretFR_SpikeBottom.geometry.parameters.radius + minaretFR_Spike.geometry.parameters.height/2;
+                    minaretFR_Spike.position.z = minaretFR_Base.position.z;
+                    minaretFR_Spike.position.x = minaretFR_Base.position.x;
+                    scene.add( minaretFR_Spike);
+
+                    minaretFR_SpikeCircle1 = new THREE.Mesh( spikeCircleGeo, material );
+                    minaretFR_SpikeCircle1.castShadow = true;
+                    minaretFR_SpikeCircle1.position.y = minaretFR_Spike.position.y + minaretFR_Spike.geometry.parameters.height/2 + minaretFR_SpikeCircle1.geometry.parameters.height/2;
+                    minaretFR_SpikeCircle1.position.z = minaretFR_Base.position.z;
+                    minaretFR_SpikeCircle1.position.x = minaretFR_Base.position.x;
+                    scene.add( minaretFR_SpikeCircle1 );
+
+                    minaretFR_SpikeCircle2 = new THREE.Mesh( spikeCircleGeo, material );
+                    minaretFR_SpikeCircle2.castShadow = true;
+                    minaretFR_SpikeCircle2.position.y = minaretFR_SpikeCircle1.position.y + minaretFR_SpikeCircle1.geometry.parameters.height/2 + minaretFR_SpikeCircle2.geometry.parameters.height/2;
+                    minaretFR_SpikeCircle2.position.z = minaretFR_Base.position.z;
+                    minaretFR_SpikeCircle2.position.x = minaretFR_Base.position.x;
+                    scene.add( minaretFR_SpikeCircle2 );
+
+                    minaretFR_SpikeTop = new THREE.Mesh( spikeTopGeo, material );
+                    minaretFR_SpikeTop.castShadow = true;
+                    minaretFR_SpikeTop.position.y = minaretFR_SpikeCircle2.position.y + minaretFR_SpikeCircle2.geometry.parameters.height/2 + minaretFR_SpikeTop.geometry.parameters.radius;
+                    minaretFR_SpikeTop.position.z = minaretFR_Base.position.z;
+                    minaretFR_SpikeTop.position.x = minaretFR_Base.position.x;
+                    scene.add( minaretFR_SpikeTop );
+
+                    minaretFR_Moon = new THREE.Mesh( moonGeo, material );
+                    minaretFR_Moon.castShadow = true;
+                    minaretFR_Moon.position.y = minaretFR_SpikeTop.position.y + minaretFR_SpikeTop.geometry.parameters.radius;
+                    minaretFR_Moon.position.z = minaretFR_Base.position.z;
+                    minaretFR_Moon.position.x = minaretFR_Base.position.x;
+                    scene.add( minaretFR_Moon );
+
+                    //################################## MINARET BACK RIGHT ##################################
+                    //BASE MINARET
+                    minaretBR_Base = new THREE.Mesh( baseMinaretGeo, material ) ;
+                    minaretBR_Base.position.y = minaretBR_Base.geometry.parameters.height/2;
+                    minaretBR_Base.position.z = mainBuildingLittleFront.position.z + minaretBR_Base.geometry.parameters.depth;
+                    minaretBR_Base.position.x = turretFrontRight.position.x - (turretFrontRight.geometry.parameters.width/2);
+                    scene.add( minaretBR_Base );
+
+                    minaretBR_deco1Base = new THREE.Mesh( decoMinaretGeo, material );
+                    minaretBR_deco1Base.position.y = minaretBR_Base.position.y + minaretBR_deco1Base.geometry.parameters.height/2;
+                    minaretBR_deco1Base.position.z = minaretBR_Base.position.z;
+                    minaretBR_deco1Base.position.x = minaretBR_Base.position.x;
+                    scene.add( minaretBR_deco1Base );
+                    
+                    minaretBR_deco2Base = new THREE.Mesh( decoMinaretGeo, material );
+                    minaretBR_deco2Base.position.y = minaretBR_Base.position.y + minaretBR_deco2Base.geometry.parameters.height*2;
+                    minaretBR_deco2Base.position.z = minaretBR_Base.position.z;
+                    minaretBR_deco2Base.position.x = minaretBR_Base.position.x;
+                    scene.add( minaretBR_deco2Base );
+
+                    minaretBR_BaseLinkOcto = new THREE.Mesh(linkGeo, material);
+                    minaretBR_BaseLinkOcto.position.y = minaretBR_Base.position.y + minaretBR_Base.geometry.parameters.height/2 + minaretBR_BaseLinkOcto.geometry.parameters.height/2;;
+                    minaretBR_BaseLinkOcto.rotation.y = Math.PI / 4;
+                    minaretBR_BaseLinkOcto.position.z = minaretBR_Base.position.z;
+                    minaretBR_BaseLinkOcto.position.x = minaretBR_Base.position.x;
+                    scene.add(minaretBR_BaseLinkOcto);
+                
+                    //TRONC DU BAS
+                    minaretBR_LowerCylinder = new THREE.Mesh( geoLC, material );
+                    minaretBR_LowerCylinder.position.y = minaretBR_BaseLinkOcto.position.y + minaretBR_BaseLinkOcto.geometry.parameters.height/2 + minaretBR_LowerCylinder.geometry.parameters.height/2;
+                    minaretBR_LowerCylinder.position.z = minaretBR_Base.position.z;
+                    minaretBR_LowerCylinder.position.x = minaretBR_Base.position.x;                
+                    scene.add( minaretBR_LowerCylinder );
+
+                    minaretBR_LowerBalconyBottom = new THREE.Mesh(balconyGeoLB, material);
+                    minaretBR_LowerBalconyBottom.position.y = minaretBR_LowerCylinder.position.y + minaretBR_LowerCylinder.geometry.parameters.height/2 + minaretBR_LowerBalconyBottom.geometry.parameters.height/2;
+                    minaretBR_LowerBalconyBottom.rotation.y = Math.PI / 4;
+                    minaretBR_LowerBalconyBottom.position.z = minaretBR_Base.position.z;
+                    minaretBR_LowerBalconyBottom.position.x = minaretBR_Base.position.x;
+                    scene.add(minaretBR_LowerBalconyBottom);
+
+                    minaretBR_LowerBalconyTop = new THREE.Mesh( balconyGeoLT, material );
+                    minaretBR_LowerBalconyTop.position.y = minaretBR_LowerBalconyBottom.position.y + minaretBR_LowerBalconyBottom.geometry.parameters.height/2 + minaretBR_LowerBalconyTop.geometry.parameters.height/2;
+                    minaretBR_LowerBalconyTop.position.z = minaretBR_Base.position.z;
+                    minaretBR_LowerBalconyTop.position.x = minaretBR_Base.position.x;
+                    scene.add( minaretBR_LowerBalconyTop );
+
+                    //TRONC DU HAUT
+                    minaretBR_MiddleCylinder = new THREE.Mesh( geoMC, material );
+                    minaretBR_MiddleCylinder.position.y = minaretBR_LowerBalconyTop.position.y + minaretBR_LowerBalconyTop.geometry.parameters.height/2 + minaretBR_MiddleCylinder.geometry.parameters.height/2;
+                    minaretBR_MiddleCylinder.position.z = minaretBR_Base.position.z;
+                    minaretBR_MiddleCylinder.position.x = minaretBR_Base.position.x;
+                    scene.add( minaretBR_MiddleCylinder );
+
+                    minaretBR_MiddleBalconyBottom = new THREE.Mesh(balconyGeoMB, material);
+                    minaretBR_MiddleBalconyBottom.position.y = minaretBR_MiddleCylinder.position.y + minaretBR_MiddleCylinder.geometry.parameters.height/2 + minaretBR_MiddleBalconyBottom.geometry.parameters.height/2;
+                    minaretBR_MiddleBalconyBottom.rotation.y = Math.PI / 4;
+                    minaretBR_MiddleBalconyBottom.position.z = minaretBR_Base.position.z;
+                    minaretBR_MiddleBalconyBottom.position.x = minaretBR_Base.position.x;
+                    scene.add(minaretBR_MiddleBalconyBottom);
+
+                    minaretBR_MiddleBalconyTop = new THREE.Mesh( balconyGeoMT, material );
+                    minaretBR_MiddleBalconyTop.position.y = minaretBR_MiddleBalconyBottom.position.y + minaretBR_MiddleBalconyBottom.geometry.parameters.height/2 + minaretBR_MiddleBalconyTop.geometry.parameters.height/2;
+                    minaretBR_MiddleBalconyTop.position.z = minaretBR_Base.position.z;
+                    minaretBR_MiddleBalconyTop.position.x = minaretBR_Base.position.x;
+                    scene.add( minaretBR_MiddleBalconyTop );
+
+                    minaretBR_HigherBalconyBottom = new THREE.Mesh(balconyGeoHB, material);
+                    minaretBR_HigherBalconyBottom.position.y = minaretBR_MiddleBalconyTop.position.y + minaretBR_MiddleBalconyTop.geometry.parameters.height/2 + minaretBR_HigherBalconyBottom.geometry.parameters.height/2;
+                    minaretBR_HigherBalconyBottom.rotation.y = Math.PI / 4;
+                    minaretBR_HigherBalconyBottom.position.z = minaretBR_Base.position.z;
+                    minaretBR_HigherBalconyBottom.position.x = minaretBR_Base.position.x;
+                    scene.add(minaretBR_HigherBalconyBottom);
+
+                    minaretBR_HigherBalconyTop = new THREE.Mesh( balconyGeoHT, material );
+                    minaretBR_HigherBalconyTop.position.y = minaretBR_HigherBalconyBottom.position.y + minaretBR_HigherBalconyBottom.geometry.parameters.height/2 + minaretBR_HigherBalconyTop.geometry.parameters.height/2;
+                    minaretBR_HigherBalconyTop.position.z = minaretBR_Base.position.z;
+                    minaretBR_HigherBalconyTop.position.x = minaretBR_Base.position.x;
+                    scene.add( minaretBR_HigherBalconyTop );
+
+                    //Pointe du minaret
+                    minaretBR_SpikeBottom = new THREE.Mesh( spikeBottomGeo, material );
+                    minaretBR_SpikeBottom.position.y = minaretBR_HigherBalconyTop.position.y + minaretBR_HigherBalconyTop.geometry.parameters.height/2 + minaretBR_SpikeBottom.geometry.parameters.radius;
+                    minaretBR_SpikeBottom.position.z = minaretBR_Base.position.z;
+                    minaretBR_SpikeBottom.position.x = minaretBR_Base.position.x;
+                    scene.add( minaretBR_SpikeBottom );
+
+                    minaretBR_Spike = new THREE.Mesh( spikeGeo, material );
+                    minaretBR_Spike.position.y = minaretBR_SpikeBottom.position.y + minaretBR_SpikeBottom.geometry.parameters.radius + minaretBR_Spike.geometry.parameters.height/2;
+                    minaretBR_Spike.position.z = minaretBR_Base.position.z;
+                    minaretBR_Spike.position.x = minaretBR_Base.position.x;
+                    scene.add( minaretBR_Spike);
+
+                    minaretBR_SpikeCircle1 = new THREE.Mesh( spikeCircleGeo, material );
+                    minaretBR_SpikeCircle1.position.y = minaretBR_Spike.position.y + minaretBR_Spike.geometry.parameters.height/2 + minaretBR_SpikeCircle1.geometry.parameters.height/2;
+                    minaretBR_SpikeCircle1.position.z = minaretBR_Base.position.z;
+                    minaretBR_SpikeCircle1.position.x = minaretBR_Base.position.x;
+                    scene.add( minaretBR_SpikeCircle1 );
+
+                    minaretBR_SpikeCircle2 = new THREE.Mesh( spikeCircleGeo, material );
+                    minaretBR_SpikeCircle2.position.y = minaretBR_SpikeCircle1.position.y + minaretBR_SpikeCircle1.geometry.parameters.height/2 + minaretBR_SpikeCircle2.geometry.parameters.height/2;
+                    minaretBR_SpikeCircle2.position.z = minaretBR_Base.position.z;
+                    minaretBR_SpikeCircle2.position.x = minaretBR_Base.position.x;
+                    scene.add( minaretBR_SpikeCircle2 );
+
+                    minaretBR_SpikeTop = new THREE.Mesh( spikeTopGeo, material );
+                    minaretBR_SpikeTop.position.y = minaretBR_SpikeCircle2.position.y + minaretBR_SpikeCircle2.geometry.parameters.height/2 + minaretBR_SpikeTop.geometry.parameters.radius;
+                    minaretBR_SpikeTop.position.z = minaretBR_Base.position.z;
+                    minaretBR_SpikeTop.position.x = minaretBR_Base.position.x;
+                    scene.add( minaretBR_SpikeTop );
+
+                    minaretBR_Moon = new THREE.Mesh( moonGeo, material );
+                    minaretBR_Moon.position.y = minaretBR_SpikeTop.position.y + minaretBR_SpikeTop.geometry.parameters.radius;
+                    minaretBR_Moon.position.z = minaretBR_Base.position.z;
+                    minaretBR_Moon.position.x = minaretBR_Base.position.x;
+                    scene.add( minaretBR_Moon );
+
+                    //################################## MINARET BACK LEFT ##################################
+                    //BASE MINARET
+                    minaretBL_Base = new THREE.Mesh( baseMinaretGeo, material ) ;//Création de l'objet avec ses matériaux
+                    minaretBL_Base.position.y = minaretBL_Base.geometry.parameters.height/2;
+                    minaretBL_Base.position.z = mainBuildingLittleFront.position.z + minaretBL_Base.geometry.parameters.depth;
+                    minaretBL_Base.position.x = turretFrontLeft.position.x + (turretFrontLeft.geometry.parameters.width/2);
+                    scene.add( minaretBL_Base ); //Ajout de l'objet dans la scene
+
+                    minaretBL_deco1Base = new THREE.Mesh( decoMinaretGeo, material );
+                    minaretBL_deco1Base.position.y = minaretBL_Base.position.y + minaretBL_deco1Base.geometry.parameters.height/2;
+                    minaretBL_deco1Base.position.z = minaretBL_Base.position.z;
+                    minaretBL_deco1Base.position.x = minaretBL_Base.position.x;
+                    scene.add( minaretBL_deco1Base );
+
+                    minaretBL_deco2Base = new THREE.Mesh( decoMinaretGeo, material );
+                    minaretBL_deco2Base.position.y = minaretBL_Base.position.y + minaretBL_deco2Base.geometry.parameters.height*2;
+                    minaretBL_deco2Base.position.z = minaretBL_Base.position.z;
+                    minaretBL_deco2Base.position.x = minaretBL_Base.position.x;
+                    scene.add( minaretBL_deco2Base );
+
+                    minaretBL_BaseLinkOcto = new THREE.Mesh(linkGeo, material);
+                    minaretBL_BaseLinkOcto.position.y = minaretBL_Base.position.y + minaretBL_Base.geometry.parameters.height/2 + minaretBL_BaseLinkOcto.geometry.parameters.height/2;;
+                    minaretBL_BaseLinkOcto.rotation.y = Math.PI / 4;
+                    minaretBL_BaseLinkOcto.position.z = minaretBL_Base.position.z;
+                    minaretBL_BaseLinkOcto.position.x = minaretBL_Base.position.x;
+                    scene.add(minaretBL_BaseLinkOcto);
+
+                    //TRONC DU BAS
+                    minaretBL_LowerCylinder = new THREE.Mesh( geoLC, material );
+                    minaretBL_LowerCylinder.position.y = minaretBL_BaseLinkOcto.position.y + minaretBL_BaseLinkOcto.geometry.parameters.height/2 + minaretBL_LowerCylinder.geometry.parameters.height/2;
+                    minaretBL_LowerCylinder.position.z = minaretBL_Base.position.z;
+                    minaretBL_LowerCylinder.position.x = minaretBL_Base.position.x;                
+                    scene.add( minaretBL_LowerCylinder );
+
+                    minaretBL_LowerBalconyBottom = new THREE.Mesh(balconyGeoLB, material);
+                    minaretBL_LowerBalconyBottom.position.y = minaretBL_LowerCylinder.position.y + minaretBL_LowerCylinder.geometry.parameters.height/2 + minaretBL_LowerBalconyBottom.geometry.parameters.height/2;
+                    minaretBL_LowerBalconyBottom.rotation.y = Math.PI / 4;
+                    minaretBL_LowerBalconyBottom.position.z = minaretBL_Base.position.z;
+                    minaretBL_LowerBalconyBottom.position.x = minaretBL_Base.position.x;
+                    scene.add(minaretBL_LowerBalconyBottom);
+
+                    minaretBL_LowerBalconyTop = new THREE.Mesh( balconyGeoLT, material );
+                    minaretBL_LowerBalconyTop.position.y = minaretBL_LowerBalconyBottom.position.y + minaretBL_LowerBalconyBottom.geometry.parameters.height/2 + minaretBL_LowerBalconyTop.geometry.parameters.height/2;
+                    minaretBL_LowerBalconyTop.position.z = minaretBL_Base.position.z;
+                    minaretBL_LowerBalconyTop.position.x = minaretBL_Base.position.x;
+                    scene.add( minaretBL_LowerBalconyTop );
+
+                    //TRONC DU HAUT
+                    minaretBL_MiddleCylinder = new THREE.Mesh( geoMC, material );
+                    minaretBL_MiddleCylinder.position.y = minaretBL_LowerBalconyTop.position.y + minaretBL_LowerBalconyTop.geometry.parameters.height/2 + minaretBL_MiddleCylinder.geometry.parameters.height/2;
+                    minaretBL_MiddleCylinder.position.z = minaretBL_Base.position.z;
+                    minaretBL_MiddleCylinder.position.x = minaretBL_Base.position.x;
+                    scene.add( minaretBL_MiddleCylinder );
+
+                    minaretBL_MiddleBalconyBottom = new THREE.Mesh(balconyGeoMB, material);
+                    minaretBL_MiddleBalconyBottom.position.y = minaretBL_MiddleCylinder.position.y + minaretBL_MiddleCylinder.geometry.parameters.height/2 + minaretBL_MiddleBalconyBottom.geometry.parameters.height/2;
+                    minaretBL_MiddleBalconyBottom.rotation.y = Math.PI / 4;
+                    minaretBL_MiddleBalconyBottom.position.z = minaretBL_Base.position.z;
+                    minaretBL_MiddleBalconyBottom.position.x = minaretBL_Base.position.x;
+                    scene.add(minaretBL_MiddleBalconyBottom);
+
+                    minaretBL_MiddleBalconyTop = new THREE.Mesh( balconyGeoMT, material );
+                    minaretBL_MiddleBalconyTop.position.y = minaretBL_MiddleBalconyBottom.position.y + minaretBL_MiddleBalconyBottom.geometry.parameters.height/2 + minaretBL_MiddleBalconyTop.geometry.parameters.height/2;
+                    minaretBL_MiddleBalconyTop.position.z = minaretBL_Base.position.z;
+                    minaretBL_MiddleBalconyTop.position.x = minaretBL_Base.position.x;
+                    scene.add( minaretBL_MiddleBalconyTop );
+
+                    minaretBL_HigherBalconyBottom = new THREE.Mesh(balconyGeoHB, material);
+                    minaretBL_HigherBalconyBottom.position.y = minaretBL_MiddleBalconyTop.position.y + minaretBL_MiddleBalconyTop.geometry.parameters.height/2 + minaretBL_HigherBalconyBottom.geometry.parameters.height/2;
+                    minaretBL_HigherBalconyBottom.rotation.y = Math.PI / 4;
+                    minaretBL_HigherBalconyBottom.position.z = minaretBL_Base.position.z;
+                    minaretBL_HigherBalconyBottom.position.x = minaretBL_Base.position.x;
+                    scene.add(minaretBL_HigherBalconyBottom);
+
+                    minaretBL_HigherBalconyTop = new THREE.Mesh( balconyGeoHT, material );
+                    minaretBL_HigherBalconyTop.position.y = minaretBL_HigherBalconyBottom.position.y + minaretBL_HigherBalconyBottom.geometry.parameters.height/2 + minaretBL_HigherBalconyTop.geometry.parameters.height/2;
+                    minaretBL_HigherBalconyTop.position.z = minaretBL_Base.position.z;
+                    minaretBL_HigherBalconyTop.position.x = minaretBL_Base.position.x;
+                    scene.add( minaretBL_HigherBalconyTop );
+
+                    //Pointe du minaret
+                    minaretBL_SpikeBottom = new THREE.Mesh( spikeBottomGeo, material );
+                    minaretBL_SpikeBottom.position.y = minaretBL_HigherBalconyTop.position.y + minaretBL_HigherBalconyTop.geometry.parameters.height/2 + minaretBL_SpikeBottom.geometry.parameters.radius;
+                    minaretBL_SpikeBottom.position.z = minaretBL_Base.position.z;
+                    minaretBL_SpikeBottom.position.x = minaretBL_Base.position.x;
+                    scene.add( minaretBL_SpikeBottom );
+
+                    minaretBL_Spike = new THREE.Mesh( spikeGeo, material );
+                    minaretBL_Spike.position.y = minaretBL_SpikeBottom.position.y + minaretBL_SpikeBottom.geometry.parameters.radius + minaretBL_Spike.geometry.parameters.height/2;
+                    minaretBL_Spike.position.z = minaretBL_Base.position.z;
+                    minaretBL_Spike.position.x = minaretBL_Base.position.x;
+                    scene.add( minaretBL_Spike);
+
+                    minaretBL_SpikeCircle1 = new THREE.Mesh( spikeCircleGeo, material );
+                    minaretBL_SpikeCircle1.position.y = minaretBL_Spike.position.y + minaretBL_Spike.geometry.parameters.height/2 + minaretBL_SpikeCircle1.geometry.parameters.height/2;
+                    minaretBL_SpikeCircle1.position.z = minaretBL_Base.position.z;
+                    minaretBL_SpikeCircle1.position.x = minaretBL_Base.position.x;
+                    scene.add( minaretBL_SpikeCircle1 );
+
+                    minaretBL_SpikeCircle2 = new THREE.Mesh( spikeCircleGeo, material );
+                    minaretBL_SpikeCircle2.position.y = minaretBL_SpikeCircle1.position.y + minaretBL_SpikeCircle1.geometry.parameters.height/2 + minaretBL_SpikeCircle2.geometry.parameters.height/2;
+                    minaretBL_SpikeCircle2.position.z = minaretBL_Base.position.z;
+                    minaretBL_SpikeCircle2.position.x = minaretBL_Base.position.x;
+                    scene.add( minaretBL_SpikeCircle2 );
+
+                    minaretBL_SpikeTop = new THREE.Mesh( spikeTopGeo, material );
+                    minaretBL_SpikeTop.position.y = minaretBL_SpikeCircle2.position.y + minaretBL_SpikeCircle2.geometry.parameters.height/2 + minaretBL_SpikeTop.geometry.parameters.radius;
+                    minaretBL_SpikeTop.position.z = minaretBL_Base.position.z;
+                    minaretBL_SpikeTop.position.x = minaretBL_Base.position.x;
+                    scene.add( minaretBL_SpikeTop );
+
+                    minaretBL_Moon = new THREE.Mesh( moonGeo, material );
+                    minaretBL_Moon.position.y = minaretBL_SpikeTop.position.y + minaretBL_SpikeTop.geometry.parameters.radius;
+                    minaretBL_Moon.position.z = minaretBL_Base.position.z;
+                    minaretBL_Moon.position.x = minaretBL_Base.position.x;
+                    scene.add( minaretBL_Moon );
+
+                //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ FIN MINARETS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+
+                //DÉFINITION DE L'ENTRÉ
+                var gateGeometry = new THREE.BoxBufferGeometry( 10000, 4000, 5000 );
+                var miniGeometry = new THREE.BoxBufferGeometry( 1000, 5000, 1000 );
+
+                    frontGateBig = new THREE.Mesh( turretFrontGeometry, turretMaterial );
+                    scene.add( frontGateBig );
+                    frontGateBig.position.z = frontWall.position.z + 500;    
+                    frontGateBig.position.y = frontGateBig.geometry.parameters.height/2;
+
+                    frontGateSmall = new THREE.Mesh ( gateGeometry, turretMaterial );
+                    scene.add( frontGateSmall );
+                    frontGateSmall.position.y = frontGateSmall.geometry.parameters.height/2;
+                    frontGateSmall.position.z = frontGateBig.position.z - 500;
+
+                    miniTurretFrontLeft = new THREE.Mesh ( miniGeometry, turretMaterial );
+                    scene.add ( miniTurretFrontLeft );
+                    miniTurretFrontLeft.position.y = miniTurretFrontLeft.geometry.parameters.height/2;
+                    miniTurretFrontLeft.position.z = frontGateSmall.position.z + (frontGateSmall.geometry.parameters.depth/2);
+                    miniTurretFrontLeft.position.x = frontGateSmall.position.x - (frontGateSmall.geometry.parameters.width/2);
+
+                    miniTurretFrontRight = new THREE.Mesh ( miniGeometry, turretMaterial );
+                    scene.add ( miniTurretFrontRight );
+                    miniTurretFrontRight.position.y = miniTurretFrontRight.geometry.parameters.height/2;
+                    miniTurretFrontRight.position.z = frontGateSmall.position.z + (frontGateSmall.geometry.parameters.depth/2);
+                    miniTurretFrontRight.position.x = frontGateSmall.position.x + (frontGateSmall.geometry.parameters.width/2);
+
+                    miniTurretBackLeft = new THREE.Mesh ( miniGeometry, turretMaterial );
+                    scene.add ( miniTurretBackLeft );
+                    miniTurretBackLeft.position.y = miniTurretBackLeft.geometry.parameters.height/2;
+                    miniTurretBackLeft.position.z = frontGateSmall.position.z - (frontGateSmall.geometry.parameters.depth/2);
+                    miniTurretBackLeft.position.x = frontGateSmall.position.x - (frontGateSmall.geometry.parameters.width/2);
+
+                    miniTurretBackRight = new THREE.Mesh ( miniGeometry, turretMaterial );
+                    scene.add ( miniTurretBackRight );
+                    miniTurretBackRight.position.y = miniTurretBackRight.geometry.parameters.height/2;
+                    miniTurretBackRight.position.z = frontGateSmall.position.z - (frontGateSmall.geometry.parameters.depth/2);
+                    miniTurretBackRight.position.x = frontGateSmall.position.x + (frontGateSmall.geometry.parameters.width/2);
+
+
+                //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ DEBUT DOMES @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+                // DEFINITION PETITS DOMES
+				var little_dome_sphere = new THREE.SphereBufferGeometry( 700, 32, 32);
+				var little_dome_cylindre = new THREE.CylinderGeometry( 700, 700, 700, 32 );
+				var little_dome_octogone = new THREE.CylinderGeometry( 800, 900, 500, 32 );
+
+                    //FRONT LEFT
+                    //FLL
+                    little_octogone_FLL = new THREE.Mesh( little_dome_octogone,material);
+                    little_octogone_FLL.position.y = frontWall.position.y + (frontWall.geometry.parameters.height/2) + (little_octogone_FLL.geometry.parameters.height/2);
+                    little_octogone_FLL.position.x = frontWall.position.x - 9500;
+                    little_octogone_FLL.position.z = frontWall.position.z;
+                    scene.add(little_octogone_FLL);
+
+                    little_cylindre_FLL = new THREE.Mesh( little_dome_cylindre,material);
+                    little_cylindre_FLL.position.y = little_octogone_FLL.position.y + little_cylindre_FLL.geometry.parameters.height/2;
+                    little_cylindre_FLL.position.x = little_octogone_FLL.position.x;
+                    little_cylindre_FLL.position.z = little_octogone_FLL.position.z;
+                    scene.add(little_cylindre_FLL);
+
+                    little_sphere_FLL = new THREE.Mesh( little_dome_sphere, sphereMaterial);
+                    little_sphere_FLL.position.y = little_cylindre_FLL.position.y + little_sphere_FLL.geometry.parameters.radius;
+                    little_sphere_FLL.position.x = little_cylindre_FLL.position.x;
+                    little_sphere_FLL.position.z = little_cylindre_FLL.position.z;
+                    scene.add(little_sphere_FLL);
+
+                    //FLR
+                    little_octogone_FLR = new THREE.Mesh( little_dome_octogone,material);
+                    little_octogone_FLR.position.y = frontWall.position.y + (frontWall.geometry.parameters.height/2) + (little_octogone_FLR.geometry.parameters.height/2);
+                    little_octogone_FLR.position.x = frontWall.position.x - 6500;
+                    little_octogone_FLR.position.z = frontWall.position.z;
+                    scene.add(little_octogone_FLR);
+
+                    little_cylindre_FLR = new THREE.Mesh( little_dome_cylindre,material);
+                    little_cylindre_FLR.position.y = little_octogone_FLR.position.y + little_cylindre_FLR.geometry.parameters.height/2;
+                    little_cylindre_FLR.position.x = little_octogone_FLR.position.x;
+                    little_cylindre_FLR.position.z = little_octogone_FLR.position.z;
+                    scene.add(little_cylindre_FLR);
+
+                    little_sphere_FLR = new THREE.Mesh( little_dome_sphere, sphereMaterial);
+                    little_sphere_FLR.position.y = little_cylindre_FLR.position.y + little_sphere_FLR.geometry.parameters.radius;
+                    little_sphere_FLR.position.x = little_cylindre_FLR.position.x;
+                    little_sphere_FLR.position.z = little_cylindre_FLR.position.z;
+                    scene.add(little_sphere_FLR);
+
+                    //FRONT RIGHT
+                    //FRR
+                    little_octogone_FRR = new THREE.Mesh( little_dome_octogone,material);
+                    little_octogone_FRR.position.y = frontWall.position.y + (frontWall.geometry.parameters.height/2) + (little_octogone_FRR.geometry.parameters.height/2);
+                    little_octogone_FRR.position.x = frontWall.position.x + 9500;
+                    little_octogone_FRR.position.z = frontWall.position.z;
+                    scene.add(little_octogone_FRR);
+
+                    little_cylindre_FRR = new THREE.Mesh( little_dome_cylindre,material);
+                    little_cylindre_FRR.position.y = little_octogone_FRR.position.y + little_cylindre_FRR.geometry.parameters.height/2;
+                    little_cylindre_FRR.position.x = little_octogone_FRR.position.x;
+                    little_cylindre_FRR.position.z = little_octogone_FRR.position.z;
+                    scene.add(little_cylindre_FRR);
+
+                    little_sphere_FRR = new THREE.Mesh( little_dome_sphere, sphereMaterial);
+                    little_sphere_FRR.position.y = little_cylindre_FRR.position.y + little_sphere_FRR.geometry.parameters.radius;
+                    little_sphere_FRR.position.x = little_cylindre_FRR.position.x;
+                    little_sphere_FRR.position.z = little_cylindre_FRR.position.z;
+                    scene.add(little_sphere_FRR);
+
+                    //FRL
+                    little_octogone_FRL = new THREE.Mesh( little_dome_octogone,material);
+                    little_octogone_FRL.position.y = frontWall.position.y + (frontWall.geometry.parameters.height/2) + (little_octogone_FRL.geometry.parameters.height/2);
+                    little_octogone_FRL.position.x = frontWall.position.x + 6500;
+                    little_octogone_FRL.position.z = frontWall.position.z;
+                    scene.add(little_octogone_FRL);
+
+                    little_cylindre_FRL = new THREE.Mesh( little_dome_cylindre,material);
+                    little_cylindre_FRL.position.y = little_octogone_FRL.position.y + little_cylindre_FRL.geometry.parameters.height/2;
+                    little_cylindre_FRL.position.x = little_octogone_FRL.position.x;
+                    little_cylindre_FRL.position.z = little_octogone_FRL.position.z;
+                    scene.add(little_cylindre_FRL);
+
+                    little_sphere_FRL = new THREE.Mesh( little_dome_sphere, sphereMaterial);
+                    little_sphere_FRL.position.y = little_cylindre_FRL.position.y + little_sphere_FRL.geometry.parameters.radius;
+                    little_sphere_FRL.position.x = little_cylindre_FRL.position.x;
+                    little_sphere_FRL.position.z = little_cylindre_FRL.position.z;
+                    scene.add(little_sphere_FRL);
+
+                    //BACK LEFT
+                    //BLL
+                    little_octogone_BLL = new THREE.Mesh( little_dome_octogone,material);
+                    little_octogone_BLL.position.y = mainBuildingLittleFront.position.y + (mainBuildingLittleFront.geometry.parameters.height/2) + (little_octogone_BLL.geometry.parameters.height/2);
+                    little_octogone_BLL.position.x = mainBuildingLittleFront.position.x - 9500;
+                    little_octogone_BLL.position.z = mainBuildingLittleFront.position.z;
+                    scene.add(little_octogone_BLL);
+
+                    little_cylindre_BLL = new THREE.Mesh( little_dome_cylindre,material);
+                    little_cylindre_BLL.position.y = little_octogone_BLL.position.y + little_cylindre_BLL.geometry.parameters.height/2;
+                    little_cylindre_BLL.position.x = little_octogone_BLL.position.x;
+                    little_cylindre_BLL.position.z = little_octogone_BLL.position.z;
+                    scene.add(little_cylindre_BLL);
+
+                    little_sphere_BLL = new THREE.Mesh( little_dome_sphere, sphereMaterial);
+                    little_sphere_BLL.position.y = little_cylindre_BLL.position.y + little_sphere_BLL.geometry.parameters.radius;
+                    little_sphere_BLL.position.x = little_cylindre_BLL.position.x;
+                    little_sphere_BLL.position.z = little_cylindre_BLL.position.z;
+                    scene.add(little_sphere_BLL);
+
+                    //BLR
+                    little_octogone_BLR = new THREE.Mesh( little_dome_octogone,material);
+                    little_octogone_BLR.position.y = mainBuildingLittleFront.position.y + (mainBuildingLittleFront.geometry.parameters.height/2) + (little_octogone_BLL.geometry.parameters.height/2);
+                    little_octogone_BLR.position.x = mainBuildingLittleFront.position.x - 6500;
+                    little_octogone_BLR.position.z = mainBuildingLittleFront.position.z;
+                    scene.add(little_octogone_BLR);
+
+                    little_cylindre_BLR = new THREE.Mesh( little_dome_cylindre,material);
+                    little_cylindre_BLR.position.y = little_octogone_BLR.position.y + little_cylindre_BLR.geometry.parameters.height/2;
+                    little_cylindre_BLR.position.x = little_octogone_BLR.position.x;
+                    little_cylindre_BLR.position.z = little_octogone_BLR.position.z;
+                    scene.add(little_cylindre_BLR);
+
+                    little_sphere_BLR = new THREE.Mesh( little_dome_sphere, sphereMaterial);
+                    little_sphere_BLR.position.y = little_cylindre_BLR.position.y + little_sphere_BLR.geometry.parameters.radius;
+                    little_sphere_BLR.position.x = little_cylindre_BLR.position.x;
+                    little_sphere_BLR.position.z = little_cylindre_BLR.position.z;
+                    scene.add(little_sphere_BLR);
+
+                    //BACK RIGHT
+                    //BRR
+                    little_octogone_BRR = new THREE.Mesh( little_dome_octogone,material);
+                    little_octogone_BRR.position.y = mainBuildingLittleFront.position.y + (mainBuildingLittleFront.geometry.parameters.height/2) + (little_octogone_BLL.geometry.parameters.height/2);
+                    little_octogone_BRR.position.x = mainBuildingLittleFront.position.x + 9500;
+                    little_octogone_BRR.position.z = mainBuildingLittleFront.position.z;
+                    scene.add(little_octogone_BRR);
+
+                    little_cylindre_BRR = new THREE.Mesh( little_dome_cylindre,material);
+                    little_cylindre_BRR.position.y = little_octogone_BRR.position.y + little_cylindre_BRR.geometry.parameters.height/2;
+                    little_cylindre_BRR.position.x = little_octogone_BRR.position.x;
+                    little_cylindre_BRR.position.z = little_octogone_BRR.position.z;
+                    scene.add(little_cylindre_BRR);
+
+                    little_sphere_BRR = new THREE.Mesh( little_dome_sphere, sphereMaterial);
+                    little_sphere_BRR.position.y = little_cylindre_BRR.position.y + little_sphere_BRR.geometry.parameters.radius;
+                    little_sphere_BRR.position.x = little_cylindre_BRR.position.x;
+                    little_sphere_BRR.position.z = little_cylindre_BRR.position.z;
+                    scene.add(little_sphere_BRR);
+
+                    //BRL
+                    little_octogone_BRL = new THREE.Mesh( little_dome_octogone,material);
+                    little_octogone_BRL.position.y = mainBuildingLittleFront.position.y + (mainBuildingLittleFront.geometry.parameters.height/2) + (little_octogone_BLL.geometry.parameters.height/2);
+                    little_octogone_BRL.position.x = mainBuildingLittleFront.position.x + 6500;
+                    little_octogone_BRL.position.z = mainBuildingLittleFront.position.z;
+                    scene.add(little_octogone_BRL);
+
+                    little_cylindre_BRL = new THREE.Mesh( little_dome_cylindre,material);
+                    little_cylindre_BRL.position.y = little_octogone_BRL.position.y + little_cylindre_BRL.geometry.parameters.height/2;
+                    little_cylindre_BRL.position.x = little_octogone_BRL.position.x;
+                    little_cylindre_BRL.position.z = little_octogone_BRL.position.z;
+                    scene.add(little_cylindre_BRL);
+
+                    little_sphere_BRL = new THREE.Mesh( little_dome_sphere, sphereMaterial);
+                    little_sphere_BRL.position.y = little_cylindre_BRL.position.y + little_sphere_BRL.geometry.parameters.radius;
+                    little_sphere_BRL.position.x = little_cylindre_BRL.position.x;
+                    little_sphere_BRL.position.z = little_cylindre_BRL.position.z;
+                    scene.add(little_sphere_BRL);
+
+                    //LEFT
+                    //L1
+                    little_octogone_L1 = new THREE.Mesh( little_dome_octogone,material);
+                    little_octogone_L1.position.y = leftWall.position.y + (leftWall.geometry.parameters.height/2) + (little_octogone_L1.geometry.parameters.height/2);
+                    little_octogone_L1.position.x = leftWall.position.x;
+                    little_octogone_L1.position.z = mainBuildingLittleFront.position.z;
+                    scene.add(little_octogone_L1);
+
+                    little_cylindre_L1 = new THREE.Mesh( little_dome_cylindre,material);
+                    little_cylindre_L1.position.y = little_octogone_L1.position.y + little_cylindre_L1.geometry.parameters.height/2;
+                    little_cylindre_L1.position.x = little_octogone_L1.position.x;
+                    little_cylindre_L1.position.z = little_octogone_L1.position.z;
+                    scene.add(little_cylindre_L1);
+
+                    little_sphere_L1 = new THREE.Mesh( little_dome_sphere, sphereMaterial);
+                    little_sphere_L1.position.y = little_cylindre_L1.position.y + little_sphere_L1.geometry.parameters.radius;
+                    little_sphere_L1.position.x = little_cylindre_L1.position.x;
+                    little_sphere_L1.position.z = little_cylindre_L1.position.z;
+                    scene.add(little_sphere_L1);
+
+                    //L2
+                    little_octogone_L2 = new THREE.Mesh( little_dome_octogone,material);
+                    little_octogone_L2.position.y = leftWall.position.y + (leftWall.geometry.parameters.height/2) + (little_octogone_L2.geometry.parameters.height/2);
+                    little_octogone_L2.position.x = leftWall.position.x;
+                    little_octogone_L2.position.z = mainBuildingLittleFront.position.z + 6500;
+                    scene.add(little_octogone_L2);
+
+                    little_cylindre_L2 = new THREE.Mesh( little_dome_cylindre,material);
+                    little_cylindre_L2.position.y = little_octogone_L2.position.y + little_cylindre_L2.geometry.parameters.height/2;
+                    little_cylindre_L2.position.x = little_octogone_L2.position.x;
+                    little_cylindre_L2.position.z = little_octogone_L2.position.z;
+                    scene.add(little_cylindre_L2);
+
+                    little_sphere_L2 = new THREE.Mesh( little_dome_sphere, sphereMaterial);
+                    little_sphere_L2.position.y = little_cylindre_L2.position.y + little_sphere_L2.geometry.parameters.radius;
+                    little_sphere_L2.position.x = little_cylindre_L2.position.x;
+                    little_sphere_L2.position.z = little_cylindre_L2.position.z;
+                    scene.add(little_sphere_L2);
+
+                    //L3
+                    little_octogone_L3 = new THREE.Mesh( little_dome_octogone,material);
+                    little_octogone_L3.position.y = leftWall.position.y + (leftWall.geometry.parameters.height/2) + (little_octogone_L3.geometry.parameters.height/2);
+                    little_octogone_L3.position.x = leftWall.position.x;
+                    little_octogone_L3.position.z = mainBuildingLittleFront.position.z + 13000;
+                    scene.add(little_octogone_L3);
+
+                    little_cylindre_L3 = new THREE.Mesh( little_dome_cylindre,material);
+                    little_cylindre_L3.position.y = little_octogone_L3.position.y + little_cylindre_L3.geometry.parameters.height/2;
+                    little_cylindre_L3.position.x = little_octogone_L3.position.x;
+                    little_cylindre_L3.position.z = little_octogone_L3.position.z;
+                    scene.add(little_cylindre_L3);
+
+                    little_sphere_L3 = new THREE.Mesh( little_dome_sphere, sphereMaterial);
+                    little_sphere_L3.position.y = little_cylindre_L3.position.y + little_sphere_L3.geometry.parameters.radius;
+                    little_sphere_L3.position.x = little_cylindre_L3.position.x;
+                    little_sphere_L3.position.z = little_cylindre_L3.position.z;
+                    scene.add(little_sphere_L3);
+
+                    //L4
+                    little_octogone_L4 = new THREE.Mesh( little_dome_octogone,material);
+                    little_octogone_L4.position.y = leftWall.position.y + (leftWall.geometry.parameters.height/2) + (little_octogone_L4.geometry.parameters.height/2);
+                    little_octogone_L4.position.x = leftWall.position.x;
+                    little_octogone_L4.position.z = mainBuildingLittleFront.position.z + 19500;
+                    scene.add(little_octogone_L4);
+
+                    little_cylindre_L4 = new THREE.Mesh( little_dome_cylindre,material);
+                    little_cylindre_L4.position.y = little_octogone_L4.position.y + little_cylindre_L4.geometry.parameters.height/2;
+                    little_cylindre_L4.position.x = little_octogone_L4.position.x;
+                    little_cylindre_L4.position.z = little_octogone_L4.position.z;
+                    scene.add(little_cylindre_L4);
+
+                    little_sphere_L4 = new THREE.Mesh( little_dome_sphere, sphereMaterial);
+                    little_sphere_L4.position.y = little_cylindre_L4.position.y + little_sphere_L4.geometry.parameters.radius;
+                    little_sphere_L4.position.x = little_cylindre_L4.position.x;
+                    little_sphere_L4.position.z = little_cylindre_L4.position.z;
+                    scene.add(little_sphere_L4);
+
+                    //RIGHT
+                    //R1
+                    little_octogone_R1 = new THREE.Mesh( little_dome_octogone,material);
+                    little_octogone_R1.position.y = rightWall.position.y + (rightWall.geometry.parameters.height/2) + (little_octogone_R1.geometry.parameters.height/2);
+                    little_octogone_R1.position.x = rightWall.position.x;
+                    little_octogone_R1.position.z = mainBuildingLittleFront.position.z;
+                    scene.add(little_octogone_R1);
+
+                    little_cylindre_R1 = new THREE.Mesh( little_dome_cylindre,material);
+                    little_cylindre_R1.position.y = little_octogone_R1.position.y + little_cylindre_R1.geometry.parameters.height/2;
+                    little_cylindre_R1.position.x = little_octogone_R1.position.x;
+                    little_cylindre_R1.position.z = little_octogone_R1.position.z;
+                    scene.add(little_cylindre_R1);
+
+                    little_sphere_R1 = new THREE.Mesh( little_dome_sphere, sphereMaterial);
+                    little_sphere_R1.position.y = little_cylindre_R1.position.y + little_sphere_R1.geometry.parameters.radius;
+                    little_sphere_R1.position.x = little_cylindre_R1.position.x;
+                    little_sphere_R1.position.z = little_cylindre_R1.position.z;
+                    scene.add(little_sphere_R1);
+
+                    //R2
+                    little_octogone_R2 = new THREE.Mesh( little_dome_octogone,material);
+                    little_octogone_R2.position.y = rightWall.position.y + (rightWall.geometry.parameters.height/2) + (little_octogone_R1.geometry.parameters.height/2);
+                    little_octogone_R2.position.x = rightWall.position.x;
+                    little_octogone_R2.position.z = mainBuildingLittleFront.position.z + 6500;
+                    scene.add(little_octogone_R2);
+
+                    little_cylindre_R2 = new THREE.Mesh( little_dome_cylindre,material);
+                    little_cylindre_R2.position.y = little_octogone_R2.position.y + little_cylindre_R2.geometry.parameters.height/2;
+                    little_cylindre_R2.position.x = little_octogone_R2.position.x;
+                    little_cylindre_R2.position.z = little_octogone_R2.position.z;
+                    scene.add(little_cylindre_R2);
+
+                    little_sphere_R2 = new THREE.Mesh( little_dome_sphere, sphereMaterial);
+                    little_sphere_R2.position.y = little_cylindre_R2.position.y + little_sphere_R2.geometry.parameters.radius;
+                    little_sphere_R2.position.x = little_cylindre_R2.position.x;
+                    little_sphere_R2.position.z = little_cylindre_R2.position.z;
+                    scene.add(little_sphere_R2);
+
+                    //R3
+                    little_octogone_R3 = new THREE.Mesh( little_dome_octogone,material);
+                    little_octogone_R3.position.y = rightWall.position.y + (rightWall.geometry.parameters.height/2) + (little_octogone_R1.geometry.parameters.height/2);
+                    little_octogone_R3.position.x = rightWall.position.x;
+                    little_octogone_R3.position.z = mainBuildingLittleFront.position.z + 13000;
+                    scene.add(little_octogone_R3);
+
+                    little_cylindre_R3 = new THREE.Mesh( little_dome_cylindre,material);
+                    little_cylindre_R3.position.y = little_octogone_R3.position.y + little_cylindre_R3.geometry.parameters.height/2;
+                    little_cylindre_R3.position.x = little_octogone_R3.position.x;
+                    little_cylindre_R3.position.z = little_octogone_R3.position.z;
+                    scene.add(little_cylindre_R3);
+
+                    little_sphere_R3 = new THREE.Mesh( little_dome_sphere, sphereMaterial);
+                    little_sphere_R3.position.y = little_cylindre_R3.position.y + little_sphere_R3.geometry.parameters.radius;
+                    little_sphere_R3.position.x = little_cylindre_R3.position.x;
+                    little_sphere_R3.position.z = little_cylindre_R3.position.z;
+                    scene.add(little_sphere_R3);
+
+                    //R4
+                    little_octogone_R4 = new THREE.Mesh( little_dome_octogone,material);
+                    little_octogone_R4.position.y = rightWall.position.y + (rightWall.geometry.parameters.height/2) + (little_octogone_R1.geometry.parameters.height/2);
+                    little_octogone_R4.position.x = rightWall.position.x;
+                    little_octogone_R4.position.z = mainBuildingLittleFront.position.z + 19500;
+                    scene.add(little_octogone_R4);
+
+                    little_cylindre_R4 = new THREE.Mesh( little_dome_cylindre,material);
+                    little_cylindre_R4.position.y = little_octogone_R4.position.y + little_cylindre_R4.geometry.parameters.height/2;
+                    little_cylindre_R4.position.x = little_octogone_R4.position.x;
+                    little_cylindre_R4.position.z = little_octogone_R4.position.z;
+                    scene.add(little_cylindre_R4);
+
+                    little_sphere_R4 = new THREE.Mesh( little_dome_sphere, sphereMaterial);
+                    little_sphere_R4.position.y = little_cylindre_R4.position.y + little_sphere_R4.geometry.parameters.radius;
+                    little_sphere_R4.position.x = little_cylindre_R4.position.x;
+                    little_sphere_R4.position.z = little_cylindre_R4.position.z;
+                    scene.add(little_sphere_R4);
+
+
+                // MAIN DOME
+                var main_dome_sphere = new THREE.SphereBufferGeometry( 3250, 32, 32);
+                var main_dome_cylindre = new THREE.CylinderGeometry( 3250, 3250, 3250, 32 );
+                var main_dome_octogone = new THREE.CylinderGeometry( 3350, 3500, 500, 32 );
+                
+                    main_octogone = new THREE.Mesh( main_dome_octogone,material);
+                    main_octogone.position.y = mainBuilding.position.y + (mainBuilding.geometry.parameters.height/2) + (main_octogone.geometry.parameters.height/2);
+                    main_octogone.position.x = mainBuilding.position.x;
+                    main_octogone.position.z = mainBuilding.position.z;
+                    scene.add(main_octogone);
+
+                    main_cylindre = new THREE.Mesh( main_dome_cylindre,material);
+                    main_cylindre.position.y = main_octogone.position.y + main_cylindre.geometry.parameters.height/2;
+                    main_cylindre.position.x = main_octogone.position.x;
+                    main_cylindre.position.z = main_octogone.position.z;
+                    scene.add(main_cylindre);
+
+                    main_sphere = new THREE.Mesh( main_dome_sphere, sphereMaterial);
+                    main_sphere.position.y = main_cylindre.position.y + main_sphere.geometry.parameters.radius;
+                    main_sphere.position.x = main_cylindre.position.x;
+                    main_sphere.position.z = main_cylindre.position.z;
+                    scene.add(main_sphere);
+
+                // BIG DOMES
+                var big_dome_sphere = new THREE.SphereBufferGeometry( 2000, 32, 32);
+                var big_dome_cylindre = new THREE.CylinderGeometry( 2000, 2000, 3250, 32 );
+                var big_dome_octogone = new THREE.CylinderGeometry( 2100, 2300, 500, 32 );
+                    //LEFT
+                    bigLeft_octogone = new THREE.Mesh( big_dome_octogone,material);
+                    bigLeft_octogone.position.y = mainBuilding.position.y + (mainBuilding.geometry.parameters.height/2) + (bigLeft_octogone.geometry.parameters.height/2);
+                    bigLeft_octogone.position.x = mainBuilding.position.x - 7000;
+                    bigLeft_octogone.position.z = mainBuilding.position.z;
+                    scene.add(bigLeft_octogone);
+
+                    bigLeft_cylindre = new THREE.Mesh( big_dome_cylindre,material);
+                    bigLeft_cylindre.position.y = bigLeft_octogone.position.y + bigLeft_cylindre.geometry.parameters.height/2;
+                    bigLeft_cylindre.position.x = bigLeft_octogone.position.x;
+                    bigLeft_cylindre.position.z = bigLeft_octogone.position.z;
+                    scene.add(bigLeft_cylindre);
+
+                    bigLeft_sphere = new THREE.Mesh( big_dome_sphere, sphereMaterial);
+                    bigLeft_sphere.position.y = bigLeft_cylindre.position.y + bigLeft_sphere.geometry.parameters.radius;
+                    bigLeft_sphere.position.x = bigLeft_cylindre.position.x;
+                    bigLeft_sphere.position.z = bigLeft_cylindre.position.z;
+                    scene.add(bigLeft_sphere);
+
+                    //Right
+                    bigRight_octogone = new THREE.Mesh( big_dome_octogone,material);
+                    bigRight_octogone.position.y = mainBuilding.position.y + (mainBuilding.geometry.parameters.height/2) + (bigRight_octogone.geometry.parameters.height/2);
+                    bigRight_octogone.position.x = mainBuilding.position.x + 7000;
+                    bigRight_octogone.position.z = mainBuilding.position.z;
+                    scene.add(bigRight_octogone);
+
+                    bigRight_cylindre = new THREE.Mesh( big_dome_cylindre,material);
+                    bigRight_cylindre.position.y = bigRight_octogone.position.y + bigRight_cylindre.geometry.parameters.height/2;
+                    bigRight_cylindre.position.x = bigRight_octogone.position.x;
+                    bigRight_cylindre.position.z = bigRight_octogone.position.z;
+                    scene.add(bigRight_cylindre);
+
+                    bigRight_sphere = new THREE.Mesh( big_dome_sphere, sphereMaterial);
+                    bigRight_sphere.position.y = bigRight_cylindre.position.y + bigRight_sphere.geometry.parameters.radius;
+                    bigRight_sphere.position.x = bigRight_cylindre.position.x;
+                    bigRight_sphere.position.z = bigRight_cylindre.position.z;
+                    scene.add(bigRight_sphere);
+
+                // MIDDLE DOMES
+                var mid_dome_sphere = new THREE.SphereBufferGeometry( 1200, 32, 32);
+                var mid_dome_cylindre = new THREE.CylinderGeometry( 1200, 1200, 500, 32 );
+                var mid_dome_octogone = new THREE.CylinderGeometry( 1400, 1500, 200, 32 );
+                    //Back
+                    midBack_octogone = new THREE.Mesh( mid_dome_octogone,material);
+                    midBack_octogone.position.y = mainBuildingMiddle.position.y + (mainBuildingMiddle.geometry.parameters.height/2) + (midBack_octogone.geometry.parameters.height/2);
+                    midBack_octogone.position.x = mainBuildingMiddle.position.x;
+                    midBack_octogone.position.z = mainBuildingMiddle.position.z;
+                    scene.add(midBack_octogone);
+
+                    midBack_cylindre = new THREE.Mesh( mid_dome_cylindre,material);
+                    midBack_cylindre.position.y = midBack_octogone.position.y + midBack_cylindre.geometry.parameters.height/2;
+                    midBack_cylindre.position.x = midBack_octogone.position.x;
+                    midBack_cylindre.position.z = midBack_octogone.position.z;
+                    scene.add(midBack_cylindre);
+
+                    midBack_sphere = new THREE.Mesh( mid_dome_sphere, sphereMaterial);
+                    midBack_sphere.position.y = midBack_cylindre.position.y - midBack_cylindre.geometry.parameters.height/2 + midBack_sphere.geometry.parameters.radius;
+                    midBack_sphere.position.x = midBack_cylindre.position.x;
+                    midBack_sphere.position.z = midBack_cylindre.position.z;
+                    scene.add(midBack_sphere);
+                    
+                    //Front
+                    midFront_octogone = new THREE.Mesh( mid_dome_octogone,material);
+                    midFront_octogone.position.y = frontGateBig.position.y + (frontGateBig.geometry.parameters.height/2) + (midFront_octogone.geometry.parameters.height/2);
+                    midFront_octogone.position.x = frontGateBig.position.x;
+                    midFront_octogone.position.z = frontGateBig.position.z;
+                    scene.add(midFront_octogone);
+
+                    midFront_cylindre = new THREE.Mesh( mid_dome_cylindre,material);
+                    midFront_cylindre.position.y = midFront_octogone.position.y + midFront_cylindre.geometry.parameters.height/2;
+                    midFront_cylindre.position.x = midFront_octogone.position.x;
+                    midFront_cylindre.position.z = midFront_octogone.position.z;
+                    scene.add(midFront_cylindre);
+
+                    midFront_sphere = new THREE.Mesh( mid_dome_sphere, sphereMaterial);
+                    midFront_sphere.position.y = midFront_cylindre.position.y - midFront_cylindre.geometry.parameters.height/2 + midFront_sphere.geometry.parameters.radius;
+                    midFront_sphere.position.x = midFront_cylindre.position.x;
+                    midFront_sphere.position.z = midFront_cylindre.position.z;
+                    scene.add(midFront_sphere);
+
+                //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ FIN DOMES @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
 
                 renderer = new THREE.WebGLRenderer( { antialias: true } ); //Moteur graphique (anti-aliasing: pour lisser le graphisme)
 				renderer.setPixelRatio( window.devicePixelRatio ); //Respect du ration des pixels
 				renderer.setSize( window.innerWidth, window.innerHeight ); //Taille du rendu
 				document.body.appendChild( renderer.domElement ); //Attachement du rendu à l'html
+
+                renderer.shadowMap.enabled = true; //Autoriser les ombres dans le moteur
+                renderer.shadowMap.type = THREE.PCFSoftShadowMap; //Type d'ombre soft
                 
                 controls = new OrbitControls( camera, renderer.domElement );
                 controls.update();
@@ -127,14 +1339,6 @@
 				renderer.setSize( window.innerWidth, window.innerHeight ); //Taille du rendu
 
 			}
-
-			// function animate() {
-
-			// 	requestAnimationFrame( animate ); //Segmente les numéros de frames
-
-			// 	renderer.render( scene, camera ); //Lancement du rendu de la scene avec sa caméra
-
-            // }
             
             function animate() {
 
@@ -142,14 +1346,15 @@
 
                 // required if controls.enableDamping or controls.autoRotate are set to true
                 controls.update();
+                
+                if(spotLight.position.y < 60000 && spotLight.position.y > -60000){
+                    spotLight.position.y += 100;
+                }
+
 
                 renderer.render( scene, camera );
 
             }
-
-            
-
 		</script>
-
 	</body>
 </html>

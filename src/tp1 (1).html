@@ -1,0 +1,1214 @@
+<!DOCTYPE html>
+<html lang="EN">
+	<head>
+		<title>Project WEBGL - Manveer</title>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<link type="text/css" rel="stylesheet" href="../ressources/css/main.css">
+	</head>
+	<body>
+
+		<script type="module">
+
+            //IMPORT DES DÉPENDANCES
+			import * as THREE from '../build/three.module.js';
+			import {OrbitControls} from "./jsm/controls/OrbitControls.js"
+
+			var camera, scene, renderer, controls; //DÉCLARATIONS OBJETS
+			var main_dome_sphere, main_dome_cylindre, main_dome_octogone;
+			var big_dome_sphere, big_dome_cylindre, big_dome_octogone; //DÉCLARATION OBJET
+			var medium_dome_sphere, medium_dome_cylindre, medium_dome_octogone;
+			var small_dome_sphere, small_dome_cylindre, small_dome_octogone;
+			var tiny_dome_sphere, tiny_dome_cylindre, tiny_dome_octogone;
+			var box, tall_box;
+			 camera = new THREE.PerspectiveCamera( 70, window.innerWidth/window.innerHeight, 1, 100000 );
+			 camera.position.set( 0, 1000, 2000 );
+
+
+			init(); //Pour créer la scène
+			animate(); //Pour animer la scène (boucle qui tourne en permanence)
+
+			function init() {
+
+                //Création de l'espace 3D (scène) avec ses axes
+                scene = new THREE.Scene();
+
+                //PerspectiveCamera( angle, echelle de la fenêtre, le plus proche , le plus loin ) -> positionné à (0;0;0)
+
+
+                //Chargement de la texture
+								var texture = new THREE.TextureLoader().load( '../ressources/textures/crate.gif' );
+
+                //Matériaux
+                var material = new THREE.MeshBasicMaterial( { map: texture } );
+
+
+                //DÉFINITION D'UN OBJET
+				// var geometry = new THREE.BoxBufferGeometry( 200, 200, 200 ); //Type/Forme d'objet (ici cube de taille 200)
+				// mesh = new THREE.Mesh( geometry, material ); //Création de l'objet avec ses matériaux
+				// scene.add( mesh ); //Ajout de l'objet dans la scene
+
+
+				// DEFINITION TOUT PETIT DOME TOUT SEUL COTE MUR 1
+
+				var tiny_dome_sphere = new THREE.SphereBufferGeometry( 100, 32, 32);
+				var tiny_dome_cylindre = new THREE.CylinderGeometry( 100, 100, 70, 32 );
+				var tiny_dome_octogone = new THREE.RingGeometry( 1, 5, 32 );
+
+				var tiny_sphere_wall1 = new THREE.Mesh( tiny_dome_sphere,material);
+				scene.add(tiny_sphere_wall1);
+
+				var tiny_cylindre_wall1 = new THREE.Mesh( tiny_dome_cylindre,material);
+				tiny_cylindre_wall1.position.y = 0;
+				scene.add(tiny_cylindre_wall1);
+
+				var tiny_octogone_wall1 = new THREE.Mesh( tiny_dome_octogone,material);
+				tiny_octogone_wall1.position.y = 0;
+				scene.add(tiny_octogone_wall1);
+
+				// DEFINITION TOUT PETIT DOME TOUT SEUL COTE MUR 2
+
+				var tiny_sphere_wall2 = new THREE.Mesh( tiny_dome_sphere,material);
+				scene.add(tiny_sphere_wall2);
+
+				var tiny_cylindre_wall2 = new THREE.Mesh( tiny_dome_cylindre,material);
+				tiny_cylindre_wall2.position.y = 0;
+				scene.add(tiny_cylindre_wall2);
+
+				var tiny_octogone_wall2 = new THREE.Mesh( tiny_dome_octogone,material);
+				tiny_octogone_wall2.position.y = 0;
+				scene.add(tiny_octogone_wall2);
+
+				// DEFINITION TOUT PETIT DOME TOUT SEUL COTE MUR 3
+
+				var tiny_sphere_wall3 = new THREE.Mesh( tiny_dome_sphere,material);
+				scene.add(tiny_sphere_wall3);
+
+				var tiny_cylindre_wall3 = new THREE.Mesh( tiny_dome_cylindre,material);
+				tiny_cylindre_wall3.position.y = 0;
+				scene.add(tiny_cylindre_wall3);
+
+				var tiny_octogone_wall3 = new THREE.Mesh( tiny_dome_octogone,material);
+				tiny_octogone_wall3.position.y = 0;
+				scene.add(tiny_octogone_wall3);
+
+
+				// DEFINITION TOUT PETIT DOME TOUT SEUL COTE MUR 4
+
+				var tiny_sphere_wall4 = new THREE.Mesh( tiny_dome_sphere,material);
+				scene.add(tiny_sphere_wall4);
+
+				var tiny_cylindre_wall4 = new THREE.Mesh( tiny_dome_cylindre,material);
+				tiny_cylindre_wall4.position.y = 0;
+				scene.add(tiny_cylindre_wall4);
+
+				var tiny_octogone_wall4 = new THREE.Mesh( tiny_dome_octogone,material);
+				tiny_octogone_wall4.position.y = 0;
+				scene.add(tiny_octogone_wall4);
+
+
+
+
+				// DEFINITION CUBE AVEC TOUT PETIT DOME DESSUS
+
+				var box = new THREE.BoxBufferGeometry(300,200,300);
+
+				var cube1 = new THREE.Mesh(box, material);
+				cube1.position.y = 0;
+				scene.add(cube1);
+
+       	var tiny_sphere2 = new THREE.Mesh( tiny_dome_sphere,material);
+				scene.add(tiny_sphere2);
+
+       	var tiny_cylindre2 = new THREE.Mesh( tiny_dome_cylindre,material);
+				cylindre2.position.y = 0;
+				scene.add(tiny_cylindre2);
+
+				var tiny_octogone2 = new THREE.Mesh( tiny_dome_octogone,material);
+				tiny_octogone2.position.y = 0;
+				scene.add(tiny_octogone2);
+
+
+				// DEFINITION PETIT DOME SEUL COTE MUR 1
+
+				var small_dome_sphere = new THREE.SphereBufferGeometry( 100, 32, 32);
+				var small_dome_cylindre = new THREE.CylinderGeometry( 100, 100, 70, 32 );
+				var small_dome_octogone = new THREE.RingGeometry( 1, 5, 32 );
+
+				var small_sphere_wall1 = new THREE.Mesh( small_dome_sphere,material);
+				scene.add(small_sphere_wall1);
+
+				var small_cylindre_wall1 = new THREE.Mesh( small_dome_cylindre,material);
+				small_cylindre_wall1.position.y = 0;
+				scene.add(small_cylindre_wall1);
+
+				var small_octogone_wall1 = new THREE.Mesh( small_dome_octogone,material);
+				small_octogone_wall1.position.y = 0;
+				scene.add(small_octogone_wall1);
+
+
+				// DEFINITION PETIT DOME SEUL COTE MUR 2
+
+				var small_sphere_wall2 = new THREE.Mesh( small_dome_sphere,material);
+				scene.add(small_sphere_wall2);
+
+				var small_cylindre_wall2 = new THREE.Mesh( small_dome_cylindre,material);
+				small_cylindre_wall2.position.y = 0;
+				scene.add(small_cylindre_wall2);
+
+				var small_octogone_wall2 = new THREE.Mesh( small_dome_octogone,material);
+				small_octogone_wall2.position.y = 0;
+				scene.add(small_octogone_wall2);
+
+
+				// DEFINITION PETIT DOME SEUL COTE MUR 3
+
+				var small_sphere_wall3 = new THREE.Mesh( small_dome_sphere,material);
+				scene.add(small_sphere_wall3);
+
+				var small_cylindre_wall3 = new THREE.Mesh( small_dome_cylindre,material);
+				small_cylindre_wall3.position.y = 0;
+				scene.add(small_cylindre_wall3);
+
+				var small_octogone_wall3 = new THREE.Mesh( small_dome_octogone,material);
+				small_octogone_wall3.position.y = 0;
+				scene.add(small_octogone_wall3);
+
+
+				// DEFINITION PETIT DOME SEUL COTE MUR 4
+
+				var small_sphere_wall4 = new THREE.Mesh( small_dome_sphere,material);
+				scene.add(small_sphere_wall4);
+
+				var small_cylindre_wall4 = new THREE.Mesh( small_dome_cylindre,material);
+				small_cylindre_wall4.position.y = 0;
+				scene.add(small_cylindre_wall4);
+
+				var small_octogone_wall4 = new THREE.Mesh( small_dome_octogone,material);
+				small_octogone_wall4.position.y = 0;
+				scene.add(small_octogone_wall4);
+
+
+				// DEFINITION PETIT DOME SEUL COTE MUR 5
+
+				var small_sphere_wall5 = new THREE.Mesh( small_dome_sphere,material);
+				scene.add(small_sphere_wall5);
+
+				var small_cylindre_wall5 = new THREE.Mesh( small_dome_cylindre,material);
+				small_cylindre_wall5.position.y = 0;
+				scene.add(small_cylindre_wall5);
+
+				var small_octogone_wall5 = new THREE.Mesh( small_dome_octogone,material);
+				small_octogone_wall5.position.y = 0;
+				scene.add(small_octogone_wall5);
+
+
+				// DEFINITION PETIT DOME SEUL COTE MUR 6
+
+				var small_sphere_wall6 = new THREE.Mesh( small_dome_sphere,material);
+				scene.add(small_sphere_wall6);
+
+				var small_cylindre_wall6 = new THREE.Mesh( small_dome_cylindre,material);
+				small_cylindre_wall6.position.y = 0;
+				scene.add(small_cylindre_wall6);
+
+				var small_octogone_wall6 = new THREE.Mesh( small_dome_octogone,material);
+				small_octogone_wall6.position.y = 0;
+				scene.add(small_octogone_wall6);
+
+
+				// DEFINITION PETIT DOME SEUL COTE GAUCHE 1
+
+				var small_sphere_left1 = new THREE.Mesh( small_dome_sphere,material);
+				scene.add(small_sphere_left1);
+
+				var small_cylindre_left1 = new THREE.Mesh( small_dome_cylindre,material);
+				small_cylindre_left1.position.y = 0;
+				scene.add(small_cylindre_left1);
+
+				var small_octogone_left1 = new THREE.Mesh( small_dome_octogone,material);
+				small_octogone_left1.position.y = 0;
+				scene.add(small_octogone_left1);
+
+
+				// DEFINITION PETIT DOME SEUL COTE GAUCHE 2
+
+				var small_sphere_left2 = new THREE.Mesh( small_dome_sphere,material);
+				scene.add(small_sphere_left2);
+
+				var small_cylindre_left2 = new THREE.Mesh( small_dome_cylindre,material);
+				small_cylindre_left2.position.y = 0;
+				scene.add(small_cylindre_left2);
+
+				var small_octogone_left2 = new THREE.Mesh( small_dome_octogone,material);
+				small_octogone_left2.position.y = 0;
+				scene.add(small_octogone_left2);
+
+
+				// DEFINITION PETIT DOME SEUL COTE GAUCHE 3
+
+				var small_sphere_left3 = new THREE.Mesh( small_dome_sphere,material);
+				scene.add(small_sphere_left3);
+
+				var small_cylindre_left3 = new THREE.Mesh( small_dome_cylindre,material);
+				small_cylindre_left3.position.y = 0;
+				scene.add(small_cylindre_left3);
+
+				var small_octogone_left3 = new THREE.Mesh( small_dome_octogone,material);
+				small_octogone_left3.position.y = 0;
+				scene.add(small_octogone_left3);
+
+
+				// DEFINITION PETIT DOME SEUL COTE GAUCHE 4
+
+				var small_sphere_left4 = new THREE.Mesh( small_dome_sphere,material);
+				scene.add(small_sphere_left4);
+
+				var small_cylindre_left4 = new THREE.Mesh( small_dome_cylindre,material);
+				small_cylindre_left4.position.y = 0;
+				scene.add(small_cylindre_left4);
+
+				var small_octogone_left4 = new THREE.Mesh( small_dome_octogone,material);
+				small_octogone_left4.position.y = 0;
+				scene.add(small_octogone_left4);
+
+
+				// DEFINITION PETIT DOME SEUL COTE GAUCHE 5
+
+				var small_sphere_left5 = new THREE.Mesh( small_dome_sphere,material);
+				scene.add(small_sphere_left5);
+
+				var small_cylindre_left5 = new THREE.Mesh( small_dome_cylindre,material);
+				small_cylindre_left5.position.y = 0;
+				scene.add(small_cylindre_left5);
+
+				var small_octogone_left5 = new THREE.Mesh( small_dome_octogone,material);
+				small_octogone_left5.position.y = 0;
+				scene.add(small_octogone_left5);
+
+
+				// DEFINITION PETIT DOME SEUL COTE GAUCHE 6
+
+				var small_sphere_left6 = new THREE.Mesh( small_dome_sphere,material);
+				scene.add(small_sphere_left6);
+
+				var small_cylindre_left6 = new THREE.Mesh( small_dome_cylindre,material);
+				small_cylindre_left6.position.y = 0;
+				scene.add(small_cylindre_left6);
+
+				var small_octogone_left6 = new THREE.Mesh( small_dome_octogone,material);
+				small_octogone_left6.position.y = 0;
+				scene.add(small_octogone_left6);
+
+
+				// DEFINITION PETIT DOME SEUL COTE GAUCHE 7
+
+				var small_sphere_left7 = new THREE.Mesh( small_dome_sphere,material);
+				scene.add(small_sphere_left7);
+
+				var small_cylindre_left7 = new THREE.Mesh( small_dome_cylindre,material);
+				small_cylindre_left7.position.y = 0;
+				scene.add(small_cylindre_left7);
+
+				var small_octogone_left7 = new THREE.Mesh( small_dome_octogone,material);
+				small_octogone_left7.position.y = 0;
+				scene.add(small_octogone_left7);
+
+
+				// DEFINITION PETIT DOME SEUL COTE GAUCHE 8
+
+				var small_sphere_left8 = new THREE.Mesh( small_dome_sphere,material);
+				scene.add(small_sphere_left8);
+
+				var small_cylindre_left8 = new THREE.Mesh( small_dome_cylindre,material);
+				small_cylindre_left8.position.y = 0;
+				scene.add(small_cylindre_left8);
+
+				var small_octogone_left8 = new THREE.Mesh( small_dome_octogone,material);
+				small_octogone_left8.position.y = 0;
+				scene.add(small_octogone_left8);
+
+
+				// DEFINITION PETIT DOME SEUL COTE GAUCHE 9
+
+				var small_sphere_left9 = new THREE.Mesh( small_dome_sphere,material);
+				scene.add(small_sphere_left9);
+
+				var small_cylindre_left9 = new THREE.Mesh( small_dome_cylindre,material);
+				small_cylindre_left9.position.y = 0;
+				scene.add(small_cylindre_left9);
+
+				var small_octogone_left9 = new THREE.Mesh( small_dome_octogone,material);
+				small_octogone_left9.position.y = 0;
+				scene.add(small_octogone_left9);
+
+
+				// DEFINITION PETIT DOME SEUL COTE GAUCHE 10
+
+				var small_sphere_left10 = new THREE.Mesh( small_dome_sphere,material);
+				scene.add(small_sphere_left10);
+
+				var small_cylindre_left10 = new THREE.Mesh( small_dome_cylindre,material);
+				small_cylindre_left10.position.y = 0;
+				scene.add(small_cylindre_left10);
+
+				var small_octogone_left10 = new THREE.Mesh( small_dome_octogone,material);
+				small_octogone_left10.position.y = 0;
+				scene.add(small_octogone_left10);
+
+
+				// DEFINITION PETIT DOME SEUL COTE DROITE 1
+
+				var small_sphere_right1 = new THREE.Mesh( small_dome_sphere,material);
+				scene.add(small_sphere_right1);
+
+				var small_cylindre_right1 = new THREE.Mesh( small_dome_cylindre,material);
+				small_cylindre_right1.position.y = 0;
+				scene.add(small_cylindre_right1);
+
+				var small_octogone_right1 = new THREE.Mesh( small_dome_octogone,material);
+				small_octogone_right1.position.y = 0;
+				scene.add(small_octogone_right1);
+
+
+				// DEFINITION PETIT DOME SEUL COTE DROITE 2
+
+				var small_sphere_right2 = new THREE.Mesh( small_dome_sphere,material);
+				scene.add(small_sphere_right2);
+
+				var small_cylindre_right2 = new THREE.Mesh( small_dome_cylindre,material);
+				small_cylindre_right2.position.y = 0;
+				scene.add(small_cylindre_right2);
+
+				var small_octogone_right2 = new THREE.Mesh( small_dome_octogone,material);
+				small_octogone_right2.position.y = 0;
+				scene.add(small_octogone_right2);
+
+
+				// DEFINITION PETIT DOME SEUL COTE DROITE 3
+
+				var small_sphere_right3 = new THREE.Mesh( small_dome_sphere,material);
+				scene.add(small_sphere_right3);
+
+				var small_cylindre_right3 = new THREE.Mesh( small_dome_cylindre,material);
+				small_cylindre_right3.position.y = 0;
+				scene.add(small_cylindre_right3);
+
+				var small_octogone_right3 = new THREE.Mesh( small_dome_octogone,material);
+				small_octogone_right3.position.y = 0;
+				scene.add(small_octogone_right3);
+
+
+				// DEFINITION PETIT DOME SEUL COTE DROITE 4
+
+				var small_sphere_right4 = new THREE.Mesh( small_dome_sphere,material);
+				scene.add(small_sphere_right4);
+
+				var small_cylindre_right4 = new THREE.Mesh( small_dome_cylindre,material);
+				small_cylindre_right4.position.y = 0;
+				scene.add(small_cylindre_right4);
+
+				var small_octogone_right4 = new THREE.Mesh( small_dome_octogone,material);
+				small_octogone_right4.position.y = 0;
+				scene.add(small_octogone_right4);
+
+
+				// DEFINITION PETIT DOME SEUL COTE DROITE 5
+
+				var small_sphere_right5 = new THREE.Mesh( small_dome_sphere,material);
+				scene.add(small_sphere_right5);
+
+				var small_cylindre_right5 = new THREE.Mesh( small_dome_cylindre,material);
+				small_cylindre_right5.position.y = 0;
+				scene.add(small_cylindre_right5);
+
+				var small_octogone_right5 = new THREE.Mesh( small_dome_octogone,material);
+				small_octogone_right5.position.y = 0;
+				scene.add(small_octogone_right5);
+
+
+				// DEFINITION PETIT DOME SEUL COTE DROITE 6
+
+				var small_sphere_right6 = new THREE.Mesh( small_dome_sphere,material);
+				scene.add(small_sphere_right6);
+
+				var small_cylindre_right6 = new THREE.Mesh( small_dome_cylindre,material);
+				small_cylindre_right6.position.y = 0;
+				scene.add(small_cylindre_right6);
+
+				var small_octogone_right6 = new THREE.Mesh( small_dome_octogone,material);
+				small_octogone_right6.position.y = 0;
+				scene.add(small_octogone_right6);
+
+
+				// DEFINITION PETIT DOME SEUL COTE DROITE 7
+
+				var small_sphere_right7= new THREE.Mesh( small_dome_sphere,material);
+				scene.add(small_sphere_right7);
+
+				var small_cylindre_right7 = new THREE.Mesh( small_dome_cylindre,material);
+				small_cylindre_right7.position.y = 0;
+				scene.add(small_cylindre_right7);
+
+				var small_octogone_right7 = new THREE.Mesh( small_dome_octogone,material);
+				small_octogone_right7.position.y = 0;
+				scene.add(small_octogone_right7);
+
+
+				// DEFINITION PETIT DOME SEUL COTE DROITE 8
+
+				var small_sphere_right8= new THREE.Mesh( small_dome_sphere,material);
+				scene.add(small_sphere_right8);
+
+				var small_cylindre_right8 = new THREE.Mesh( small_dome_cylindre,material);
+				small_cylindre_right8.position.y = 0;
+				scene.add(small_cylindre_right8);
+
+				var small_octogone_right8 = new THREE.Mesh( small_dome_octogone,material);
+				small_octogone_right8.position.y = 0;
+				scene.add(small_octogone_right8);
+
+
+				// DEFINITION PETIT DOME SEUL COTE DROITE 9
+
+				var small_sphere_right9= new THREE.Mesh( small_dome_sphere,material);
+				scene.add(small_sphere_right9);
+
+				var small_cylindre_right9 = new THREE.Mesh( small_dome_cylindre,material);
+				small_cylindre_right9.position.y = 0;
+				scene.add(small_cylindre_right9);
+
+				var small_octogone_right9 = new THREE.Mesh( small_dome_octogone,material);
+				small_octogone_right9.position.y = 0;
+				scene.add(small_octogone_right9);
+
+
+				// DEFINITION PETIT DOME SEUL COTE DROITE 10
+
+				var small_sphere_right10= new THREE.Mesh( small_dome_sphere,material);
+				scene.add(small_sphere_right10);
+
+				var small_cylindre_right10 = new THREE.Mesh( small_dome_cylindre,material);
+				small_cylindre_right10.position.y = 0;
+				scene.add(small_cylindre_right10);
+
+				var small_octogone_right10 = new THREE.Mesh( small_dome_octogone,material);
+				small_octogone_right10.position.y = 0;
+				scene.add(small_octogone_right10);
+
+
+				// DEFINITION PETIT DOME SEUL COTE BATIMENT 1
+
+				var small_sphere_bat1= new THREE.Mesh( small_dome_sphere,material);
+				scene.add(small_sphere_bat1);
+
+				var small_cylindre_bat1 = new THREE.Mesh( small_dome_cylindre,material);
+				small_cylindre_bat1.position.y = 0;
+				scene.add(small_cylindre_bat1);
+
+				var small_octogone_bat1 = new THREE.Mesh( small_dome_octogone,material);
+				small_octogone_bat1.position.y = 0;
+				scene.add(small_octogone_bat1);
+
+
+				// DEFINITION PETIT DOME SEUL COTE BATIMENT 2
+
+				var small_sphere_bat2= new THREE.Mesh( small_dome_sphere,material);
+				scene.add(small_sphere_bat2);
+
+				var small_cylindre_bat2 = new THREE.Mesh( small_dome_cylindre,material);
+				small_cylindre_bat2.position.y = 0;
+				scene.add(small_cylindre_bat2);
+
+				var small_octogone_bat2 = new THREE.Mesh( small_dome_octogone,material);
+				small_octogone_bat2.position.y = 0;
+				scene.add(small_octogone_bat2);
+
+
+				// DEFINITION PETIT DOME SEUL COTE BATIMENT 3
+
+				var small_sphere_bat3= new THREE.Mesh( small_dome_sphere,material);
+				scene.add(small_sphere_bat3);
+
+				var small_cylindre_bat3 = new THREE.Mesh( small_dome_cylindre,material);
+				small_cylindre_bat3.position.y = 0;
+				scene.add(small_cylindre_bat3);
+
+				var small_octogone_bat3 = new THREE.Mesh( small_dome_octogone,material);
+				small_octogone_bat3.position.y = 0;
+				scene.add(small_octogone_bat3);
+
+
+				// DEFINITION PETIT DOME SEUL COTE BATIMENT 4
+
+				var small_sphere_bat4= new THREE.Mesh( small_dome_sphere,material);
+				scene.add(small_sphere_bat4);
+
+				var small_cylindre_bat4 = new THREE.Mesh( small_dome_cylindre,material);
+				small_cylindre_bat4.position.y = 0;
+				scene.add(small_cylindre_bat4);
+
+				var small_octogone_bat4 = new THREE.Mesh( small_dome_octogone,material);
+				small_octogone_bat4.position.y = 0;
+				scene.add(small_octogone_bat4);
+
+
+				// DEFINITION PETIT DOME SEUL COTE BATIMENT 5
+
+				var small_sphere_bat5= new THREE.Mesh( small_dome_sphere,material);
+				scene.add(small_sphere_bat5);
+
+				var small_cylindre_bat5 = new THREE.Mesh( small_dome_cylindre,material);
+				small_cylindre_bat5.position.y = 0;
+				scene.add(small_cylindre_bat5);
+
+				var small_octogone_bat5 = new THREE.Mesh( small_dome_octogone,material);
+				small_octogone_bat5.position.y = 0;
+				scene.add(small_octogone_bat5);
+
+
+				// DEFINITION PETIT DOME SEUL COTE BATIMENT 6
+
+				var small_sphere_bat6= new THREE.Mesh( small_dome_sphere,material);
+				scene.add(small_sphere_bat6);
+
+				var small_cylindre_bat6 = new THREE.Mesh( small_dome_cylindre,material);
+				small_cylindre_bat6.position.y = 0;
+				scene.add(small_cylindre_bat6);
+
+				var small_octogone_bat6 = new THREE.Mesh( small_dome_octogone,material);
+				small_octogone_bat6.position.y = 0;
+				scene.add(small_octogone_bat6);
+
+
+
+
+
+				//DEFINITION MOYEN DOME SEUL COTE MUR
+
+				var medium_dome_sphere = new THREE.SphereBufferGeometry( 100, 32, 32);
+				var medium_dome_cylindre = new THREE.CylinderGeometry( 100, 100, 70, 32 );
+				var medium_dome_octogone = new THREE.RingGeometry( 1, 5, 32 );
+
+				var medium_sphere1 = new THREE.Mesh( medium_dome_sphere,material);
+				scene.add(medium_sphere1);
+
+				var medium_cylindre1 = new THREE.Mesh( medium_dome_cylindre,material);
+				medium_cylindre1.position.y = 0;
+				scene.add(medium_cylindre1);
+
+				var medium_octogone1 = new THREE.Mesh( medium_dome_octogone,material);
+				medium_octogone1.position.y = 0;
+				scene.add(medium_octogone1);
+
+
+				//DEFINITION MOYEN DOME SEUL COTE BATIMENT
+
+
+				var medium_sphere2 = new THREE.Mesh( medium_dome_sphere,material);
+				scene.add(medium_sphere2);
+
+				var medium_cylindre2 = new THREE.Mesh( medium_dome_cylindre,material);
+				medium_cylindre1.position.y = 0;
+				scene.add(medium_cylindre2);
+
+				var medium_octogone2 = new THREE.Mesh( medium_dome_octogone,material);
+				medium_octogone2.position.y = 0;
+				scene.add(medium_octogone2);
+
+
+				//DEFINITION MOYEN DOME SEUL COTE GAUCHE
+
+
+				var medium_sphere_left1 = new THREE.Mesh( medium_dome_sphere,material);
+				scene.add(medium_sphere_left1);
+
+				var medium_cylindre_left1 = new THREE.Mesh( medium_dome_cylindre,material);
+				medium_cylindre_left1.position.y = 0;
+				scene.add(medium_cylindre_left1);
+
+				var medium_octogone_left1 = new THREE.Mesh( medium_dome_octogone,material);
+				medium_octogone_left1.position.y = 0;
+				scene.add(medium_octogone_left1);
+
+
+				//DEFINITION MOYEN DOME SEUL COTE DROITE
+
+
+				var medium_sphere_right1 = new THREE.Mesh( medium_dome_sphere,material);
+				scene.add(medium_sphere_right1);
+
+				var medium_cylindre_right1 = new THREE.Mesh( medium_dome_cylindre,material);
+				medium_cylindre_right1.position.y = 0;
+				scene.add(medium_cylindre_right1);
+
+				var medium_octogone_right1 = new THREE.Mesh( medium_dome_octogone,material);
+				medium_octogone_right1.position.y = 0;
+				scene.add(medium_octogone_right1);
+
+
+				//DEFINITION GRAND DOME SEUL
+
+				var big_dome_sphere = new THREE.SphereBufferGeometry( 100, 32, 32);
+				var big_dome_cylindre = new THREE.CylinderGeometry( 100, 100, 70, 32 );
+				var big_dome_octogone = new THREE.RingGeometry( 1, 5, 32 );
+
+				// var big_sphere1 = new THREE.Mesh( big_dome_sphere,material);
+				// scene.add(big_sphere1);
+				//
+				// var big_cylindre1 = new THREE.Mesh( big_dome_cylindre,material);
+				// big_cylindre1.position.y = 0;
+				// scene.add(big_cylindre1);
+				//
+				// var big_octogone1 = new THREE.Mesh( big_dome_octogone,material);
+				// big_octogone1.position.y = 0;
+				// scene.add(big_octogone1);
+
+
+				// DEFINITION MAIN DOME SEUL
+
+				var main_dome_sphere = new THREE.SphereBufferGeometry( 100, 32, 32);
+				var main_dome_cylindre = new THREE.CylinderGeometry( 100, 100, 70, 32 );
+				var main_dome_octogone = new THREE.RingGeometry( 1, 5, 32 );
+
+				// var main_sphere1 = new THREE.Mesh( main_dome_sphere,material);
+				// scene.add(main_sphere1);
+				//
+				// var main_cylindre1 = new THREE.Mesh( main_dome_cylindre,material);
+				// main_cylindre1.position.y = 0;
+				// scene.add(main_cylindre1);
+				//
+				// var main_octogone1 = new THREE.Mesh( main_dome_octogone,material);
+				// main_octogone1.position.y = 0;
+				// scene.add(main_octogone1);
+
+
+				// DEFINITION MAIN AVEC BOX ET TOUT PETIT DOME AUTOUR
+
+				var main_sphere2 = new THREE.Mesh( main_dome_sphere,material);
+				scene.add(main_sphere2);
+
+				var main_cylindre2 = new THREE.Mesh( main_dome_cylindre,material);
+				main_cylindre2.position.y = 0;
+				scene.add(main_cylindre1);
+
+				var main_octogone2 = new THREE.Mesh( main_dome_octogone,material);
+				main_octogone2.position.y = 0;
+				scene.add(main_octogone2);
+
+
+
+
+
+				var cube2 = new THREE.Mesh(box, material);
+				cube2.position.y = 0;
+				scene.add(cube2);
+
+       	var tiny_sphere3 = new THREE.Mesh( tiny_dome_sphere,material);
+				scene.add(tiny_sphere3);
+
+       	var tiny_cylindre3 = new THREE.Mesh( tiny_dome_cylindre,material);
+				cylindre3.position.y = 0;
+				scene.add(tiny_cylindre3);
+
+				var tiny_octogone3 = new THREE.Mesh( tiny_dome_octogone,material);
+				tiny_octogone3.position.y = 0;
+				scene.add(tiny_octogone3);
+
+
+
+
+				var cube3 = new THREE.Mesh(box, material);
+				cube3.position.y = 0;
+				scene.add(cube3);
+
+       	var tiny_sphere4 = new THREE.Mesh( tiny_dome_sphere,material);
+				scene.add(tiny_sphere4);
+
+       	var tiny_cylindre4 = new THREE.Mesh( tiny_dome_cylindre,material);
+				tiny_cylindre4.position.y = 0;
+				scene.add(tiny_cylindre4);
+
+				var tiny_octogone4 = new THREE.Mesh( tiny_dome_octogone,material);
+				tiny_octogone4.position.y = 0;
+				scene.add(tiny_octogone4);
+
+
+
+				var cube4 = new THREE.Mesh(box, material);
+				cube4.position.y = 0;
+				scene.add(cube4);
+
+       	var tiny_sphere5 = new THREE.Mesh( tiny_dome_sphere,material);
+				scene.add(tiny_sphere5);
+
+       	var tiny_cylindre5 = new THREE.Mesh( tiny_dome_cylindre,material);
+				tiny_cylindre5.position.y = 0;
+				scene.add(tiny_cylindre5);
+
+				var tiny_octogone5 = new THREE.Mesh( tiny_dome_octogone,material);
+				tiny_octogone5.position.y = 0;
+				scene.add(tiny_octogone5);
+
+
+
+				var cube5 = new THREE.Mesh(box, material);
+				cube1.position.y = 0;
+				scene.add(cube5);
+
+       	var tiny_sphere6 = new THREE.Mesh( tiny_dome_sphere,material);
+				scene.add(tiny_sphere6);
+
+       	var tiny_cylindre6 = new THREE.Mesh( tiny_dome_cylindre,material);
+				tiny_cylindre6.position.y = 0;
+				scene.add(tiny_cylindre6);
+
+				var tiny_octogone6 = new THREE.Mesh( tiny_dome_octogone,material);
+				tiny_octogone6.position.y = 0;
+				scene.add(tiny_octogone6);
+
+
+
+				var cube6 = new THREE.Mesh(box, material);
+				cube1.position.y = 0;
+				scene.add(cube6);
+
+       	var tiny_sphere7 = new THREE.Mesh( tiny_dome_sphere,material);
+				scene.add(tiny_sphere7);
+
+       	var tiny_cylindre7 = new THREE.Mesh( tiny_dome_cylindre,material);
+				tiny_cylindre7.position.y = 0;
+				scene.add(tiny_cylindre7);
+
+				var tiny_octogone7 = new THREE.Mesh( tiny_dome_octogone,material);
+				tiny_octogone7.position.y = 0;
+				scene.add(tiny_octogone7);
+
+
+
+				var cube7 = new THREE.Mesh(box, material);
+				cube7.position.y = 0;
+				scene.add(cube7);
+
+       	var tiny_sphere8 = new THREE.Mesh( tiny_dome_sphere,material);
+				scene.add(tiny_sphere8);
+
+       	var tiny_cylindre8 = new THREE.Mesh( tiny_dome_cylindre,material);
+				tiny_cylindre8.position.y = 0;
+				scene.add(tiny_cylindre8);
+
+				var tiny_octogone8 = new THREE.Mesh( tiny_dome_octogone,material);
+				tiny_octogone8.position.y = 0;
+				scene.add(tiny_octogone8);
+
+
+
+				var cube8 = new THREE.Mesh(box, material);
+				cube8.position.y = 0;
+				scene.add(cube8);
+
+       	var tiny_sphere9 = new THREE.Mesh( tiny_dome_sphere,material);
+				scene.add(tiny_sphere9);
+
+       	var tiny_cylindre9 = new THREE.Mesh( tiny_dome_cylindre,material);
+				tiny_cylindre9.position.y = 0;
+				scene.add(tiny_cylindre9);
+
+				var tiny_octogone9 = new THREE.Mesh( tiny_dome_octogone,material);
+				tiny_octogone9.position.y = 0;
+				scene.add(tiny_octogone9);
+
+
+
+				var cube9 = new THREE.Mesh(box, material);
+				cube9.position.y = 0;
+				scene.add(cube9);
+
+       	var tiny_sphere10 = new THREE.Mesh( tiny_dome_sphere,material);
+				scene.add(tiny_sphere10);
+
+       	var tiny_cylindre10 = new THREE.Mesh( tiny_dome_cylindre,material);
+				tiny_cylindre10.position.y = 0;
+				scene.add(tiny_cylindre10);
+
+				var tiny_octogone10 = new THREE.Mesh( tiny_dome_octogone,material);
+				tiny_octogone10.position.y = 0;
+				scene.add(tiny_octogone10);
+
+
+
+
+				// DEFINITION BIG DOME AVEC BOX ET TOUT PETIT DOME AUTOUR NUMERO UN
+
+				var big_sphere2 = new THREE.Mesh( big_dome_sphere,material);
+				scene.add(big_sphere2);
+
+				var big_cylindre2 = new THREE.Mesh( big_dome_cylindre,material);
+				big_cylindre2.position.y = 0;
+				scene.add(big_cylindre1);
+
+				var big_octogone2 = new THREE.Mesh( big_dome_octogone,material);
+				big_octogone2.position.y = 0;
+				scene.add(big_octogone2);
+
+
+
+
+
+				var cube10 = new THREE.Mesh(box, material);
+				cube10.position.x = (big_octogone2.geometry.parameters.width/2)
+				cube10.position.y = 0;
+				scene.add(cube10);
+
+				var tiny_sphere11 = new THREE.Mesh( tiny_dome_sphere,material);
+				scene.add(tiny_sphere11);
+
+				var tiny_cylindre11 = new THREE.Mesh( tiny_dome_cylindre,material);
+				tiny_cylindre11.position.y = 0;
+				scene.add(tiny_cylindre11);
+
+				var tiny_octogone11 = new THREE.Mesh( tiny_dome_octogone,material);
+				tiny_octogone11.position.y = 0;
+				scene.add(tiny_octogone11);
+
+
+
+
+				var cube11 = new THREE.Mesh(box, material);
+				cube11.position.y = ;
+				scene.add(cube11);
+
+				var tiny_sphere12 = new THREE.Mesh( tiny_dome_sphere,material);
+				scene.add(tiny_sphere12);
+
+				var tiny_cylindre12 = new THREE.Mesh( tiny_dome_cylindre,material);
+				tiny_cylindre12.position.y = 0;
+				scene.add(tiny_cylindre12);
+
+				var tiny_octogone12 = new THREE.Mesh( tiny_dome_octogone,material);
+				tiny_octogone12.position.y = 0;
+				scene.add(tiny_octogone12);
+
+
+
+				var cube12 = new THREE.Mesh(box, material);
+				cube12.position.y = 0;
+				scene.add(cube12);
+
+				var tiny_sphere13 = new THREE.Mesh( tiny_dome_sphere,material);
+				scene.add(tiny_sphere13);
+
+				var tiny_cylindre13 = new THREE.Mesh( tiny_dome_cylindre,material);
+				tiny_cylindre13.position.y = 0;
+				scene.add(tiny_cylindre13);
+
+				var tiny_octogone13 = new THREE.Mesh( tiny_dome_octogone,material);
+				tiny_octogone13.position.y = 0;
+				scene.add(tiny_octogone13);
+
+
+
+				var cube13 = new THREE.Mesh(box, material);
+				cube13.position.y = 0;
+				scene.add(cube13);
+
+				var tiny_sphere14 = new THREE.Mesh( tiny_dome_sphere,material);
+				scene.add(tiny_sphere14);
+
+				var tiny_cylindre14 = new THREE.Mesh( tiny_dome_cylindre,material);
+				tiny_cylindre14.position.y = 0;
+				scene.add(tiny_cylindre14);
+
+				var tiny_octogone14 = new THREE.Mesh( tiny_dome_octogone,material);
+				tiny_octogone14.position.y = 0;
+				scene.add(tiny_octogone14);
+
+
+
+				var cube14 = new THREE.Mesh(box, material);
+				cube14.position.y = 0;
+				scene.add(cube14);
+
+				var tiny_sphere15 = new THREE.Mesh( tiny_dome_sphere,material);
+				scene.add(tiny_sphere15);
+
+				var tiny_cylindre15 = new THREE.Mesh( tiny_dome_cylindre,material);
+				tiny_cylindre15.position.y = 0;
+				scene.add(tiny_cylindre15);
+
+				var tiny_octogone15 = new THREE.Mesh( tiny_dome_octogone,material);
+				tiny_octogone15.position.y = 0;
+				scene.add(tiny_octogone15);
+
+
+
+				var cube15 = new THREE.Mesh(box, material);
+				cube15.position.y = 0;
+				scene.add(cube15);
+
+				var tiny_sphere16 = new THREE.Mesh( tiny_dome_sphere,material);
+				scene.add(tiny_sphere16);
+
+				var tiny_cylindre16 = new THREE.Mesh( tiny_dome_cylindre,material);
+				tiny_cylindre16.position.y = 0;
+				scene.add(tiny_cylindre16);
+
+				var tiny_octogone16 = new THREE.Mesh( tiny_dome_octogone,material);
+				tiny_octogone16.position.y = 0;
+				scene.add(tiny_octogone16);
+
+
+
+				var cube16 = new THREE.Mesh(box, material);
+				cube16.position.y = 0;
+				scene.add(cube16);
+
+				var tiny_sphere17 = new THREE.Mesh( tiny_dome_sphere,material);
+				scene.add(tiny_sphere17);
+
+				var tiny_cylindre17 = new THREE.Mesh( tiny_dome_cylindre,material);
+				tiny_cylindre17.position.y = 0;
+				scene.add(tiny_cylindre17);
+
+				var tiny_octogone17 = new THREE.Mesh( tiny_dome_octogone,material);
+				tiny_octogone17.position.y = 0;
+				scene.add(tiny_octogone17);
+
+
+
+				var cube17 = new THREE.Mesh(box, material);
+				cube17.position.y = 0;
+				scene.add(cube17);
+
+				var tiny_sphere18 = new THREE.Mesh( tiny_dome_sphere,material);
+				scene.add(tiny_sphere18);
+
+				var tiny_cylindre18 = new THREE.Mesh( tiny_dome_cylindre,material);
+				tiny_cylindre18.position.y = 0;
+				scene.add(tiny_cylindre18);
+
+				var tiny_octogone18 = new THREE.Mesh( tiny_dome_octogone,material);
+				tiny_octogone18.position.y = 0;
+				scene.add(tiny_octogone18);
+
+
+
+
+				// DEFINITION BIG DOME AVEC BOX ET TOUT PETIT DOME AUTOUR NUMERO DEUX
+
+				var big_sphere3 = new THREE.Mesh( big_dome_sphere,material);
+				scene.add(big_sphere3);
+
+				var big_cylindre3 = new THREE.Mesh( big_dome_cylindre,material);
+				big_cylindre3.position.y = 0;
+				scene.add(big_cylindre3);
+
+				var big_octogone3 = new THREE.Mesh( big_dome_octogone,material);
+				big_octogone3.position.y = 0;
+				scene.add(big_octogone3);
+
+
+
+
+
+				var cube18 = new THREE.Mesh(box, material);
+				cube18.position.y = 0;
+				scene.add(cube18);
+
+				var tiny_sphere19 = new THREE.Mesh( tiny_dome_sphere,material);
+				scene.add(tiny_sphere19);
+
+				var tiny_cylindre19 = new THREE.Mesh( tiny_dome_cylindre,material);
+				tiny_cylindre19.position.y = 0;
+				scene.add(tiny_cylindre19);
+
+				var tiny_octogone19 = new THREE.Mesh( tiny_dome_octogone,material);
+				tiny_octogone19.position.y = 0;
+				scene.add(tiny_octogone19);
+
+
+
+
+				var cube19 = new THREE.Mesh(box, material);
+				cube19.position.y = 0;
+				scene.add(cube19);
+
+				var tiny_sphere20 = new THREE.Mesh( tiny_dome_sphere,material);
+				scene.add(tiny_sphere20);
+
+				var tiny_cylindre20 = new THREE.Mesh( tiny_dome_cylindre,material);
+				tiny_cylindre20.position.y = 0;
+				scene.add(tiny_cylindre20);
+
+				var tiny_octogone20 = new THREE.Mesh( tiny_dome_octogone,material);
+				tiny_octogone20.position.y = 0;
+				scene.add(tiny_octogone20);
+
+
+
+				var cube20 = new THREE.Mesh(box, material);
+				cube20.position.y = 0;
+				scene.add(cube20);
+
+				var tiny_sphere21 = new THREE.Mesh( tiny_dome_sphere,material);
+				scene.add(tiny_sphere21);
+
+				var tiny_cylindre21 = new THREE.Mesh( tiny_dome_cylindre,material);
+				tiny_cylindre21.position.y = 0;
+				scene.add(tiny_cylindre21);
+
+				var tiny_octogone21 = new THREE.Mesh( tiny_dome_octogone,material);
+				tiny_octogone21.position.y = 0;
+				scene.add(tiny_octogone21);
+
+
+
+				var cube21 = new THREE.Mesh(box, material);
+				cube21.position.y = 0;
+				scene.add(cube21);
+
+				var tiny_sphere22 = new THREE.Mesh( tiny_dome_sphere,material);
+				scene.add(tiny_sphere22);
+
+				var tiny_cylindre22 = new THREE.Mesh( tiny_dome_cylindre,material);
+				tiny_cylindre22.position.y = 0;
+				scene.add(tiny_cylindre22);
+
+				var tiny_octogone22 = new THREE.Mesh( tiny_dome_octogone,material);
+				tiny_octogone22.position.y = 0;
+				scene.add(tiny_octogone22);
+
+
+
+				var cube22 = new THREE.Mesh(box, material);
+				cube22.position.y = 0;
+				scene.add(cube22);
+
+				var tiny_sphere23 = new THREE.Mesh( tiny_dome_sphere,material);
+				scene.add(tiny_sphere23);
+
+				var tiny_cylindre23 = new THREE.Mesh( tiny_dome_cylindre,material);
+				tiny_cylindre23.position.y = 0;
+				scene.add(tiny_cylindre23);
+
+				var tiny_octogone23 = new THREE.Mesh( tiny_dome_octogone,material);
+				tiny_octogone23.position.y = 0;
+				scene.add(tiny_octogone23);
+
+
+
+				var cube23 = new THREE.Mesh(box, material);
+				cube23.position.y = 0;
+				scene.add(cube23);
+
+				var tiny_sphere24 = new THREE.Mesh( tiny_dome_sphere,material);
+				scene.add(tiny_sphere24);
+
+				var tiny_cylindre24 = new THREE.Mesh( tiny_dome_cylindre,material);
+				tiny_cylindre24.position.y = 0;
+				scene.add(tiny_cylindre24);
+
+				var tiny_octogone24 = new THREE.Mesh( tiny_dome_octogone,material);
+				tiny_octogone24.position.y = 0;
+				scene.add(tiny_octogone24);
+
+
+
+				var cube24 = new THREE.Mesh(box, material);
+				cube24.position.y = 0;
+				scene.add(cube24);
+
+				var tiny_sphere25 = new THREE.Mesh( tiny_dome_sphere,material);
+				scene.add(tiny_sphere25);
+
+				var tiny_cylindre25 = new THREE.Mesh( tiny_dome_cylindre,material);
+				tiny_cylindre25.position.y = 0;
+				scene.add(tiny_cylindre25);
+
+				var tiny_octogone25 = new THREE.Mesh( tiny_dome_octogone,material);
+				tiny_octogone25.position.y = 0;
+				scene.add(tiny_octogone25);
+
+
+
+				var cube25 = new THREE.Mesh(box, material);
+				cube25.position.y = 0;
+				scene.add(cube25);
+
+				var tiny_sphere26 = new THREE.Mesh( tiny_dome_sphere,material);
+				scene.add(tiny_sphere26);
+
+				var tiny_cylindre26 = new THREE.Mesh( tiny_dome_cylindre,material);
+				tiny_cylindre26.position.y = 0;
+				scene.add(tiny_cylindre26);
+
+				var tiny_octogone26 = new THREE.Mesh( tiny_dome_octogone,material);
+				tiny_octogone26.position.y = 0;
+				scene.add(tiny_octogone26);
+
+
+
+				// DEFINITION LONGUE BOX AVEC TOUT PETIT DOME COTE BATIMENT 1
+
+				var tall_box = new THREE.BoxBufferGeometry(300,600,300);
+
+				var tall_cube1 = new THREE.Mesh(tall_box, material);
+				tall_cube1.position.y = 0;
+				scene.add(tall_cube1);
+
+				var tiny_sphere27 = new THREE.Mesh( tiny_dome_sphere,material);
+				scene.add(tiny_sphere27);
+
+				var tiny_cylindre27 = new THREE.Mesh( tiny_dome_cylindre,material);
+				tiny_cylindre27.position.y = 0;
+				scene.add(tiny_cylindre27);
+
+				var tiny_octogone27 = new THREE.Mesh( tiny_dome_octogone,material);
+				tiny_octogone27.position.y = 0;
+				scene.add(tiny_octogone27);
+
+
+
+
+
+
+
+
+				renderer = new THREE.WebGLRenderer( { antialias: true } ); //Moteur graphique (anti-aliasing: pour lisser le graphisme)
+				renderer.setPixelRatio( window.devicePixelRatio ); //Respect du ration des pixels
+				renderer.setSize( window.innerWidth, window.innerHeight ); //Taille du rendu
+				document.body.appendChild( renderer.domElement ); //Attachement du rendu à l'html
+
+				controls = new OrbitControls( camera, renderer.domElement );
+        controls.update();
+
+				//
+
+				window.addEventListener( 'resize', onWindowResize, false ); //Adaptation au changement de taille de la fenêtre avec appel de sa fonction ↩️
+
+			}
+
+			function onWindowResize() {
+                //Adaptation au changement de taille de la fenêtre
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+
+				renderer.setSize( window.innerWidth, window.innerHeight ); //Taille du rendu
+
+			}
+
+			function animate() {
+
+				requestAnimationFrame( animate ); //Segmente les numéros de frames
+
+				// required if controls.enableDamping or controls.autoRotate are set to true
+                controls.update();
+
+				renderer.render( scene, camera); //Lancement du rendu de la scene avec sa caméra
+
+			}
+
+		</script>
+
+	</body>
+</html>
