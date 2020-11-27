@@ -36,7 +36,7 @@
 
 
             //DÉCLARATIONS DES OBJETS DE LA SCÈNE
-            var camera, scene, renderer, controls, ambient, spotLight, lightHelper, spotLightDome, mixer, clock;  
+            var camera, scene, renderer, controls, ambient, spotLight, lightHelper, spotLightDome, mixer, clock, stormtrooper;  
 
             //DÉCLARATION DE LA BASE 
             var mesh_floor, ground, leftWall, rightWall, frontWall, backWall;
@@ -66,67 +66,6 @@
            
             //DÉCLARATION DES DÔMES
             var sphere, cylindre, octogone;
-
-            //CRÉATION DU GUI
-            displaygui();
-            function displaygui() {
-                var gui = new GUI;
-                var parameters = {
-                    //musique d'ambiance
-                    music: "",
-                    volume: 2,
-                    movSpeedX: 1,
-                    movSpeedZ: 1,
-                    rainer: false
-                };
-
-                var sounds = gui.addFolder('Music scene');
-
-                var soundVolume = sounds.add(parameters, 'volume').min(0).max(4).step(0.1).name('Volume');
-                soundVolume.onChange(function(changed){
-                    sound.setVolume(changed);
-
-                });
-
-                var song = sounds.add(parameters, 'music', ['sounds/song.mp3','sounds/AnimalCrossingMusic.ogg','sounds/trickAndTreats.mp3','sounds/moderation.mp3','sounds/resettiSong.mp3', 'sounds/gamecube.mp3']).name("Song")
-                song.onChange(function(changed){
-                    sound.stop();
-                    audioLoader.load( changed, function( buffer ) {
-                    sound.setBuffer( buffer );
-                    sound.setLoop( true );
-                    sound.setVolume( 0.5 );
-                    sound.play();
-                    })
-                });
-
-                var navig = gui.addFolder('Navigation');
-
-                var movingSpeedX = navig.add(parameters, 'movSpeedX').min(-1).max(2).step(0.1).name('Speed X');
-                movingSpeedX.onChange(function(changed){
-                    //movSpeedX = changed;
-
-                });
-                var movingSpeedZ = navig.add(parameters, 'movSpeedZ').min(-1).max(2).step(0.1).name('Speed Z');
-                movingSpeedZ.onChange(function(changed){
-                    //movSpeedZ = changed;
-
-                });
-
-
-                var weather = gui.addFolder('Rain Control');
-
-                var rainControl = weather.add(parameters, 'rainer').name('Raining');
-                rainControl.onChange(function(changed){
-                    // rainBool = changed;
-                    // cloud.visible = changed;
-
-                    // if (changed) {
-                    //     rainSound.play();
-                    // }else{
-                    //     rainSound.stop();
-                    // }
-                });
-            }
 
             //CRÉATION DE LA CAMÉRA SUPER DYNAMIQUE
             camera = new THREE.PerspectiveCamera( 70, window.innerWidth/window.innerHeight, 1, 1000000 );
@@ -193,6 +132,7 @@
 				ground = new THREE.Mesh( groundGeometry, groundMaterial ); //Création de l'objet avec ses matériaux
                 ground.position.y = -ground.geometry.parameters.height/2;
                 ground.receiveShadow = true;
+                ground.wireframe = false;
 				scene.add( ground ); //Ajout de l'objet dans la scene
 
 
@@ -422,8 +362,7 @@
                 spotLightDome.decay = 1;//
                 spotLightDome.focus = 1;
                 spotLightDome.distance = 40000;
-                spotLightDome.intensity = 1.1;    
-                spotLightDome.target = frontGateBig;                    
+                spotLightDome.intensity = 1.1;                     
 
                 spotLightDome.castShadow = true;
                 spotLightDome.shadow.mapSize.width = 512;
@@ -431,10 +370,11 @@
                 spotLightDome.shadow.camera.near = 1;
                 spotLightDome.shadow.camera.far = 100000;
                 spotLightDome.shadow.focus = 1;
+                spotLightDome.visible = false;
                 scene.add( spotLightDome );
 
-                lightHelper = new THREE.SpotLightHelper( spotLightDome );
-                scene.add( lightHelper );
+                // lightHelper = new THREE.SpotLightHelper( spotLightDome );
+                // scene.add( lightHelper );
                 
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ DEBUT DOMES @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
@@ -781,27 +721,51 @@
                 loader.load( './models/collada/stormtrooper/stormtrooper.dae', function ( collada ) {
 
                     const animations = collada.animations;
-                    const avatar = collada.scene;
+                    stormtrooper = collada.scene;
 
-                    avatar.traverse( function ( node ) {
+                    stormtrooper.traverse( function ( node ) {
 
                         if ( node.isSkinnedMesh ) {
 
                             node.frustumCulled = false;
 
+                            node.castShadow = true;
+                            node.receiveShadow = true;
+
+                            
                         }
 
                     } );
 
-                    mixer = new THREE.AnimationMixer( avatar );
+                    mixer = new THREE.AnimationMixer( stormtrooper );
                     mixer.clipAction( animations[ 0 ] ).play();
-                    avatar.scale.set(190,190,190);
-                    scene.add( avatar );
+                    stormtrooper.scale.set(190,190,190);
+                    stormtrooper.visible = false;
+                    scene.add( stormtrooper );
+                    spotLightDome.target = stormtrooper;   
+                    
 
                 } );
 
-                //
+                displaygui();
+                function displaygui() {
+                var gui = new GUI;
+                var parameters = {
+                    switch: false
+                };
+                
+                var party = gui.addFolder('Party Control');
 
+                var partyControl = party.add(parameters, 'switch').name('ONOFF');
+                partyControl.onChange(function(changed){
+                    stormtrooper.visible = changed;
+                    spotLightDome.visible = changed;
+                });
+
+            }
+
+                //
+                
                 renderer = new THREE.WebGLRenderer( { antialias: true } ); //Moteur graphique (anti-aliasing: pour lisser le graphisme)
 				renderer.setPixelRatio( window.devicePixelRatio ); //Respect du ration des pixels
 				renderer.setSize( window.innerWidth, window.innerHeight ); //Taille du rendu
