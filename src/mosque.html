@@ -748,23 +748,42 @@
 
                 //FONCTION DU GUI
                 function displaygui() {
-                var gui = new GUI;
-                var parameters = {
-                    switch: false
-                };
+                    var gui = new GUI;
+                    //Ajout des différents paramètres possibles pour gui
+                    var parameters = {
+                        stormtrooperSwitch: false,
+                        lightSwitch: false,
+                        mirrorSwitch: false
+                    };
 
-                var party = gui.addFolder('Party Control'); //Dossier
+                    var party = gui.addFolder('Party Control'); //Dossier
 
-                //ajout du paramètre "switch" dans le dossier party et le nommer
-                var partyControl = party.add(parameters, 'switch').name('ON/OFF');
+                    //ajout du paramètre "stormtrooperSwitch" dans le dossier party et le nommer
+                    var stormControl = party.add(parameters, 'stormtrooperSwitch').name('Stormtrooper');
 
-                //Ajout de la fonction d'état du paramètre "switch"
-                partyControl.onChange(function(changed){
-                    stormtrooper.visible = changed;
-                    spotLightMainBuildingMiddle.visible = changed;
-                    verticalMirror.visible = changed;
-                });
-                
+                    //Ajout de la fonction d'état du paramètre "stormtrooperSwitch"
+                    stormControl.onChange(function(changed){
+                        stormtrooper.visible = changed;
+                    });
+
+                    //ajout du paramètre "mirrorSwitch" dans le dossier party et le nommer
+                    var mirrorControl = party.add(parameters, 'mirrorSwitch').name('Mirror');
+
+                    //Ajout de la fonction d'état du paramètre "mirrorSwitch"
+                    mirrorControl.onChange(function(changed){
+                        verticalMirror.visible = changed;
+                    });
+
+                    var lights = gui.addFolder('Lights Control'); //Dossier
+
+                    //ajout du paramètre "lightSwitch" dans le dossier lights et le nommer
+                    var lightControl = lights.add(parameters, 'lightSwitch').name('SpotLight');
+
+                    //Ajout de la fonction d'état du paramètre "lightSwitch"
+                    lightControl.onChange(function(changed){
+                        spotLightMainBuildingMiddle.visible = changed;
+                    });
+                    
                 }
 
                 //Appel de la fonction displaygui
