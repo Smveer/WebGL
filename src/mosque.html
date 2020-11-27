@@ -12,10 +12,11 @@
 
             //IMPORT DES DÉPENDANCES
 			import * as THREE from '../build/three.module.js';
-            import {OrbitControls} from "./jsm/controls/OrbitControls.js";
+            import { OrbitControls } from "./jsm/controls/OrbitControls.js";
             import Stats from './jsm/libs/stats.module.js';
-            import {GUI} from './jsm/libs/dat.gui.module.js'
+            import { GUI } from './jsm/libs/dat.gui.module.js'
             import { ColladaLoader } from './jsm/loaders/ColladaLoader.js';
+            import { Reflector } from './jsm/objects/Reflector.js';
 
 
             (function(fps){
@@ -299,6 +300,19 @@
                     scene.add( mainBuildingMiddle );
                     mainBuildingMiddle.position.y = mainBuildingMiddle.geometry.parameters.height/2;
                     mainBuildingMiddle.position.z = mainBuildingFront.position.z + (mainBuildingLittleFront.geometry.parameters.depth/2) + 500;
+
+
+                    var mirrorGeo = new THREE.PlaneBufferGeometry( mainBuildingMiddle.geometry.parameters.width, mainBuildingMiddle.geometry.parameters.height );
+                    var verticalMirror = new Reflector( mirrorGeo, {
+                        clipBias: 0.003,
+                        textureWidth: window.innerWidth * window.devicePixelRatio,
+                        textureHeight: window.innerHeight * window.devicePixelRatio,
+                        color: 0x889999
+                    } );
+                    verticalMirror.position.y = mainBuildingMiddle.position.y;
+                    verticalMirror.position.x = mainBuildingMiddle.position.x;
+                    verticalMirror.position.z = mainBuildingMiddle.position.z + mainBuildingMiddle.geometry.parameters.depth/2 + 100;
+                    scene.add( verticalMirror );
 
                     miniTurretMainBuilding_frontLeft = new THREE.Mesh( miniGeometryTurret, turretMaterial );
                     miniTurretMainBuilding_frontLeft.receiveShadow = true;
