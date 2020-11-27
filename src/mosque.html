@@ -15,6 +15,7 @@
             import {OrbitControls} from "./jsm/controls/OrbitControls.js";
             import Stats from './jsm/libs/stats.module.js';
             import {GUI} from './jsm/libs/dat.gui.module.js'
+            import { ColladaLoader } from './jsm/loaders/ColladaLoader.js';
 
 
             (function(fps){
@@ -35,7 +36,7 @@
 
 
             //DÉCLARATIONS DES OBJETS DE LA SCÈNE
-            var camera, scene, renderer, controls, ambient, spotLight, lightHelper, spotLightDome;  
+            var camera, scene, renderer, controls, ambient, spotLight, lightHelper, spotLightDome, mixer, clock;  
 
             //DÉCLARATION DE LA BASE 
             var mesh_floor, ground, leftWall, rightWall, frontWall, backWall;
@@ -116,8 +117,8 @@
 
                 var rainControl = weather.add(parameters, 'rainer').name('Raining');
                 rainControl.onChange(function(changed){
-                    //rainBool = changed;
-                    //cloud.visible = changed;
+                    // rainBool = changed;
+                    // cloud.visible = changed;
 
                     // if (changed) {
                     //     rainSound.play();
@@ -138,6 +139,7 @@
 
                 //Création de l'espace 3D (scène) avec ses axes
                 scene = new THREE.Scene();
+                clock = new THREE.Clock();
                 scene.background = new THREE.CubeTextureLoader()
                     .setPath( 'textures/cube/MilkyWay/' )
                     .load( [
@@ -541,6 +543,7 @@
                 addMinaret(turretBackRight, mainBuildingLittleFront, 'on');
 
                 
+
                 //FONCTION MINARETS
                 function addMinaret(turret, mainBuild, lightStatus){
                     var baseMinaretGeo = new THREE.BoxBufferGeometry( 200*(6000/700), 12000, 200*(6000/700) );
@@ -771,6 +774,33 @@
 
                 }
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ FIN MINARET @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+                
+                // collada
+
+                const loader = new ColladaLoader();
+                loader.load( './models/collada/stormtrooper/stormtrooper.dae', function ( collada ) {
+
+                    const animations = collada.animations;
+                    const avatar = collada.scene;
+
+                    avatar.traverse( function ( node ) {
+
+                        if ( node.isSkinnedMesh ) {
+
+                            node.frustumCulled = false;
+
+                        }
+
+                    } );
+
+                    mixer = new THREE.AnimationMixer( avatar );
+                    mixer.clipAction( animations[ 0 ] ).play();
+                    avatar.scale.set(190,190,190);
+                    scene.add( avatar );
+
+                } );
+
+                //
 
                 renderer = new THREE.WebGLRenderer( { antialias: true } ); //Moteur graphique (anti-aliasing: pour lisser le graphisme)
 				renderer.setPixelRatio( window.devicePixelRatio ); //Respect du ration des pixels
@@ -794,7 +824,7 @@
                 
 				renderer.setSize( window.innerWidth, window.innerHeight ); //Taille du rendu
 
-			}
+            }
             
             function animate() {
 
@@ -803,6 +833,13 @@
                 // required if controls.enableDamping or controls.autoRotate are set to true
                 controls.update();
                 
+                const delta = clock.getDelta();
+
+				if ( mixer !== undefined ) {
+
+					mixer.update( delta );
+
+				}
                 
                 renderer.render( scene, camera );
 
