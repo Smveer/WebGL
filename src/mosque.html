@@ -13,7 +13,7 @@
             //IMPORT DES DÉPENDANCES
 			import * as THREE from '../build/three.module.js';
             import { OrbitControls } from "./jsm/controls/OrbitControls.js";
-            import Stats from './jsm/libs/stats.module.js'; //pour fps
+            import Stats from './jsm/libs/stats.module.js'; //pour voir les fps
             import { GUI } from './jsm/libs/dat.gui.module.js' //pour gui
             import { ColladaLoader } from './jsm/loaders/ColladaLoader.js'; // pour objet type collada
             import { Reflector } from './jsm/objects/Reflector.js'; // pour propriétés mirroir
@@ -21,10 +21,10 @@
             //Affichage des fps
             (function(fps){
                 var script=document.createElement('script');
-                script.onload=function(){
+                script.onload=function(){ // Charge le script
                         var stats=new Stats();
                         document.body.appendChild(stats.dom);
-                        requestAnimationFrame(function loop(){
+                        requestAnimationFrame(function loop(){ // Permet de update les fps
                             stats.update();
                             requestAnimationFrame(loop)
                         });
@@ -83,7 +83,7 @@
                 clock = new THREE.Clock(); //création de l'horloge
                 scene.background = new THREE.CubeTextureLoader()
                     .setPath( 'textures/cube/MilkyWay/' )
-                    .load( [
+                    .load( [ // Load chaque côté du background
                         'dark-s_px.jpg',
                         'dark-s_nx.jpg',
                         'dark-s_py.jpg',
@@ -93,7 +93,7 @@
                     ] ); //SKYBOX DU BACKGROUND
 
                 //Lumière ambiente
-                ambient = new THREE.AmbientLight( 0xffffff, 0.4 );
+                ambient = new THREE.AmbientLight( 0xffffff, 0.4 ); // Lumière sans source, éclaire partout
 				scene.add( ambient );
 
                 //Chargement des textures
@@ -296,8 +296,8 @@
                     //Mirroir devant le mainBuildingMiddle
                     var mirrorGeo = new THREE.PlaneBufferGeometry( mainBuildingMiddle.geometry.parameters.width, mainBuildingMiddle.geometry.parameters.height );
                     var verticalMirror = new Reflector( mirrorGeo, {
-                        clipBias: 0.003,
-                        textureWidth: window.innerWidth * window.devicePixelRatio,
+                        clipBias: 0.003, //Capacité de reflexion du mirroir
+                        textureWidth: window.innerWidth * window.devicePixelRatio, //Qualité de texture du mirroir
                         textureHeight: window.innerHeight * window.devicePixelRatio,
                         color: 0x889999
                     } );
@@ -368,13 +368,13 @@
                 spotLightMainBuildingMiddle.position.set(mainBuildingMiddle.position.x, mainBuildingMiddle.position.y + mainBuildingMiddle.geometry.parameters.height/2, mainBuildingMiddle.position.z + mainBuildingMiddle.geometry.parameters.depth/2);
                 spotLightMainBuildingMiddle.angle = 0.4; //Angle de la lumière
                 spotLightMainBuildingMiddle.penumbra = 0.5;
-                spotLightMainBuildingMiddle.decay = 1;//
+                spotLightMainBuildingMiddle.decay = 1; // Quantité d'ombre perdue selon la distance 
                 spotLightMainBuildingMiddle.focus = 1;
                 spotLightMainBuildingMiddle.distance = 40000;
                 spotLightMainBuildingMiddle.intensity = 1.1;                     
 
                 spotLightMainBuildingMiddle.castShadow = true;
-                spotLightMainBuildingMiddle.shadow.mapSize.width = 512;
+                spotLightMainBuildingMiddle.shadow.mapSize.width = 512; // Qualité de l'ombre
                 spotLightMainBuildingMiddle.shadow.mapSize.height = 512;
                 spotLightMainBuildingMiddle.shadow.camera.near = 1;
                 spotLightMainBuildingMiddle.shadow.camera.far = 100000;
@@ -423,7 +423,7 @@
 
                     // Condition de vérification si la largeur du bâtiment > profondeur de celui-ci
                     if(build.geometry.parameters.width > build.geometry.parameters.depth){
-                        // Placement des 'gap' en horizontal entre les domes, soit l'espacement entre ceux-ci
+                        // Placement des 'gap' en horizontal entre les deux premiers domes et le batiment associé
                         if(build == frontWall || build == mainBuildingLittleFront){
                             var gapx = build.geometry.parameters.width/4.25;
                         } else {
@@ -432,15 +432,14 @@
                            
                         // Placement des domes à l'aide de boucles   
                         var gapz = 0;
-                        for(let i = 0; i < 2; i++){
+                        for(let i = 0; i < 2; i++){ // On veut parcourir cette boucle deux fois, pour créer deux objets
                             addDome(build, size, gapx, gapz);
-                            gapx = gapx*(-1);
+                            gapx = gapx*(-1); // Si le gap est de 4.25, il devient -4.25, cela permet de créer un deuxième dôme symétrique au premier par rapport au bâtiment associé
                         }
 
-                        // Placement des 'gap' en horizontal entre les domes, soit l'espacement entre ceux-ci
+                        // Placement des 'gap' en horizontal entre les deux autres dômes et le bâtiment associé
                         if(build == frontWall || build == mainBuildingLittleFront){
                             gapx = build.geometry.parameters.width/3.250;
-                            console.log(gapx);
                         } else {
                             gapx = build.geometry.parameters.width/3;
                         }
@@ -451,17 +450,17 @@
                             gapx = gapx*(-1);
                         }
 
-                    } else {
+                    } else { // Concerne les batiments qui ont un width < à leur depth, donc les batiments sur les côtés
                         var gapx = 0;
-                        var gapz = build.geometry.parameters.depth/9;
-                        for(let i = 0; i < 2; i++){
+                        var gapz = build.geometry.parameters.depth/9; 
+                        for(let i = 0; i < 2; i++){ // Création des deux premiers domes, ceux les plus au centre du wall
                             addDome(build, size, gapx, gapz);
                             gapz = gapz*(-1);
                         }
 
                         gapz = build.geometry.parameters.depth/3;
 
-                        for(let i = 0; i < 2; i++){
+                        for(let i = 0; i < 2; i++){ // Création des deux derniers domes, ceux les plus aux extrémitées
                             addDome(build, size, gapx, gapz);
                             gapz = gapz*(-1);
                         }
@@ -513,22 +512,19 @@
                     minaret_Base = new THREE.Mesh( baseMinaretGeo, material ) ;//Création de l'objet avec ses matériaux
                     minaret_Base.position.y = minaret_Base.geometry.parameters.height/2;
                    
-                    //REGARDER LA POSITION DE LA TOURELLE POUR DONNER LE SENS DE POSITIONEMENT DU MINARET
+                    //POSITIONNEMENT DES MINARETS SUIVANT LES X
                     if (turret.position.x > 0){
-                        minaret_Base.position.x = turret.position.x - (turret.geometry.parameters.width/2);
+                        minaret_Base.position.x = turret.position.x - (turret.geometry.parameters.width/1.4);
                     } else {
-                        minaret_Base.position.x = turret.position.x + (turret.geometry.parameters.width/2);
+                        minaret_Base.position.x = turret.position.x + (turret.geometry.parameters.width/1.4);
                     }
                     
-                    if(mainBuild != null){ // POSITIONEMENT POUR LES MINARETS DE DERRIERE PAR RAPPORT À LA BUILDING
+                    if(mainBuild != null){ // POSITIONEMENT DES MINARETS LIES AU MAIN BUILD ( DONC LES BACK ) SUR LES Z
                         minaret_Base.position.z = mainBuild.position.z + minaret_Base.geometry.parameters.depth;
-                    } else {
-                        if (turret.position.z > 0){
-                            minaret_Base.position.z = turret.position.z - (turret.geometry.parameters.depth/2);
-                        } else {
-                            minaret_Base.position.z = turret.position.z + (turret.geometry.parameters.depth/2);
-                        }
+                    } else { // POSITIONNEMENT DES MINARETS NON LIES AU MAIN BUILD ( DONC LES FRONT ) SUR LES Z
+                            minaret_Base.position.z = turret.position.z - (turret.geometry.parameters.depth/2);                        
                     }
+
                     minaret_Base.castShadow = true;
                     scene.add(minaret_Base ); //Ajout de l'objet dans la scene
 
@@ -583,7 +579,7 @@
                         var gap;
                         spotLight = new THREE.SpotLight( 0xffffff, 2 );
                         if (turret.position.z < 0){
-                            gap = 1500;
+                            gap = 1500; // Pour éviter que la light soit bloqué dans l'objet et ne fasse pas de lumière
                         } else {
                             gap = -1500;
                         }
@@ -595,7 +591,7 @@
                         spotLight.distance = 40000;
                         spotLight.intensity = 1.1;
 
-                        //Positionnement de la lumière si minaret positioner par rapport au Building
+                        //Positionnement de la cible de la light selon son positionnement, la cible doit toujours être en diagonale
                         if(mainBuild == null){
                             if(turret.position.x > 0){
                                 spotLight.target = turretBackLeft;
@@ -717,17 +713,17 @@
                 const loader = new ColladaLoader();
                 loader.load( './models/collada/stormtrooper/stormtrooper.dae', function ( collada ) {
 
-                    const animations = collada.animations;
-                    stormtrooper = collada.scene;
+                    const animations = collada.animations; //range les animations dans variable
+                    stormtrooper = collada.scene; //range la scène dans var
 
-                    stormtrooper.traverse( function ( node ) {
+                    stormtrooper.traverse( function ( node ) { // Execute le rappel sur l'objet et tous les descendants
 
-                        if ( node.isSkinnedMesh ) {
+                        if ( node.isSkinnedMesh ) { // Si l'objet a un skelette, autrement dit on vérifie si il est articulé.
 
-                            node.frustumCulled = false;
+                            node.frustumCulled = false; // Check tous les frames de l'objet avant de le render
 
-                            node.castShadow = true;
-                            node.receiveShadow = true;
+                            node.castShadow = true; // emet une ombre 
+                            node.receiveShadow = true; // recoit les ombres
 
                             
                         }
@@ -738,9 +734,9 @@
                     mixer = new THREE.AnimationMixer( stormtrooper );
                     mixer.clipAction( animations[ 0 ] ).play(); //Animation du collada (danse)
                     stormtrooper.scale.set(190,190,190); //Mis à l'échelle du collada
-                    stormtrooper.visible = false;
+                    stormtrooper.visible = false; // le stormtrooper est de base invisible
                     scene.add( stormtrooper );
-                    spotLightMainBuildingMiddle.target = stormtrooper;
+                    spotLightMainBuildingMiddle.target = stormtrooper; // Le spotlight précédemment créé vise le personnage 
                     
 
                 } );
@@ -751,7 +747,7 @@
                     var gui = new GUI;
                     //Ajout des différents paramètres possibles pour gui
                     var parameters = {
-                        stormtrooperSwitch: false,
+                        stormtrooperSwitch: false, // Lorsque l'on charge la page, les 3 paramètres du futur menu "Party" du GUI sont désactivés
                         lightSwitch: false,
                         mirrorSwitch: false
                     };
@@ -763,7 +759,7 @@
 
                     //Ajout de la fonction d'état du paramètre "stormtrooperSwitch"
                     stormControl.onChange(function(changed){
-                        stormtrooper.visible = changed;
+                        stormtrooper.visible = changed; // Le personnage est désormais visible
                     });
 
                     //ajout du paramètre "mirrorSwitch" dans le dossier party et le nommer
@@ -823,7 +819,7 @@
                 controls.update();
                 
                 //
-                var delta = clock.getDelta();
+                var delta = clock.getDelta(); // Système d'horloge qui trouve les secondes après le moment t et qui met à jour ce moment
 
                 //UPDATE DU MIXER (de stormtrooper)
 				if ( mixer !== undefined ) {
