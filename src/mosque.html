@@ -40,8 +40,12 @@
 
             //DÉCLARATION POUR BONHOMME QUI DANSE (COLLADA)
             var mixer, stormtrooper;
+
             //DÉCLARATION POUR LA SOURIS QUI TWERK (FBX)
             var mixer2, mouse;
+
+            //SONS
+            var voice, globalAudio, listener, audioLoader;
 
             //DÉCLARATION DE LA BASE 
             var mesh_floor, ground, leftWall, rightWall, frontWall, backWall;
@@ -767,12 +771,42 @@
                     mouse.scale.set(5,5,5);
                     mouse.position.set(0,0,-600);
                     mouse.rotation.y = Math.PI;
+                    mouse.add( voice );
                     //mouse.visible = false;
 
 					scene.add( mouse );
 
 				} );
                 //FIN AJOUT FBX
+
+                // Création de l'audio
+                listener = new THREE.AudioListener();
+                camera.add( listener );
+
+                globalAudio = new THREE.Audio( listener ); // Source audio globale
+
+                audioLoader = new THREE.AudioLoader(); // Chargement d'un audio et mise en place dans le buffer de l'objet Audio
+                audioLoader.load( '../src/sounds/minecraft.mp3', function( buffer ) {
+                    globalAudio.setBuffer( buffer );
+                    globalAudio.setLoop( true );
+                    globalAudio.setVolume( 0.025 );
+                    globalAudio.play();
+                });
+
+                // Ajout de l'audio positionnel référencé sur la souris animée
+                voice = new THREE.PositionalAudio( listener );
+                
+                // Téléchargement de la musique et ajustements              
+                audioLoader = new THREE.AudioLoader(); // Chargement d'un audio et mise en place dans le buffer de l'objet Audio
+                audioLoader.load( '../src/sounds/body.mp3', function( buffer ) {
+                    voice.setBuffer( buffer );
+                    voice.setLoop( true );
+                    voice.setVolume( 100 );
+                    voice.setRefDistance(0.25);
+                    voice.play();
+                });
+
+
 
                 //FONCTION DU GUI
                 function displaygui() {
