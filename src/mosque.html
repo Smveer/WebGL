@@ -198,7 +198,7 @@
         <div id="blocker">
 
             <div id="instructions">
-                <center><img src="textures & images/logo4.png" style="height: 380px;width: 650px; margin:10px;"></center>
+                <center><img src="../ressources/images/party.jpg" style="height: 380px;width: 650px; margin:10px;"></center>
                 <b><span style="font-size:50px; color: #a56e3d ">Click to play </span>
                 <i>
                 <br /><br />
@@ -215,7 +215,7 @@
         </div>
 
         <div id="home">
-                <img src="textures & images/home.jpg" style=" opacity: 1; position: absolute; margin: 0px; padding: 0; width:1490px; height: 810px">
+                <img src="../ressources/images/home.png" style=" opacity: 1; position: absolute; margin: 0px; padding: 0; width:1490px; height: 810px">
 
 
 
@@ -1149,7 +1149,7 @@
                     });
 
                     //ajout du paramètre "music" dans le dossier sounds et le nommer
-                    var song = sounds.add(parameters, 'music', ['../src/sounds/body.mp3','../src/sounds/body2.mp3','../src/sounds/body.mp3','../src/sounds/body.mp3']).name("Song")
+                    var song = sounds.add(parameters, 'music', ['../src/sounds/body.mp3','../src/sounds/work.mp3']).name("Song")
                     song.onChange(function(changed){
                         voice.stop();
                         audioLoader.load( changed, function( buffer ) {
