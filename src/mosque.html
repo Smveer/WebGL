@@ -335,20 +335,20 @@
 			function init() {
                 
                 // MISE EN PLACE DU POINTER LOCK CONTROL, CONTROLEUR DE LA SCENE 
-                controls = new PointerLockControls( camera, document.body );
-                var blocker = document.getElementById( 'blocker' );
-                var instructions = document.getElementById( 'instructions' );
-                instructions.addEventListener( 'click', function () {
-                    controls.lock();
-                }, false );
-
-                controls.addEventListener( 'lock', function () {
-                    instructions.style.display = 'none';
-                    blocker.style.display = 'none';
-                } );
-                controls.addEventListener( 'unlock', function () {
-                    blocker.style.display = 'block';
-                    instructions.style.display = '';
+                controls = new PointerLockControls( camera, document.body );    // Création des axes controls PLC
+                var blocker = document.getElementById( 'blocker' );             // Récupération de la div #blocker
+                var instructions = document.getElementById( 'instructions' );   // Récupération de la div #instructions
+                instructions.addEventListener( 'click', function () {           // Attente de l'évènement clic sur la div #instructions
+                    controls.lock();                                            // En attendant, blocage des contrôles
+                }, false );                                                     //
+                                                                                //
+                controls.addEventListener( 'lock', function () {                // Si il y a clic sur la div #instructions plus haut, disparition des div #blocker et #instructions
+                    instructions.style.display = 'none';                        // display = none
+                    blocker.style.display = 'none';                             // display = none
+                } );                                                            //
+                controls.addEventListener( 'unlock', function () {              // Si il y a verrouillage des contrôles (on quitte le statut 'unlock') alors apparition des div
+                    blocker.style.display = 'block';                            //
+                    instructions.style.display = '';                            //
                 } );
 
                 // Mapping des touches du clavier pour First Person Control
@@ -400,8 +400,8 @@
                 document.addEventListener( 'keydown', onKeyDown, false );
                 document.addEventListener( 'keyup', onKeyUp, false );
 
-                raycaster = new THREE.Raycaster( new THREE.Vector3(), new THREE.Vector3( 0, - 1, 0 ), 0, 10 );
-    
+                raycaster = new THREE.Raycaster( new THREE.Vector3(), new THREE.Vector3( 0, - 1, 0 ), 0, 10 );  // Création de l'objet Raycaster permettant le travail sur les objets
+                                                                                                                // survolés par la souris dans l'espace 3D
                 //Création de l'espace 3D (scène) avec ses axes
                 scene = new THREE.Scene();
                 clock = new THREE.Clock(); //création de l'horloge
@@ -1207,38 +1207,34 @@
 
                 requestAnimationFrame( animate );
 
-                // required if controls.enableDamping or controls.autoRotate are set to true
-                // 
-
                 if ( controls.isLocked === true ) {
-                    raycaster.ray.origin.copy( controls.getObject().position );
-                    raycaster.ray.origin.y -= 10;
-                    var intersections = raycaster.intersectObjects( objects );
-                    var onObject = intersections.length > 0;
-                    var time = performance.now();
-                    var delta = ( time - prevTime ) / 1000;
-                    // velocity: vitesse de déplacement sur les différents axes
-                    velocity.x -= (velocity.x*0.01) * movSpeedX* delta;
-                    velocity.z -= (velocity.z*0.01) * movSpeedZ * delta;
-                    velocity.y -= 9.8 * 100.0 * delta; // 100.0 = mass
-                    direction.z = Number( moveForward ) - Number( moveBackward );
-                    direction.x = Number( moveRight ) - Number( moveLeft );
-                    direction.normalize(); // this ensures consistent movements in all directions
-                    if ( moveForward || moveBackward ) velocity.z -= direction.z * 400.0 * delta;
-                    if ( moveLeft || moveRight ) velocity.x -= direction.x * 400.0 * delta;
-                    if ( onObject === true ) {
-                        velocity.y = Math.max( 0, velocity.y );
-                        canJump = true;
-                    }
-                    controls.moveRight( - velocity.x * delta );
-                    controls.moveForward( - velocity.z * delta );
-                    controls.getObject().position.y += ( velocity.y * delta ); // new behavior
-                    if ( controls.getObject().position.y < 1000 ) {
-                        velocity.y = 0;
-                        controls.getObject().position.y = 1000;
-                        canJump = true;
-                    }
-                    prevTime = time;
+                    raycaster.ray.origin.copy( controls.getObject().position );                     // Positionnement de la souris dans l'espace 3D
+                    var intersections = raycaster.intersectObjects( objects );                      // Création de l'axe de la caméra souris dans l'espace
+                    var onObject = intersections.length > 0;                                        // Booléen vérifiant la position au sol (pour le saut)
+                    var time = performance.now();                                                   // Actualisation des performances
+                    var delta = ( time - prevTime ) / 1000;                                         // Delta des performances (animation en temps réel)
+                    // Velocity                                                                     //
+                    velocity.x -= (velocity.x*0.01) * movSpeedX* delta;                             // Détermination de la vélocité X dans l'espace
+                    velocity.z -= (velocity.z*0.01) * movSpeedZ * delta;                            // Détermination de la vélocité Z dans l'espace
+                    velocity.y -= 9.8 * 100.0 * delta; // 100.0 = mass                              // Détermination de la vélocité Y dans l'espace (gravité x masse x delta)
+                    direction.z = Number( moveForward ) - Number( moveBackward );                   // Quantification des objets en valeurs numériques (si j'avance ou je recule)
+                    direction.x = Number( moveRight ) - Number( moveLeft );                         // Quantification des objets en valeurs numériques (si à gauche ou à droite)
+                    direction.normalize();                                                          // Normalisation des vecteurs pour déplacement fluide
+                    if ( moveForward || moveBackward ) velocity.z -= direction.z * 400.0 * delta;   // Traitement des positions (évolution de la direction par rapport au temps)
+                    if ( moveLeft || moveRight ) velocity.x -= direction.x * 400.0 * delta;         // Traitement des positions (évolution de la direction par rapport au temps)
+                    if ( onObject === true ) {                                                      // 
+                        velocity.y = Math.max( 0, velocity.y );                                     // Vérification de la position pour éviter sauts multiples
+                        canJump = true;                                                             // 
+                    }                                                                               //
+                    controls.moveRight( - velocity.x * delta );                                     // Mirroring des vélocités pour déplacement inversé
+                    controls.moveForward( - velocity.z * delta );                                   // (Sinon déplacement inversé (gauche = droite/devant = derrière))
+                    controls.getObject().position.y += ( velocity.y * delta );                      // Détermination du comportement en cas de saut (déplacement vertical)
+                    if ( controls.getObject().position.y < 1000 ) {                                 // Troubleshooting pour éviter l'enfoncement dans le sol
+                        velocity.y = 0;                                                             //
+                        controls.getObject().position.y = 1000;                                     //
+                        canJump = true;                                                             // Restauration de la possibilité de sauter
+                    }                                                                               //
+                    prevTime = time;                                                                // Actualisation de la frame
                 }
 
                 //
