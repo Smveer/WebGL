@@ -1133,8 +1133,32 @@
                         stormtrooperSwitch: false,
                         mouseSwitch: false,
                         lightSwitch: false,
-                        mirrorSwitch: false
+                        mirrorSwitch: false,
+                        music: "",
+			            volume: 0.025
                     };
+
+                    var sounds = gui.addFolder('Music scene'); //Dossier
+
+                    //ajout du paramètre "volume" dans le dossier sounds et le nommer
+                    var soundVolume = sounds.add(parameters, 'volume').min(0).max(1).step(0.005).name('Volume');
+                    //Ajout de la fonction d'état du paramètre "volume"
+                    soundVolume.onChange(function(changed){
+                        globalAudio.setVolume(changed);
+
+                    });
+
+                    //ajout du paramètre "music" dans le dossier sounds et le nommer
+                    var song = sounds.add(parameters, 'music', ['../src/sounds/body.mp3','../src/sounds/body2.mp3','../src/sounds/body.mp3','../src/sounds/body.mp3']).name("Song")
+                    song.onChange(function(changed){
+                        voice.stop();
+                        audioLoader.load( changed, function( buffer ) {
+                        voice.setBuffer( buffer );
+                        voice.setLoop( true );
+                        voice.setVolume( 100 );
+                        voice.play();
+                        })
+                    });
 
                     var party = gui.addFolder('Party Control'); //Dossier
 
