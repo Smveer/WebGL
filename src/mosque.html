@@ -279,6 +279,8 @@
             //DÉCLARATION POUR LA SOURIS QUI TWERK (FBX)
             var mixer2, mouse;
 
+            var objs = [];
+
             //DÉCLARATION POUR LA CAMERA FPC (FIRST PERSON CONTROL)
             var objects = [];
             var raycaster;
@@ -1032,14 +1034,13 @@
                 addMinaret(turretBackRight, mainBuildingLittleFront, 'on');
 
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ FIN MINARET @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-                
-                //DEBUT AJOUT COLLADA
+
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ OBJETS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+                //DEBUT AJOUT Stormtrooper
                 const colladaLoader = new ColladaLoader();
                 colladaLoader.load( './models/collada/stormtrooper/stormtrooper.dae', function ( collada ) {
-
                     const animations = collada.animations; //range les animations dans variable
                     stormtrooper = collada.scene; //range la scène dans var
-
                     stormtrooper.traverse( function ( node ) { // Execute le rappel sur l'objet et tous les descendants
 
                         if ( node.isSkinnedMesh ) { // Si l'objet a un skelette, autrement dit on vérifie si il est articulé.
@@ -1048,54 +1049,60 @@
 
                             node.castShadow = true; // emet une ombre 
                             node.receiveShadow = true; // recoit les ombres
-
-                            
                         }
-
                     } );
-
                     //Mixer qui marche comme un player d'animation comme un player video
-                    mixer = new THREE.AnimationMixer( stormtrooper );
-                    mixer.clipAction( animations[ 0 ] ).play(); //Animation du collada (danse)
+                    var mixer = new THREE.AnimationMixer(stormtrooper);
+                    mixer.clipAction(animations[0]).play();//Animation du collada (danse)
                     stormtrooper.scale.set(190,190,190); //Mis à l'échelle du collada
+                    //stormtrooper.position.set(posxyz[0],posxyz[1],posxyz[2]); //Position du collada
                     stormtrooper.visible = false; // le stormtrooper est de base invisible
                     scene.add( stormtrooper );
+                    objs.push({stormtrooper, mixer});
                     spotLightMainBuildingMiddle.target = stormtrooper; // Le spotlight précédemment créé vise le personnage 
-                    
-
                 } );
-                //FIN AJOUT COLLADA
+                //FIN AJOUT Stormtrooper
 
-                //DEBUT AJOUT FBX
+                //DEBUT AJOUT Mouse
 				const fbxLoader = new FBXLoader();
-				fbxLoader.load( './models/fbx/Dancing_Twerk.fbx', function ( mouse ) {
+				fbxLoader.load( './models/fbx/Dancing_Twerk.fbx', function ( fbx ) {
+                    const animations = fbx.animations; //range les animations dans variable
+                    mouse = fbx; //range la scène dans var
+                    mouse.traverse( function ( node ) { // Execute le rappel sur l'objet et tous les descendants
 
-					mixer2 = new THREE.AnimationMixer( mouse );
+                        if ( node.isSkinnedMesh ) { // Si l'objet a un skelette, autrement dit on vérifie si il est articulé.
 
-					const action = mixer2.clipAction( mouse.animations[ 0 ] );
-					action.play();
+                            node.frustumCulled = false; // Check tous les frames de l'objet avant de le render
 
-					mouse.traverse( function ( node ) {
-
-						if ( node.isMesh ) {
-
-							node.castShadow = true;
-							node.receiveShadow = true;
-
-						}
-
-					} );
+                            node.castShadow = true; // emet une ombre 
+                            node.receiveShadow = true; // recoit les ombres
+                        }
+                    } );
+                    var mixer = new THREE.AnimationMixer(mouse);
+                    mixer.clipAction(animations[0]).play();//Animation du fbx (danse)
                     mouse.scale.set(5,5,5);
                     mouse.position.set(0,0,-600);
                     mouse.rotation.y = Math.PI;
-                    mouse.add( voice );
-                    //mouse.visible = false;
-
-					scene.add( mouse );
-
+                    mouse.visible = false;
+                    mouse.add(voice);
+                    scene.add( mouse );
+                    objs.push({mouse, mixer});
 				} );
+                //FIN AJOUT Mouse
+
+                //DEBUT AJOUT FBX
+                    createFbx('source/alien', [15,15,15], [2000,0,-600], -Math.PI/2);
+                    createFbx('source/eve', [100,100,100], [1000,1000,-600], Math.PI/2);
+                    createFbx('source/spaceship', [90,90,90], [4000,1000,8000], Math.PI);
+                    createFbx('source/trump', [1000,1000,1000], [-6000,0,-600], Math.PI/2);
+                    createFbx('source/shrek', [0.2,0.2,0.2], [-4000,0, 3000], -Math.PI/2);
+                    createFbx('source/hitler', [0.2,0.2,0.2], [-4000,0, -600], -Math.PI/2);
+                //FIN AJOUT FBX
+                //DEBUT AJOUT FBX
+                    //createFbx('Dancing_Twerk', [100,100,100], [0,0,-600]);
                 //FIN AJOUT FBX
 
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ SON @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
                 // Création de l'audio
                 listener = new THREE.AudioListener();
                 camera.add( listener );
@@ -1120,11 +1127,11 @@
                     voice.setLoop( true );
                     voice.setVolume( 100 );
                     voice.setRefDistance(0.10);
-                    voice.play();
+                    //voice.play();
                 });
 
 
-
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ GUI @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
                 //FONCTION DU GUI
                 function displaygui() {
                     var gui = new GUI;
@@ -1151,12 +1158,18 @@
                     //ajout du paramètre "music" dans le dossier sounds et le nommer
                     var song = sounds.add(parameters, 'music', ['../src/sounds/body.mp3','../src/sounds/work.mp3']).name("Song")
                     song.onChange(function(changed){
-                        voice.stop();
+                        if(mouse.visible == true){
+                            voice.stop();
+                        }
                         audioLoader.load( changed, function( buffer ) {
                         voice.setBuffer( buffer );
                         voice.setLoop( true );
                         voice.setVolume( 100 );
-                        voice.play();
+                        if(mouse.visible == true){
+                            voice.play();
+                        }
+
+                        
                         })
                     });
 
@@ -1175,7 +1188,12 @@
 
                     //Ajout de la fonction d'état du paramètre "mouseSwitch"
                     mouseControl.onChange(function(changed){
-                        mouse.visible = changed; // Le personnage est désormais visible
+                        mouse.visible = changed;// Le personnage est désormais visible
+                        if(changed){
+                            voice.play();
+                        }else{
+                            voice.stop();
+                        } 
                     });
 
                     //ajout du paramètre "mirrorSwitch" dans le dossier party et le nommer
@@ -1224,7 +1242,57 @@
 				camera.updateProjectionMatrix();
                 
 				renderer.setSize( window.innerWidth, window.innerHeight ); //Taille du rendu
+            }
+            
+            function createCollada(name, scalexyz, posxyz){
+                //DEBUT AJOUT COLLADA
+                const colladaLoader = new ColladaLoader();
+                var object;
+                colladaLoader.load( './models/collada/' + name + '.dae', function ( collada ) {
+                    const animations = collada.animations; //range les animations dans variable
+                    object = collada.scene; //range la scène dans var
+                    object.traverse( function ( node ) { // Execute le rappel sur l'objet et tous les descendants
 
+                        if ( node.isSkinnedMesh ) { // Si l'objet a un skelette, autrement dit on vérifie si il est articulé.
+
+                            node.frustumCulled = false; // Check tous les frames de l'objet avant de le render
+
+                            node.castShadow = true; // emet une ombre 
+                            node.receiveShadow = true; // recoit les ombres
+                        }
+                    } );
+                    //Mixer qui marche comme un player d'animation comme un player video
+                    var mixer = new THREE.AnimationMixer(object);
+                    mixer.clipAction(animations[0]).play();//Animation du collada
+                    object.scale.set(scalexyz[0],scalexyz[1],scalexyz[2]); //Mis à l'échelle du collada
+                    object.position.set(posxyz[0],posxyz[1],posxyz[2]); //Position du collada
+                    scene.add( object );
+                    objs.push({object, mixer});
+                } );
+                //FIN AJOUT COLLADA
+            }
+
+            function createFbx(name, scalexyz, posxyz, turn){
+                //DEBUT AJOUT FBX
+				const fbxLoader = new FBXLoader();
+				fbxLoader.load( './models/fbx/'+ name +'.fbx', function ( object ) {
+                    var mixer = new THREE.AnimationMixer(object);
+					mixer.clipAction(object.animations[0]).play();
+					object.traverse( function ( node ) {
+						if ( node.isMesh ) {
+
+							node.castShadow = true;
+							node.receiveShadow = true;
+
+						}
+					} );
+                    object.scale.set(scalexyz[0],scalexyz[1],scalexyz[2]);
+                    object.position.set(posxyz[0],posxyz[1],posxyz[2]);
+                    object.rotation.y = turn;
+                    scene.add( object );
+                    objs.push({object, mixer});
+				} );
+                //FIN AJOUT FBX
             }
             
             function animate() {
@@ -1264,19 +1332,8 @@
                 //
                 var delta = clock.getDelta();// Système d'horloge qui trouve les secondes après le moment t et qui met à jour ce moment
 
-                //UPDATE DU MIXER (de stormtrooper)
-				if ( mixer !== undefined ) {
-
-					mixer.update( delta );
-
-                }
-                
-                if ( mixer2 !== undefined ) {
-
-                    mixer2.update( delta );
-
-                }
-
+                //UPDATE DU MIXER 
+                objs.forEach(({mixer}) => {mixer.update(delta);});
             
 
                 renderer.render( scene, camera );
